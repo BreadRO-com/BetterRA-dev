@@ -1,0 +1,55 @@
+# This file is a part of rAthena.
+#   Copyright(C) 2022 rAthena Development Team
+#   https://rathena.org - https://github.com/rathena
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+#
+###########################################################################
+# Laphine Upgrade Database
+###########################################################################
+#
+# Laphine Upgrade Settings
+#
+###########################################################################
+# - Item                       Item that triggers Laphine Upgrade.
+#   RandomOptionGroup          Name of the random option group that will be applied. (Default: none)
+#   ResultRefine               Absolute refine level after the upgrade. (Default: none)
+#   ResultRefineMinimum        Minimum refine level after the upgrade. (Default: none)
+#   ResultRefineMaximum        Maximum refine level after the upgrade. (Default: none)
+#   MinimumRefine              Minimum refine level of the required items. (Default: 0)
+#   MaximumRefine              Maximum refine level of the required items. (Default: MAX_REFINE)
+#   RequiredRandomOptions      How many random options have to be in the item? (Default: 0)
+#   CardsAllowed               Are cards allowed in the target item? (Default: no)
+#   TargetItems:               List of possible target item(s)
+#     - Item                   Item name of the possible target item
+#   Script:                    Script executed on successful upgrade, If it exists 'RandomOptionGroup/ResultRefine/ResultRefineMinimum/ResultRefineMaximum' not work.
+#                              If validation process is success, these variables are set:
+#                              - @last_lapine_id             - Item ID of target item
+#                              - @last_lapine_idx            - Inventory index of target item
+#                              - @last_lapine_refine         - Refine level
+#                              - @last_lapine_attribute      - Attribute flag
+#                              - @last_lapine_card1          - Card value at slot 0
+#                              - @last_lapine_card2          - Card value at slot 1
+#                              - @last_lapine_card3          - Card value at slot 2
+#                              - @last_lapine_card4          - Card value at slot 3
+#                              - @last_lapine_bound          - Bound flag
+#                              - @last_lapine_uniqueid$      - Unqiue ID
+#                              - @last_lapine_option_id[]    - Array of Random Option IDs
+#                              - @last_lapine_option_value[] - Array of Random Option Values
+#                              - @last_lapine_option_param[] - Array of Random Option Params
+###########################################################################
+
+Header:
+  Type: LAPHINE_UPGRADE_DB
+  Version: 1

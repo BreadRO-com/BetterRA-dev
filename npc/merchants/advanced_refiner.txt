@@ -74,7 +74,7 @@ payon,157,146,6	script	龙先生#cash	85,{
 
 	mes "[龙先生]";
 	mes "锵! 锵! 锵!";
-	if (getequippercentrefinery(.@part, true) > rand(100)) {
+	if (getequippercentrefinery(.@part, REFINE_COST_ENRICHED) > rand(100)) {
 		successrefitem .@part;
 		next;
 		emotion ET_BEST;
@@ -155,7 +155,7 @@ S_RefineValidate:
 	mes "你真的希望我继续吗?";
 	next;
 	if( select("是的:不要") == 1 ) {
-		if (getequippercentrefinery(.@part) < 100) {
+		if (getequippercentrefinery(.@part,REFINE_COST_ENRICHED) < 100) {
 			if (.@itemtype == IT_WEAPON) {
 				mes "[龙先生]";
 				mes "呜哇!!";

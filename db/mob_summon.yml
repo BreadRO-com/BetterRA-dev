@@ -26,7 +26,7 @@
 #   Default                 Monster AegisName summoned by default when the summon fails.
 #   Summon:                 List of Summonable Monsters.
 #     - Mob                 Monster AegisName.
-#       Rate                Summon rate of Mob (from [0-1000000]).
+#       Rate                Summon rate of Mob (实际概率 = 概率 / 概率总和).
 ###########################################################################
 
 Header:

@@ -65,7 +65,7 @@
 		setarray .@list[0],2352,2510,2414,1243,2112,5055;
 		.@size = getarraysize(.@list);
 		
-		for ( .@i = 0, .@i < .@size; .@i++ ) {
+		for ( .@i = 0; .@i < .@size; .@i++ ) {
 			.@count = countitem(.@list[.@i]);	// note: maybe check if equipped items are skipped
 			if (.@count < 1)
 				continue;

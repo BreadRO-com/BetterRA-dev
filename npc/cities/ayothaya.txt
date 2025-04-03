@@ -102,9 +102,9 @@ ayothaya,152,68,1	script	哎伊拜婷#ayo2	4_M_THAIONGBAK,{
 		mes "再见面的... 呵! 哈!";
 		close2;
 		if (checkre(0))
-			warp "alberta",235,45;
+			warp "alberta",245,87;
 		else
-			warp "alberta",238,22;
+			warp "alberta",235,45;
 
 		end;
 	}

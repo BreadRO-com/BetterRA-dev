@@ -3,8 +3,8 @@
 #	- ID                       (数值类型) 仓库的唯一编号, 用于 'openstorage2' 脚本指令, 这样地图服务器才知道应该打开哪个仓库.
 #	  Name                     (字符串类型) 仓库的名称, 这个名称会显示在客户端仓库窗口的标题栏中.
 #	  Table                    (字符串类型) 此仓库对应的数据库表名称. 附加数据表的格式与自带的 storage 表一样.
-#	  Type                     (字符串类型) 仓库对应 STORAGE_DB, 背包对应 INVENTORY_DB, 省略默认为 STORAGE_DB
-#	  Max                      (数值类型) *可选* 用来设置仓库能存放的物品种类上限. 若未设置的话, 则会采用源代码中 MAX_STORAGE 宏定
+#	  Type                     (字符串类型) 账号仓库对应 storage_db, 角色仓库对应 storage_char_db, 背包对应 inventory_db, 省略默认为 storage_db
+#	  Max                      (数值类型) *可选* 用来设置仓库能存放的物品种类上限. 若未设置的话, 则会采用源代码中 MIN_STORAGE 宏定
 ###########################################################################
 #
 # 扩展仓库通过 'openstorage2' 指令打开, 扩展背包通过 mapflag 标记切换, 具体请查看 doc/BetterRa_mapflags.txt
@@ -24,12 +24,16 @@ Body:
     Table: storage
     
 #  - ID: 1
-#    Name: "扩展仓库"
-#    Type: STORAGE_DB
+#    Name: "扩展仓库(与账号关联)"
+#    Type: storage_db
 #    Table: storage2
+#  - ID: 2
+#    Name: "扩展仓库(与角色关联)"
+#    Type: storage_char_db
+#    Table: storage3
 #  - ID: 101
 #    Name: "扩展背包"
-#    Type: INVENTORY_DB
+#    Type: inventory_db
 #    Table: inventory2
 
 Footer:

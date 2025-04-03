@@ -1,0 +1,221 @@
+# This file is a part of rAthena.
+#   Copyright(C) 2021 rAthena Development Team
+#   https://rathena.org - https://github.com/rathena
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+#
+###########################################################################
+# Map/Instance Difficulty Database
+###########################################################################
+#
+# Map/Instance Difficulty Settings
+#
+###########################################################################
+# - Level             难度等级, 如果自行添加请先在const.yml 中添加以 ML_ 开头的常量用作 Level等级, 也可以直接使用数字作为难度等级
+#   MobStatus         魔物属性配置.
+#     Hp:             血量倍率（默认：100, 可以超过21亿血量）
+#     Str:            力量倍率（默认：100）
+#     Agi:            敏捷倍率（默认：100）
+#     Vit:            体力倍率（默认：100）
+#     Int:            智力倍率（默认：100）
+#     Dex:            灵巧倍率（默认：100）
+#     Luk:            幸运倍率（默认：100）
+#     Atk:            攻击力倍率（默认：100）
+#     Matk:           魔法攻击力倍率（默认：100）
+#     Def:            防御力倍率（默认：100）
+#     Mdef:           魔法防御力倍率（默认：100）
+#     Hit:            命中率倍率（默认：100）
+#     Flee:           回避率倍率（默认：100）
+#     Flee2:          完全回避率倍率（默认：100）
+#     Cri:            暴击率倍率（默认：100）
+#     Speed:          行走速度倍率（默认：100）
+#     Aspd:           攻击速度倍率（默认：100）
+#   SkillUseRate:     释放技能倍率（默认：100）
+#   SkillDelayRate:   释放技能间隔倍率（默认：100）
+#   MobDropRate:      掉率倍率
+#     Normal:         普通魔物
+#       Common:       普通物品的掉落倍率
+#       Heal:         治疗类物品的掉落倍率
+#       Use:          可使用类物品的掉落倍率
+#       Equip:        装备类物品的掉落倍率
+#       Card:         卡片类物品的掉落倍率
+#     MiniBoss:       MiniBoss魔物
+#       Common:       普通物品的掉落倍率
+#       Heal:         治疗类物品的掉落倍率
+#       Use:          可使用类物品的掉落倍率
+#       Equip:        装备类物品的掉落倍率
+#       Card:         卡片类物品的掉落倍率
+#     Mvp:            MiniBoss魔物
+#       Common:       普通物品的掉落倍率
+#       Heal:         治疗类物品的掉落倍率
+#       Use:          可使用类物品的掉落倍率
+#       Equip:        装备类物品的掉落倍率
+#       Card:         卡片类物品的掉落倍率
+#    MobExpRate:      经验倍率
+#      Base: 75       基础经验倍率
+#      Job: 75        职业经验倍率
+#      Mvp: 75        MVP经验倍率
+#   BonusScript:      地图上常驻的 bonus 当玩家在地图上时自动叠加这些 bonus.
+#   EnterScript:      玩家进入地图时触发的脚本
+#   LeaveScript:      玩家离开地图时触发的脚本
+#   MapList:          应用这个配置的地图列表
+#
+###########################################################################
+#
+# 如果所有怪物统一掉落倍率, 也可以这样写:
+#   MobDropRate:      掉率倍率
+#     Common:       普通物品的掉落倍率
+#     Heal:         治疗类物品的掉落倍率
+#     Use:          可使用类物品的掉落倍率
+#     Equip:        装备类物品的掉落倍率
+#     Card:         卡片类物品的掉落倍率
+#
+###########################################################################
+#
+# 如果在副本使用请在创建副本时(脚本指令: instance_create)带上难度参数
+# 例子: instance_create("无尽之塔",IM_PARTY, getcharid(1), ML_HARD);
+#
+# SkillUseRate 调小释放技能概率增加, SkillDelayRate 调小释放技能间隔变短
+# 同时调的过小可能会造成魔物一直使用同一个技能的问题
+#
+###########################################################################
+#
+# 注意! 脚本不需要在同一行, 支持多行, 如果需要使用此功能, 请联作者
+# 功能可在测试版测试, 测试版为 BetterRA.cn 首页下载, 售后服务版免费使用
+#
+###########################################################################
+
+Header:
+  Type: MAP_LEVEL_DB
+  Version: 1
+
+Body:
+  - Level: Easy
+    MobStatus:
+      Hp: 75
+      Str: 75
+      Agi: 75
+      Vit: 75
+      Int: 75
+      Dex: 75
+      Luk: 75
+      Atk: 75
+      Matk: 75
+      Def: 75
+      Mdef: 75
+      Hit: 75
+      Flee: 75
+      Flee2: 75
+      Cri: 75
+      Speed: 120
+      Aspd: 120
+    MobDropRate:
+      Common: 75
+      Heal: 75
+      Use: 75
+      Equip: 75
+      Card: 75
+    MobExpRate:
+      Base: 75
+      Job: 75
+      Mvp: 75
+#    BonusScript: |
+#      bonus bStr,10;
+#      bonus bAgi,10;
+#      bonus bVit,10;
+#    EnterScript: |
+#      sc_start SC_ATKPOTION,INFINITE_TICK,500;
+#      sc_start SC_MATKPOTION,INFINITE_TICK,500;
+#    LeaveScript: |
+#      sc_end SC_ATKPOTION;
+#      sc_end SC_MATKPOTION;
+#    MapList:
+#      - prontera
+#      - geffen
+  - Level: Normal
+    MobStatus:
+      Hp: 100
+      Str: 100
+      Agi: 100
+      Vit: 100
+      Int: 100
+      Dex: 100
+      Luk: 100
+      Atk: 100
+      Matk: 100
+      Def: 100
+      Mdef: 100
+      Hit: 100
+      Flee: 100
+      Flee2: 100
+      Cri: 100
+      Speed: 100
+      Aspd: 100
+#    MobDropRate:
+#      Normal:
+#        Common: 100
+#        Heal: 100
+#        Use: 100
+#        Equip: 100
+#        Card: 100
+#      MiniBoss:
+#        Common: 100
+#        Heal: 100
+#        Use: 100
+#        Equip: 100
+#        Card: 100
+#      Mvp:
+#        Common: 100
+#        Heal: 100
+#        Use: 100
+#        Equip: 100
+#        Card: 100
+  - Level: Hard
+    MobStatus:
+      Hp: 200
+      Str: 200
+      Agi: 200
+      Vit: 200
+      Int: 200
+      Dex: 200
+      Luk: 200
+      Atk: 200
+      Matk: 200
+      Def: 200
+      Mdef: 200
+      Hit: 200
+      Flee: 200
+      Flee2: 200
+      Cri: 200
+      Speed: 75
+      Aspd: 75
+  - Level: Insane
+    MobStatus:
+      Hp: 1000
+      Str: 1000
+      Agi: 1000
+      Vit: 1000
+      Int: 1000
+      Dex: 1000
+      Luk: 1000
+      Atk: 1000
+      Matk: 1000
+      Def: 1000
+      Mdef: 1000
+      Hit: 1000
+      Flee: 1000
+      Flee2: 1000
+      Cri: 1000
+      Speed: 50
+      Aspd: 50

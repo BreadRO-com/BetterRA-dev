@@ -9,7 +9,7 @@
 // - Up to 5 ID/Amount pairs can be specified.
 // - Rate = n/10%
 
-0,703,1000,4,800,2,200	// Hinalle (¹ã·¶Î§±ù¶³)
+0,703,1000,4,800,2,200	// Hinalle (¹ã·¶Î§Àä¶³)
 1,958,800,9,1000		// Horrendous_Mouth
 2,959,800,7,1000		// Rotten_Scale
 3,960,1000,6,800,9,200	// Nipper 

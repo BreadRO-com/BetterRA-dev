@@ -3,7 +3,7 @@
 //===== By: ==================================================
 //= rAthena Dev Team
 //===== Last Updated: ========================================
-//= 20200602
+//= 20220402
 //===== Description: =========================================
 //= Explanation of the item_db.yml file and structure.
 //============================================================
@@ -102,6 +102,7 @@ Attack: Weapon's attack.
 ---------------------------------------
 
 MagicAttack: Weapon's magic attack. (Renewal only)
+             Unlike matk bonus from equipment, MagicAttack is taken into account in weapon variance calculation on Renewal.
 
 ---------------------------------------
 
@@ -119,35 +120,146 @@ Slots: Amount of slots the item possesses.
 
 Jobs: Equippable jobs.
 
-All          - Applies to all jobs listed below.
-Acolyte
-Alchemist
-Archer
-Assassin
-BardDancer   - Applies to Bard and Dancer.
-Blacksmith
-Crusader
-Gunslinger
-Hunter
-KagerouOboro - Applies to Kagerou and Oboro.
-Knight
-Mage
-Merchant
-Monk
-Ninja
-Novice
-Priest
-Rebellion
-Rogue
-Sage
-SoulLinker
-StarGladiator
-Summoner
-SuperNovice
-Swordman
-Taekwon
-Thief
-Wizard
+All                   所有职业    
+Novice                初学者(0)
+Swordman              剑士(1)
+Mage                  魔法师(2)
+Archer                弓箭手(3)
+Acolyte               服事(4)
+Merchant              商人(5)
+Thief                 盗贼(6)
+Knight                骑士(7)
+Priest                牧师(8)
+Wizard                巫师(9)
+Blacksmith            铁匠(10)
+Hunter                猎人(11)
+Assassin              刺客(12)
+Crusader              十字军(14)
+Monk                  武僧(15)
+Sage                  贤者(16)
+Rogue                 流氓(17)
+Alchemist             炼金术师(18)
+Barddancer            诗人/舞娘(20)
+Supernovice           超级初学者(23)
+Gunslinger            枪手(24)
+Ninja                 忍者(25)
+Novice_high           进阶初学者(4001)
+Swordman_high         进阶剑士(4002)
+Mage_high             进阶魔法师(4003)
+Archer_high           进阶弓箭手(4004)
+Acolyte_high          进阶服事(4005)
+Merchant_high         进阶商人(4006)
+Thief_high            进阶盗贼(4007)
+Lord_knight           骑士领主(4008)
+High_priest           神官(4009)
+High_wizard           超魔导师(4010)
+Whitesmith            神工匠(4011)
+Sniper                神射手(4012)
+Assassin_cross        十字刺客(4013)
+Paladin               圣殿十字军(4015)
+Champion              武术宗师(4016)
+Professor             智者(4017)
+Stalker               神行太保(4018)
+Creator               创造者(4019)
+Clowngypsy            冷艳舞姬(4021)
+Baby                  初学者宝宝(4023)
+Baby_swordman         剑士宝宝(4024)
+Baby_mage             魔法师宝宝(4025)
+Baby_archer           弓箭手宝宝(4026)
+Baby_acolyte          服事宝宝(4027)
+Baby_merchant         商人宝宝(4028)
+Baby_thief            盗贼宝宝(4029)
+Baby_knight           骑士宝宝(4030)
+Baby_priest           牧师宝宝(4031)
+Baby_wizard           巫师宝宝(4032)
+Baby_blacksmith       铁匠宝宝(4033)
+Baby_hunter           猎人宝宝(4034)
+Baby_assassin         刺客宝宝(4035)
+Baby_crusader         十字军宝宝(4037)
+Baby_monk             武僧宝宝(4038)
+Baby_sage             贤者宝宝(4039)
+Baby_rogue            流氓宝宝(4040)
+Baby_alchemist        炼金术师宝宝(4041)
+Baby_barddancer       舞娘宝宝(4043)
+Super_baby            超级初学者宝宝(4045)
+Taekwon               跆拳少年(4046)
+Stargladiator         拳圣(4047)
+Soullinker            灵媒(4049)
+Gangsi                未命名职业(4050)
+Deathknight           死亡骑士(4051)
+Darkcollector         黑暗收集者(4052)
+Rune_knight           卢恩骑士(4054)
+Warlock               大法师(4055)
+Ranger                游侠(4056)
+Arch_bishop           大主教(4057)
+Mechanic              机匠(4058)
+Guillotine_cross      十字斩首者(4059)
+Rune_knight_t         进阶三转卢恩骑士(4060)
+Warlock_t             进阶三转咒术士(4061)
+Ranger_t              进阶三转游侠(4062)
+Arch_bishop_t         进阶三转大主教(4063)
+Mechanic_t            进阶三转机械工匠(4064)
+Guillotine_cross_t    进阶三转十字斩首者(4065)
+Royal_guard           皇家卫士(4066)
+Sorcerer              元素使(4067)
+Minstrelwanderer      浪姬舞者(4069)
+Sura                  修罗(4070)
+Genetic               基因学者(4071)
+Shadow_chaser         魅影追踪者(4072)
+Royal_guard_t         进阶三转皇家禁卫队(4073)
+Sorcerer_t            进阶三转妖术师(4074)
+Minstrelwanderer_t    进阶三转漫游舞者(4076)
+Sura_t                进阶三转修罗(4077)
+Genetic_t             进阶三转基因学者(4078)
+Shadow_chaser_t       进阶三转魅影追踪者(4079)
+Baby_rune             卢恩骑士宝宝(4096)
+Baby_rune_knight      卢恩骑士宝宝(4096)
+Baby_warlock          大法师宝宝(4097)
+Baby_ranger           游侠宝宝(4098)
+Baby_arch_bishop      大主教宝宝(4099)
+Baby_mechanic         机匠宝宝(4100)
+Baby_guillotine_cross 十字斩首者宝宝(4101)
+Baby_royal_guard      皇家卫士宝宝(4102)
+Baby_sorcerer         元素使宝宝(4103)
+Baby_minstrelwanderer 浪姬舞者宝宝(4105)
+Baby_sura             修罗宝宝(4106)
+Baby_genetic          基因学者宝宝(4107)
+Baby_shadow_chaser    魅影追踪者宝宝(4108)
+Super_novice_e        进阶超级初学者(4190)
+Super_baby_e          进阶超级初学者宝宝(4191)
+Kagerouoboro          日影/月影忍者(4212)
+Rebellion             反叛者(4215)
+Summoner              召唤师(4218)
+Baby_summoner         召唤师宝宝(4220)
+Baby_ninja            忍者宝宝(4222)
+Baby_kagerouoboro     月影忍者宝宝(4224)
+Baby_taekwon          跆拳道宝宝(4225)
+Baby_star_gladiator   拳圣宝宝(4226)
+Baby_soul_linker      灵媒宝宝(4227)
+Baby_gunslinger       枪手宝宝(4228)
+Baby_rebellion        反叛者宝宝(4229)
+Star_emperor          星帝(4239)
+Soul_reaper           灵魂收割者(4240)
+Baby_star_emperor     星帝宝宝(4241)
+Baby_soul_reaper      灵魂收割者宝宝(4242)
+Dragon_knight         卢恩龙爵(4252)
+Meister               机甲神匠(4253)
+Shadow_cross          十字暗影(4254)
+Arch_mage             禁咒魔导士(4255)
+Cardinal              枢机主教(4256)
+Windhawk              风鹰狩猎者(4257)
+Imperial_guard        帝国圣卫军(4258)
+Biolo                 生命缔造者(4259)
+Abyss_chaser          深渊追迹者(4260)
+Elemental_master      元素支配者(4261)
+Inquisitor            圣裁者(4262)
+Troubadourtrouvere    乐之舞灵(4264)
+Sky_emperor           天帝(4302)
+Soul_ascetic          灵导士(4303)
+Shinkiro_shiranui     不知火(4305)
+Night_watch           夜巡者(4306)
+Hyper_novice          顶尖初学者(4307)
+Spirit_handler        魂灵师(4308)
 
 ---------------------------------------
 
@@ -220,6 +332,10 @@ Refineable: Defines if the item can be refined.
 
 ---------------------------------------
 
+Gradable: Defines if the item can be graded.
+
+---------------------------------------
+
 View: For normal items, defines a replacement view-sprite for the item.
 
 ---------------------------------------
@@ -239,6 +355,27 @@ BindOnEquip  - If the item is bound to the character upon equipping.
 DropAnnounce - If the item has a special announcement to self on drop.
 NoConsume    - If the item is consumed on use.
 DropEffect   - If the item has a special effect on the ground when dropped by a monster.
+
+BetterRA 添加:
+ForceUseItem          当玩家处于不能使用物品的状态时依然可以使用带有此标签的物品
+IgnoreNoFunc          物品当在地图 mapflag 标签没有 noitemfunc 时被禁用, 有 noitemfunc 则生效
+NoConsume2            物品不会由于被玩家主动使用而消耗（无 NoConsume 在使用技能和坐骑下不能使用的限制的限制）
+NoSkillConsume        物品不会由于被发动技能所需要而消耗
+NoDropWithoutPlayer   魔物在没有玩家参与被杀死时不会掉落该物品
+DoDropEvent           魔物被玩家击杀掉落该物品时, 会触发 OnMobDropItemFilter 与 OnMobDropItemEvent 事件
+TurnIntoCostume       插有该物品的装备变为时装/影装 (先在 BetterRA.conf 中 配置 item_costume_card为 yes 开启该功能)
+IgnoreScript          插有该物品的装备、时装/影装所有属性会无效化
+IgnoreAutoLoot        物品无视自动拾取, 会直接掉到地上
+IgnoreEquipView       装备外观不显示在装备栏窗口中
+
+---------------------------------------
+
+Announce: Different types of announce for an item.
+
+BetterRA 添加:
+MobDrop    当魔物掉落时公告
+MvpReward  当以MVP奖励方式获取时公告
+Steal      当偷窃获得该物品时公告
 
 ---------------------------------------
 
@@ -274,6 +411,10 @@ Trade: Trade restrictions.
   NoGuildStorage - If the item can not be put in a guild storage.
   NoMail         - If the item can not be put in a mail.
   NoAuction      - If the item can not be put in an auction.
+  
+BetterRA 添加:
+  ForceVending   无视交易限制可以挂店出售租赁和绑定物品等(租赁时间不会显示在商店内 Default: false)
+  ForceTrade     无视交易限制可以交易租赁和绑定物品等(租赁时间不会显示在交易框内 Default: false)
 
 ---------------------------------------
 
@@ -281,10 +422,10 @@ Script: Script to execute when the item is used/equipped.
 
 ---------------------------------------
 
-OnEquip_Script: Script to execute when the item is equipped.
-                Warning, not all item bonuses will work here as expected.
+EquipScript: Script to execute when the item is equipped.
+             Warning, not all item bonuses will work here as expected.
 
 ---------------------------------------
 
-OnUnequip_Script: Script to execute when the item is unequipped or when a rental item expires.
-                  Warning, not all item bonuses will work here as expected.
+UnEquipScript: Script to execute when the item is unequipped or when a rental item expires.
+               Warning, not all item bonuses will work here as expected.

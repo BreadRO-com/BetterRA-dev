@@ -44,6 +44,7 @@
 #   EquipLevelMin           Minimum required level to equip. (Default: 0)
 #   EquipLevelMax           Maximum level that can equip. (Default: 0)
 #   Refineable              If the item can be refined. (Default: false)
+#   Gradable                If the item can be graded. (Default: false)
 #   View                    View sprite of an item. (Default: 0)
 #   AliasName               Another item's AegisName that will be sent to the client instead of this item's AegisName. (Default: null)
 #   Flags:                  Item flags. (Default: null)
@@ -60,11 +61,15 @@
 #     NoConsume2            物品不会由于被玩家主动使用而消耗（无 NoConsume 在使用技能和坐骑下不能使用的限制的限制）
 #     NoSkillConsume        物品不会由于被发动技能所需要而消耗
 #     NoDropWithoutPlayer   魔物在没有玩家参与被杀死时不会掉落该物品
-#     DoDropEvent           魔物被玩家击杀时, 会触发 OnMOBDropItemFilter 事件
+#     DoDropEvent           魔物被玩家击杀掉落该物品时, 会触发 OnMobDropItemFilter 与 OnMobDropItemEvent 事件
 #     TurnIntoCostume       插有该物品的装备变为时装/影装 (先在 BetterRA.conf 中 配置 item_costume_card为 yes 开启该功能)
 #     IgnoreScript          插有该物品的装备、时装/影装所有属性会无效化
 #     IgnoreAutoLoot        物品无视自动拾取, 会直接掉到地上
 #     IgnoreEquipView       装备外观不显示在装备栏窗口中
+#   Announce:               物品获取公告
+#     MobDrop               当魔物掉落时公告
+#     MvpReward             当以MVP奖励方式获取时公告
+#     Steal                 当偷窃获得该物品时公告
 #   Delay:                  Item use delay. (Default: null)
 #     Duration              Duration of delay in seconds.
 #     Status                Status Change used to track delay. (Default: None)
@@ -74,6 +79,11 @@
 #     Cart                  If the stack is applied to the player's cart. (Default: false)
 #     Storage               If the stack is applied to the player's storage. (Default: false)
 #     GuildStorage          If the stack is applied to the player's guild storage. (Default: false)
+#   MaxAmount:              物品最大数量, 超过堆叠上限后, 将添加在另一个栏位, 可超过 30000
+#     Inventory             物品在背包中最大数量
+#     Cart                  物品在手推车中最大数量
+#     Storage               物品在仓库中最大数量
+#     GuildStorage          物品在公会仓库中最大数量
 #   NoUse:                  Conditions when the item is unusable. (Default: null)
 #     Override              Group level to override these conditions. (Default: 100)
 #     Sitting               If the item can not be used while sitting. (Default: false)
@@ -88,6 +98,8 @@
 #     NoGuildStorage        If the item can not be put in a guild storage. (Default: false)
 #     NoMail                If the item can not be put in a mail. (Default: false)
 #     NoAuction             If the item can not be put in an auction. (Default: false)
+#     ForceVending          无视交易限制可以挂店出售租赁和绑定物品等(租赁时间不会显示在商店内 Default: false)
+#     ForceTrade            无视交易限制可以交易租赁和绑定物品等(租赁时间不会显示在交易框内 Default: false)
 #   Script                  Script to execute when the item is used/equipped. (Default: null)
 #   EquipScript             Script to execute when the item is equipped. (Default: null)
 #   UnEquipScript           Script to execute when the item is unequipped or when a rental item expires. (Default: null)
@@ -95,7 +107,7 @@
 
 Header:
   Type: ITEM_DB
-  Version: 2
+  Version: 3
 
 Body:
   - Id: 1101
@@ -854,7 +866,6 @@ Body:
     Refineable: true
     Script: |
       skill "TF_DOUBLE",5;
-      bonus bDoubleRate,25;
       bonus2 bAddRace,RC_DemiHuman,5;
       bonus2 bAddRace,RC_Player_Human,5;
   - Id: 1131
@@ -1141,7 +1152,7 @@ Body:
       bonus bAllStats,2;
   - Id: 1141
     AegisName: Immaterial_Sword
-    Name: 圣剑 浑沌
+    Name: 圣剑 混沌
     Type: Weapon
     SubType: 1hSword
     Buy: 20
@@ -1193,7 +1204,7 @@ Body:
     EquipLevelMin: 68
     Refineable: true
     Script: |
-      bonus2 bAddMonsterDropItemGroup,IG_Jewel,100;
+      bonus2 bAddMonsterDropItemGroup,IG_Jewel,10000;
   - Id: 1143
     AegisName: Gaia_Sword
     Name: 寻矿之剑
@@ -1219,7 +1230,7 @@ Body:
     EquipLevelMin: 74
     Refineable: true
     Script: |
-      bonus2 bAddMonsterDropItemGroup,IG_Ore,30;
+      bonus2 bAddMonsterDropItemGroup,IG_Ore,10000;
   - Id: 1144
     AegisName: Sasimi
     Name: 生鱼片刀
@@ -3492,7 +3503,7 @@ Body:
       bonus bUnbreakableWeapon;
   - Id: 1237
     AegisName: Grimtooth_
-    Name: 魔短剑 暗噬
+    Name: 魔短剑 闇噬
     Type: Weapon
     SubType: Dagger
     Buy: 20
@@ -4538,7 +4549,7 @@ Body:
          autobonus "{ bonus bAspdRate,100; }",70,3000,BF_WEAPON,"{ specialeffect2 EF_POTION_BERSERK; }";
   - Id: 1282
     AegisName: Krieger_Katar2
-    Name: 勇士秘刃暗啸
+    Name: 勇士秘刃闇啸
     Type: Weapon
     SubType: Katar
     Buy: 20
@@ -5718,7 +5729,7 @@ Body:
          bonus3 bAutoSpell,"BS_HAMMERFALL",3,30;
   - Id: 1377
     AegisName: Hurricane_Fury
-    Name: 狂怒 飓风
+    Name: 狂暴飓风
     Type: Weapon
     SubType: 2hAxe
     Buy: 20
@@ -7412,7 +7423,7 @@ Body:
       bonus bHit,10;
   - Id: 1477
     AegisName: Spectral_Spear
-    Name: 幻影长矛
+    Name: 妖怪的枪
     Type: Weapon
     SubType: 2hSpear
     Buy: 20
@@ -7462,7 +7473,7 @@ Body:
       bonus3 bAutoSpell,"KN_PIERCE",5,30;
   - Id: 1479
     AegisName: Spectral_Spear_
-    Name: 幻影长矛
+    Name: 妖怪的枪
     Type: Weapon
     SubType: 2hSpear
     Buy: 20
@@ -8286,7 +8297,7 @@ Body:
       bonus2 bAddEff,Eff_Stun,1000;
   - Id: 1523
     AegisName: Spike
-    Name: 暗盲之锤
+    Name: 闇盲之锤
     Type: Weapon
     SubType: Mace
     Buy: 20
@@ -8633,7 +8644,7 @@ Body:
       bonus2 bAddRace,RC_Undead,40;
   - Id: 1538
     AegisName: Spike_
-    Name: 暗盲之锤
+    Name: 闇盲之锤
     Type: Weapon
     SubType: Mace
     Buy: 20
@@ -9810,6 +9821,7 @@ Body:
       bonus2 bHPDrainRate,1000,100;
       bonus2 bSPDrainRate,1000,20;
       bonus bHealPower,200;
+      bonus bAspdRate,100;
       bonus2 bAddClass,Class_All,100;
       skill "WZ_STORMGUST",10;
       Skill "WZ_METEOR",10;
@@ -10442,8 +10454,9 @@ Body:
       bonus bDex,1;
       bonus bAtkEle,Ele_Undead;
       bonus bMatkRate,20;
-      bonus3 bAutoSpellWhenHit,"NPC_WIDECURSE",5,10+getrefine();
-      if (getrefine()>=9) {
+      .@r = getrefine();
+      bonus3 bAutoSpellWhenHit,"NPC_WIDECURSE",5,10+.@r;
+      if (.@r>=9) {
          bonus bMatkRate,3;
          bonus bMaxSP,300;
       }
@@ -10495,8 +10508,9 @@ Body:
     Script: |
       bonus bInt,4;
       bonus bMatkRate,15;
-      bonus2 bIgnoreMdefClassRate,Class_Normal,10+getrefine();
-      bonus2 bIgnoreMdefClassRate,Class_Boss,10+getrefine();
+      .@r = getrefine();
+      bonus2 bIgnoreMdefClassRate,Class_Normal,10+.@r;
+      bonus2 bIgnoreMdefClassRate,Class_Boss,10+.@r;
   - Id: 1627
     AegisName: Staffy
     Name: Staffy
@@ -10791,12 +10805,13 @@ Body:
       bonus bInt,3;
       bonus bDex,3;
       bonus bMatkRate,20;
-      bonus2 bIgnoreMdefClassRate,Class_Normal,getrefine();
-      bonus2 bIgnoreMdefClassRate,Class_Boss,getrefine();
-      bonus bDelayRate,-(getrefine()*3/2);
+      .@r = getrefine();
+      bonus2 bIgnoreMdefClassRate,Class_Normal,.@r;
+      bonus2 bIgnoreMdefClassRate,Class_Boss,.@r;
+      bonus bDelayRate,-(.@r*3/2);
   - Id: 1637
     AegisName: Eraser
-    Name: 净化之仗
+    Name: 净化之杖
     Type: Weapon
     SubType: Staff
     Buy: 20
@@ -10918,12 +10933,14 @@ Body:
       NoMail: true
       NoAuction: true
     Script: |
+      bonus bMatkRate,15;
       bonus2 bMagicAddRace,RC_DemiHuman,15;
       bonus2 bMagicAddRace,RC_Player_Human,15;
-      bonus2 bIgnoreMdefRaceRate,RC_DemiHuman,25 + ((getrefine()>5) ? 5 : 0);
-      bonus2 bIgnoreMdefRaceRate,RC_Player_Human,25 + ((getrefine()>5) ? 5 : 0);
+      .@r = getrefine();
+      bonus2 bIgnoreMdefRaceRate,RC_DemiHuman,25 + ((.@r>5) ? 5 : 0);
+      bonus2 bIgnoreMdefRaceRate,RC_Player_Human,25 + ((.@r>5) ? 5 : 0);
       bonus bUnbreakableWeapon;
-      if (getrefine()>8) {
+      if (.@r>8) {
          bonus bCastrate,-5;
          bonus bDelayRate,-5;
          bonus bMatkRate,5;
@@ -10958,17 +10975,19 @@ Body:
       NoMail: true
       NoAuction: true
     Script: |
+      bonus bMatkRate,15;
       bonus bHealPower,14;
       bonus bDelayRate,-10;
       bonus bUnbreakableWeapon;
-      if (getrefine()>5) {
+      .@r = getrefine();
+      if (.@r>5) {
          bonus2 bIgnoreMdefRaceRate,RC_DemiHuman,5;
          bonus2 bIgnoreMdefRaceRate,RC_Player_Human,5;
-         bonus bHealPower,5+(getrefine()-5)*2;
+         bonus bHealPower,5+(.@r-5)*2;
       }
-      if (getrefine()>8)
+      if (.@r>8)
          bonus5 bAutoSpellOnSkill,"AL_HEAL","AL_HEAL",10,100,1;
-      if (getrefine()>9) {
+      if (.@r>9) {
          bonus bHealPower,10;
       }
   - Id: 1642
@@ -11026,10 +11045,11 @@ Body:
     EquipLevelMin: 70
     Refineable: true
     Script: |
-      bonus bMatk,15;
+      bonus bMatkRate,15;
       bonus bInt,4;
-      if (getrefine()>5) {
-         bonus bInt,getrefine()-5;
+      .@r = getrefine();
+      if (.@r>5) {
+         bonus bInt,.@r-5;
          bonus bMaxHP,-200;
          bonus bMaxSP,-100;
       }
@@ -11067,8 +11087,9 @@ Body:
     Script: |
       bonus bInt,4;
       bonus bMatkRate,15;
-      bonus2 bIgnoreMdefClassRate,Class_Normal,10+getrefine();
-      bonus2 bIgnoreMdefClassRate,Class_Boss,10+getrefine();
+      .@r = getrefine();
+      bonus2 bIgnoreMdefClassRate,Class_Normal,10+.@r;
+      bonus2 bIgnoreMdefClassRate,Class_Boss,10+.@r;
   - Id: 1645
     AegisName: Lich_Bone_Wand_M
     Name: Lich's Bone Wand
@@ -11106,8 +11127,9 @@ Body:
       bonus bDex,1;
       bonus bAtkEle,Ele_Undead;
       bonus bMatkRate,20;
-      bonus3 bAutoSpellWhenHit,"NPC_WIDECURSE",5,10+getrefine();
-      if (getrefine()>=9) {
+      .@r = getrefine();
+      bonus3 bAutoSpellWhenHit,"NPC_WIDECURSE",5,10+.@r;
+      if (.@r>=9) {
          bonus bMatkRate,3;
          bonus bMaxSP,300;
       }
@@ -11135,9 +11157,10 @@ Body:
     Script: |
       bonus bInt,4;
       bonus bMatkRate,15;
-      bonus bMdef,getrefine();
-      bonus2 bSkillAtk,"WZ_STORMGUST",getrefine();
-      if (getrefine()>9)
+      .@r = getrefine();
+      bonus bMdef,.@r;
+      bonus2 bSkillAtk,"WZ_STORMGUST",.@r;
+      if (.@r>9)
          bonus2 bCastrate,"WZ_STORMGUST",-8;
   - Id: 1647
     AegisName: Croce_Staff
@@ -11787,7 +11810,7 @@ Body:
       skill "AL_HEAL",1;
   - Id: 1730
     AegisName: Burning_Bow
-    Name: 灼热之弓
+    Name: 燃烧之弓
     Type: Weapon
     SubType: Bow
     Buy: 20
@@ -11809,7 +11832,7 @@ Body:
       bonus2 bSubEle,Ele_Fire,10;
   - Id: 1731
     AegisName: Frozen_Bow
-    Name: 冰霜之弓
+    Name: 冰冻之弓
     Type: Weapon
     SubType: Bow
     Buy: 20
@@ -11851,7 +11874,7 @@ Body:
     Refineable: true
   - Id: 1733
     AegisName: Gust_Bow
-    Name: 飓风之弓
+    Name: 疾风之弓
     Type: Weapon
     SubType: Bow
     Buy: 20
@@ -11871,7 +11894,7 @@ Body:
     Refineable: true
   - Id: 1734
     AegisName: Orc_Archer_Bow
-    Name: 兽人射手之弓
+    Name: 兽人弓箭手之弓
     Type: Weapon
     SubType: Bow
     Buy: 20
@@ -12071,7 +12094,7 @@ Body:
       bonus2 bAddEff,Eff_Curse,400;
   - Id: 1742
     AegisName: N_Composite_Bow
-    Name: 新手复合弓
+    Name: 新手专用坎普兹弓
     Type: Weapon
     SubType: Bow
     Buy: 1
@@ -14233,11 +14256,12 @@ Body:
     EquipLevelMin: 80
     Refineable: true
     Script: |
-      bonus bMatkRate,25+getrefine()/2;
+      .@r = getrefine();
+      bonus bMatkRate,25+(.@r/2);
       bonus bInt,3;
       bonus bAgi,10;
-      bonus bUseSPrate,(getrefine()*2);
-      bonus3 bAutoSpellWhenHit,"WZ_JUPITEL",5,(getrefine()*20);
+      bonus bUseSPrate,(.@r*2);
+      bonus3 bAutoSpellWhenHit,"WZ_JUPITEL",5,(.@r*20);
       bonus2 bCastrate,"HW_MAGICPOWER",-50;
   - Id: 2001
     AegisName: Divine_Cross
@@ -14291,19 +14315,20 @@ Body:
       NoMail: true
       NoAuction: true
     Script: |
-      bonus bMatkRate,getrefine();
+      .@r = getrefine();
+      bonus bMatkRate,15 + .@r;
       bonus2 bMagicAddRace,RC_DemiHuman,15;
       bonus2 bMagicAddRace,RC_Player_Human,15;
       bonus2 bIgnoreMdefRaceRate,RC_DemiHuman,25;
       bonus2 bIgnoreMdefRaceRate,RC_Player_Human,25;
       bonus bUnbreakableWeapon;
-      if (getrefine()>5) {
-         bonus2 bMagicAddRace,RC_DemiHuman,(getrefine()-5)*2;
-         bonus2 bMagicAddRace,RC_Player_Human,(getrefine()-5)*2;
-         bonus2 bIgnoreMdefRaceRate,RC_DemiHuman,5+(getrefine()-5)*2;
-         bonus2 bIgnoreMdefRaceRate,RC_Player_Human,5+(getrefine()-5)*2;
+      if (.@r>5) {
+         bonus2 bMagicAddRace,RC_DemiHuman,(.@r-5)*2;
+         bonus2 bMagicAddRace,RC_Player_Human,(.@r-5)*2;
+         bonus2 bIgnoreMdefRaceRate,RC_DemiHuman,5+(.@r-5)*2;
+         bonus2 bIgnoreMdefRaceRate,RC_Player_Human,5+(.@r-5)*2;
       }
-      if (getrefine()>8) {
+      if (.@r>8) {
          bonus5 bAutoSpellOnSkill,"WZ_STORMGUST","MG_SAFETYWALL",10,200,1;
          bonus5 bAutoSpellOnSkill,"WZ_METEOR","MG_SAFETYWALL",10,200,1;
          bonus5 bAutoSpellOnSkill,"WZ_VERMILION","MG_SAFETYWALL",10,200,1;
@@ -14336,11 +14361,12 @@ Body:
       NoMail: true
       NoAuction: true
     Script: |
-      bonus bMatkRate,25+getrefine()/2;
+      .@r = getrefine();
+      bonus bMatkRate,25+(.@r/2);
       bonus bInt,3;
       bonus bAgi,10;
-      bonus bUseSPrate,(getrefine()*2);
-      bonus3 bAutoSpellWhenHit,"WZ_JUPITEL",5,(getrefine()*20);
+      bonus bUseSPrate,(.@r*2);
+      bonus3 bAutoSpellWhenHit,"WZ_JUPITEL",5,(.@r*20);
       bonus2 bCastrate,"HW_MAGICPOWER",-50;
   - Id: 2004
     AegisName: Kronos
@@ -14363,9 +14389,10 @@ Body:
     EquipLevelMin: 50
     Refineable: true
     Script: |
+      .@r = getrefine();
       bonus bMatkRate,20;
-      bonus bInt,3+(getrefine()/2);
-      bonus bMaxHP,300+(50*getrefine()/2);
+      bonus bInt,3+(.@r/2);
+      bonus bMaxHP,300+(50*.@r/2);
       autobonus "{ bonus bMatkRate,12; bonus buseSPRate,20; }",1,5000,BF_MAGIC,"{ specialeffect2 EF_ENHANCE; }";
   - Id: 2005
     AegisName: Dea_Staff
@@ -14394,29 +14421,6 @@ Body:
       bonus bInt,6;
       bonus bVit,2;
       autobonus3 "{ }",20,1000,"AL_HEAL","{ specialeffect2 EF_MAGICALATTHIT; heal 0,200; }";
-  - Id: 2006
-    AegisName: G_Staff_Of_Light
-    Name: 光护之杖
-    Type: Weapon
-    SubType: 2hStaff
-    Buy: 20
-    Weight: 1900
-    Attack: 80
-    Range: 1
-    Jobs:
-      Mage: true
-      Sage: true
-      SoulLinker: true
-      Wizard: true
-    Locations:
-      Both_Hand: true
-    WeaponLevel: 4
-    EquipLevelMin: 60
-    Refineable: true
-    Script: |
-      /* bonus bMatk,150;
-      */ bonus bAtkEle,Ele_Holy;
-      bonus bInt,6;
   - Id: 2101
     AegisName: Guard
     Name: 铁盾
@@ -15247,11 +15251,11 @@ Body:
       Left_Hand: true
     ArmorLevel: 1
     EquipLevelMin: 1
-    Refineable: true
     View: 1
     Script: |
       bonus bAllStats,50;
       bonus bMdef,99;
+      bonus bUnbreakableShield;
       bonus bShortWeaponDamageReturn,100;
       bonus2 bSubRace,RC_DemiHuman,95;
       bonus2 bSubRace,RC_Player_Human,95;
@@ -17981,7 +17985,7 @@ Body:
       bonus bMdef,4;
   - Id: 2369
     AegisName: Freyja_Overcoat
-    Name: 菲力亚的长袍
+    Name: Freyja Overcoat
     Type: Armor
     Weight: 500
     Defense: 12
@@ -19257,7 +19261,7 @@ Body:
       bonus bMdef,4;
   - Id: 2428
     AegisName: Freyja_Boots
-    Name: 菲力亚的长靴
+    Name: Freyja Boots
     Type: Armor
     Weight: 300
     Defense: 10
@@ -20388,7 +20392,7 @@ Body:
       bonus5 bAutoSpellWhenHit,"NPC_ANTIMAGIC",6,200,BF_MAGIC,0;
   - Id: 2533
     AegisName: Freyja_Cape
-    Name: 菲力亚的斗篷
+    Name: Freyja Cape
     Type: Armor
     Weight: 200
     Defense: 10
@@ -20605,16 +20609,7 @@ Body:
     EquipLevelMin: 94
     Script: |
       bonus bMdef,5;
-      bonus3 bSubEle,Ele_Neutral,30,BF_SHORT;
-      bonus3 bSubEle,Ele_Water,30,BF_SHORT;
-      bonus3 bSubEle,Ele_Earth,30,BF_SHORT;
-      bonus3 bSubEle,Ele_Fire,30,BF_SHORT;
-      bonus3 bSubEle,Ele_Wind,30,BF_SHORT;
-      bonus3 bSubEle,Ele_Poison,30,BF_SHORT;
-      bonus3 bSubEle,Ele_Holy,30,BF_SHORT;
-      bonus3 bSubEle,Ele_Dark,30,BF_SHORT;
-      bonus3 bSubEle,Ele_Ghost,30,BF_SHORT;
-      bonus3 bSubEle,Ele_Undead,30,BF_SHORT;
+      bonus3 bSubEle,Ele_All,30,BF_WEAPON;
       bonus bFlee,30;
       skill "AL_TELEPORT",1;
       bonus bUnbreakableGarment;
@@ -20810,7 +20805,7 @@ Body:
     Refineable: true
   - Id: 2551
     AegisName: Rider_Insignia_M
-    Name: 奔跑者 徽章
+    Name: Crest of the Rider
     Type: Armor
     Buy: 20
     Weight: 500
@@ -21943,7 +21938,7 @@ Body:
       bonus2 bExpAddRace,RC_Demon,5;
   - Id: 2666
     AegisName: Lamp_Of_Hope
-    Name: 希望神灯
+    Name: Lantern of Hope
     Type: Armor
     Buy: 20
     Weight: 100
@@ -21974,7 +21969,7 @@ Body:
       bonus bDex,1;
   - Id: 2668
     AegisName: Women's_Glory
-    Name: 女生的荣耀
+    Name: Woman Glory
     Type: Armor
     Weight: 500
     Locations:
@@ -22141,7 +22136,7 @@ Body:
       bonus bDex,1;
   - Id: 2678
     AegisName: Ring_Of_Flame_Lord
-    Name: 火焰精灵王戒指
+    Name: 火焰国王戒指
     Type: Armor
     Buy: 20
     Weight: 100
@@ -22819,7 +22814,7 @@ Body:
       Both_Accessory: true
     ArmorLevel: 1
     Script: |
-      bonus bAtkRate,5;
+      bonus2 bAddClass,Class_All,5;
       bonus bMatkRate,5;
   - Id: 2710
     AegisName: Bloody_Iron_Ball_C
@@ -22837,7 +22832,7 @@ Body:
       bonus bBaseAtk,30;
   - Id: 2711
     AegisName: Spiritual_Ring_C
-    Name: 精灵 戒指C
+    Name: Spiritual Ring
     Type: Armor
     Buy: 1
     Locations:
@@ -23383,7 +23378,7 @@ Body:
       bonus bMdef,2;
   - Id: 2737
     AegisName: Foot_Ring
-    Name: 足环
+    Name: Foot Ring
     Type: Armor
     Buy: 20
     Weight: 150
@@ -23704,10 +23699,10 @@ Body:
       NoAuction: true
     Script: |
       bonus2 bAddClass,Class_All,5;
-      bonus bMatkrate,5;
+      bonus bMatkRate,5;
   - Id: 2753
     AegisName: Beholder_Ring
-    Name: 无形系 戒指
+    Name: 目击者之戒
     Type: Armor
     Locations:
       Both_Accessory: true
@@ -23726,7 +23721,7 @@ Body:
       bonus2 bExpAddRace,RC_Formless,15;
   - Id: 2754
     AegisName: Hallow_Ring
-    Name: 不死系 戒指
+    Name: 神圣之戒
     Type: Armor
     Locations:
       Both_Accessory: true
@@ -23745,7 +23740,7 @@ Body:
       bonus2 bExpAddRace,RC_undead,15;
   - Id: 2755
     AegisName: Clamorous_Ring
-    Name: 呐喊之戒
+    Name: 吶喊之戒
     Type: Armor
     Locations:
       Both_Accessory: true
@@ -23840,7 +23835,7 @@ Body:
       bonus2 bExpAddRace,RC_Demon,15;
   - Id: 2760
     AegisName: Bloody_Ring
-    Name: 人型系 戒指
+    Name: 血腥之戒
     Type: Armor
     Locations:
       Both_Accessory: true
@@ -23910,8 +23905,8 @@ Body:
     ArmorLevel: 1
     EquipLevelMin: 95
     Script: |
-      bonus bAtkRate,5;
-      bonus bMatkrate,5;
+      bonus2 bAddClass,Class_All,5;
+      bonus bMatkRate,5;
       bonus bMaxHPrate,5;
       bonus2 bSkillHeal,"AL_HEAL",5;
       skill "MG_SIGHT",1;
@@ -24256,7 +24251,7 @@ Body:
       bonus bMatkRate,3;
   - Id: 2786
     AegisName: Spiritual_Ring_M
-    Name: 精灵 戒指M
+    Name: Spiritual Ring
     Type: Armor
     Buy: 20
     Weight: 100
@@ -24712,7 +24707,6 @@ Body:
     Script: |
       bonus bMaxSP,100;
       skill "TF_DOUBLE",3;
-      bonus bDoubleRate,15;
       skill "TF_STEAL",1;
       skill "TF_HIDING",1;
       skill "TF_POISON",1;
@@ -25707,7 +25701,7 @@ Body:
       bonus bStr,2;
   - Id: 5054
     AegisName: Assassin_Mask
-    Name: 刺客口罩
+    Name: 卡兹爆米花假发帽
     Type: Armor
     Buy: 20
     Weight: 100
@@ -28310,8 +28304,6 @@ Body:
       bonus bMaxHP,50;
       bonus bMaxSP,10;
       skill "AL_RUWACH",1;
-    UnEquipScript: |
-      sc_end SC_RUWACH;
   - Id: 5213
     AegisName: Black_Bunny_Band
     Name: 兔女郎发圈
@@ -28440,7 +28432,7 @@ Body:
       bonus bInt,2;
   - Id: 5219
     AegisName: Drooping_Kitty_
-    Name: 进化的懒洋洋的猫
+    Name: 进化的懶洋洋的猫
     Type: Armor
     Buy: 250000
     Weight: 500
@@ -29677,7 +29669,7 @@ Body:
       bonus bLongAtkDef,10;
   - Id: 5278
     AegisName: Yellow_Ribbon
-    Name: 黄色发带
+    Name: Yellow Ribbon
     Type: Armor
     Buy: 20
     Weight: 100
@@ -29779,7 +29771,6 @@ Body:
       bonus bMaxHP,50;
       bonus bMaxSP,50;
       skill "TF_DOUBLE",2;
-      bonus bDoubleRate,10;
       bonus2 bSubRace,RC_DemiHuman,3;
       bonus2 bSubRace,RC_Player_Human,3;
   - Id: 5284
@@ -30158,7 +30149,7 @@ Body:
       bonus2 bResEff,Eff_Blind,10000;
   - Id: 5305
     AegisName: Pirate_Dagger
-    Name: 海盗匕首
+    Name: Pirate Dagger
     Type: Armor
     Buy: 20
     Weight: 100
@@ -30178,7 +30169,7 @@ Body:
       bonus bBaseAtk,5;
   - Id: 5306
     AegisName: Freyja_Crown
-    Name: 菲力亚的冠冕
+    Name: Freya's Crown
     Type: Armor
     Weight: 500
     Defense: 12
@@ -30223,7 +30214,7 @@ Body:
       bonus3 bAutoSpellWhenHit,"DC_WINKCHARM",1,50;
   - Id: 5308
     AegisName: Brazilian_Flag_Hat
-    Name: 巴西国旗帽子
+    Name: Brazil National Flag Hat
     Type: Armor
     Buy: 20
     Weight: 300
@@ -31288,7 +31279,7 @@ Body:
       skill "HT_FLASHER",1;
   - Id: 5366
     AegisName: Hat_0f_King
-    Name: 国王帽子
+    Name: Love Dad Bandana
     Type: Armor
     Buy: 20
     Weight: 200
@@ -31613,8 +31604,6 @@ Body:
     Script: |
       bonus bVit,1;
       skill "AL_ANGELUS",1;
-    UnEquipScript: |
-      sc_end SC_ANGELUS;
   - Id: 5383
     AegisName: Hunting_Cap
     Name: 猎人帽
@@ -31742,7 +31731,6 @@ Body:
       NoGuildStorage: true
     Script: |
       skill "TF_DOUBLE",5;
-      bonus bDoubleRate,25;
   - Id: 5389
     AegisName: Angel_Spirit
     Name: 天使魅影
@@ -32372,7 +32360,7 @@ Body:
       bonus bMdef,2;
   - Id: 5423
     AegisName: Lovecap_China
-    Name: I LOVE CHINA
+    Name: I Love China
     Type: Armor
     Buy: 20
     Weight: 250
@@ -33112,7 +33100,7 @@ Body:
       skill "PR_MAGNIFICAT", 3;
   - Id: 5476
     AegisName: Hairband_Of_Grandpeco
-    Name: 七彩大嘴鸟发带
+    Name: 七彩大嘴鸟发饰
     Type: Armor
     Buy: 20
     Weight: 800
@@ -33150,7 +33138,7 @@ Body:
       skill "SM_BASH", 1;
   - Id: 5478
     AegisName: Classic_Hat
-    Name: 古典帽子
+    Name: Classic Hat
     Type: Armor
     Buy: 20
     Weight: 500
@@ -33661,7 +33649,7 @@ Body:
       bonus3 bAutoSpellWhenHit,"MG_LIGHTNINGBOLT",1,20;
   - Id: 5504
     AegisName: China_Wedding_Veil
-    Name: RO5周年纪念头纱
+    Name: Wedding Weil
     Type: Armor
     Buy: 20
     Weight: 500
@@ -33983,7 +33971,7 @@ Body:
       bonus bMatkRate,4;
   - Id: 5521
     AegisName: Angry_Mouth_C
-    Name: 愤怒的嘴
+    Name: Angry Mouth
     Type: Armor
     Locations:
       Head_Low: true
@@ -34185,9 +34173,7 @@ Body:
     View: 525
     Script: |
       bonus bDex,2;
-      .@bonus = max(getskilllv("TF_DOUBLE"), 5);
-      skill "TF_DOUBLE",.@bonus;
-      bonus bDoubleRate,.@bonus * 5;
+      skill "TF_DOUBLE",5;
   - Id: 5532
     AegisName: Pirate_Dagger_J
     Name: 海贼匕首
@@ -34207,7 +34193,7 @@ Body:
       bonus bShortWeaponDamageReturn,1;
   - Id: 5533
     AegisName: Emperor_Wreath_J
-    Name: 皇帝的月桂冠
+    Name: Emperor Wreath
     Type: Armor
     Buy: 20
     Weight: 800
@@ -34265,7 +34251,7 @@ Body:
       bonus2 bAddMonsterDropItem,6187,1000;
   - Id: 5537
     AegisName: Quati_Hat
-    Name: 长鼻浣熊帽子
+    Name: Kwati Hat
     Type: Armor
     Buy: 20
     Weight: 700
@@ -34304,7 +34290,7 @@ Body:
       bonus bDex,3;
   - Id: 5539
     AegisName: Jaguar_Hat
-    Name: 猎豹面具
+    Name: Jaguar Hat
     Type: Armor
     Buy: 20
     Weight: 400
@@ -34765,7 +34751,7 @@ Body:
       bonus bCastRate,-10;
   - Id: 5565
     AegisName: Dragon_Arhat_Mask
-    Name: 降龙罗汉脸谱
+    Name: Dragon Arhat Mask
     Type: Armor
     Defense: 5
     Locations:
@@ -34788,7 +34774,7 @@ Body:
       bonus2 bAddRace,RC_Player_Human,10;
   - Id: 5566
     AegisName: Tiger_Arhat_Mask
-    Name: 伏虎罗汉脸谱
+    Name: Tiger Arhat Mask
     Type: Armor
     Defense: 1
     Locations:
@@ -34961,7 +34947,7 @@ Body:
     View: 556
   - Id: 5577
     AegisName: Dark_Knight_MaskB
-    Name: 黑暗骑士面具
+    Name: Dark Knight Mask
     Type: Armor
     Weight: 3000
     Defense: 5
@@ -35215,7 +35201,7 @@ Body:
     View: 569
   - Id: 5596
     AegisName: 4Leaf_Clover_In_Mouth
-    Name: 幸运四叶草
+    Name: 4Leaf Clover In Mouth
     Type: Armor
     Buy: 20
     Defense: 2
@@ -35344,7 +35330,7 @@ Body:
       bonus bAllStats, 1;
   - Id: 5653
     AegisName: Darkness_Helm_J
-    Name: 黑暗头盔
+    Name: Darkness Helm
     Type: Armor
     Buy: 20
     Weight: 500
@@ -35722,7 +35708,7 @@ Body:
       }
   - Id: 5741
     AegisName: Im_Egg_Shell_Hat
-    Name: 永生蛋壳帽
+    Name: Eternal Egg Shell
     Type: Armor
     Buy: 20
     Defense: 1
@@ -35961,7 +35947,7 @@ Body:
       NoAuction: true
   - Id: 5800
     AegisName: Blush_Of_Groom
-    Name: 新郎的害羞
+    Name: Blush of Groom
     Type: Armor
     Buy: 20
     Weight: 50
@@ -36186,7 +36172,7 @@ Body:
       NoAuction: true
   - Id: 5815
     AegisName: Classic_Hat_J
-    Name: 古雅帽子
+    Name: '古雅帽子[1]'
     Type: Armor
     Buy: 20
     Weight: 500
@@ -36203,7 +36189,7 @@ Body:
       bonus2 bSubSize, 2, 5;
   - Id: 5816
     AegisName: Cowboy_Hat_J
-    Name: 新荒野之帽
+    Name: '新荒野之帽[1]'
     Type: Armor
     Buy: 20
     Weight: 500
@@ -36217,7 +36203,7 @@ Body:
       bonus bFlee,-5;
   - Id: 5817
     AegisName: Valentine_Pledge
-    Name: 人气的象征
+    Name: Valentine Pledge
     Type: Armor
     Buy: 20
     Defense: 3
@@ -36280,7 +36266,7 @@ Body:
       bonus bAllStats, 3;
   - Id: 5821
     AegisName: Gold_Tulip_Hairpin
-    Name: 黄金郁金香发夹
+    Name: Gold Tulip Hairpin
     Type: Armor
     Buy: 10
     Weight: 100
@@ -36344,7 +36330,7 @@ Body:
     View: 265
   - Id: 5826
     AegisName: Valkyrie_Helmet
-    Name: 巴基力头盔
+    Name: Valkyrie Helmet
     Type: Armor
     Defense: 10
     Locations:
@@ -36523,7 +36509,7 @@ Body:
       bonus bAllStats,1;
   - Id: 9001
     AegisName: Poring_Egg
-    Name: 波利魔物蛋
+    Name: 波利宠物蛋
     Type: Petegg
     Buy: 20
   - Id: 9002
@@ -36533,7 +36519,7 @@ Body:
     Buy: 20
   - Id: 9003
     AegisName: Poporing_Egg
-    Name: 波波利魔物蛋
+    Name: 波波利宠物蛋
     Type: Petegg
     Buy: 20
   - Id: 9004
@@ -36548,17 +36534,17 @@ Body:
     Buy: 20
   - Id: 9006
     AegisName: Chonchon_Egg
-    Name: 苍蝇魔物蛋
+    Name: 苍蝇宠物蛋
     Type: Petegg
     Buy: 20
   - Id: 9007
     AegisName: Steel_Chonchon_Egg
-    Name: 绿苍蝇魔物蛋
+    Name: 绿苍蝇宠物蛋
     Type: Petegg
     Buy: 20
   - Id: 9008
     AegisName: Hunter_Fly_Egg
-    Name: 赤苍蝇魔物蛋
+    Name: 赤苍蝇宠物蛋
     Type: Petegg
     Buy: 20
   - Id: 9009
@@ -36573,7 +36559,7 @@ Body:
     Buy: 20
   - Id: 9011
     AegisName: Rocker_Egg
-    Name: 摇滚蝗虫魔物蛋
+    Name: 摇滚蝗虫宠物蛋
     Type: Petegg
     Buy: 20
   - Id: 9012
@@ -36603,57 +36589,57 @@ Body:
     Buy: 20
   - Id: 9017
     AegisName: Orc_Warrior_Egg
-    Name: 兽人战士魔物蛋
+    Name: 兽人战士宠物蛋
     Type: Petegg
     Buy: 20
   - Id: 9018
     AegisName: Munak_Egg
-    Name: 僵尸魔物蛋
+    Name: 僵尸宠物蛋
     Type: Petegg
     Buy: 20
   - Id: 9019
     AegisName: Dokkaebi_Egg
-    Name: 土人魔物蛋
+    Name: 土人宠物蛋
     Type: Petegg
     Buy: 20
   - Id: 9020
     AegisName: Sohee_Egg
-    Name: 鬼女魔物蛋
+    Name: 鬼女宠物蛋
     Type: Petegg
     Buy: 20
   - Id: 9021
     AegisName: Isis_Egg
-    Name: 蛇女伊丝魔物蛋
+    Name: 蛇女伊丝宠物蛋
     Type: Petegg
     Buy: 20
   - Id: 9022
     AegisName: Green_Petite_Egg
-    Name: 毕帝特地龙魔物蛋
+    Name: 毕帝特地龙宠物蛋
     Type: Petegg
     Buy: 20
   - Id: 9023
     AegisName: Deviruchi_Egg
-    Name: 小恶魔魔物蛋
+    Name: 小恶魔宠物蛋
     Type: Petegg
     Buy: 20
   - Id: 9024
     AegisName: Bapho_Jr._Egg
-    Name: 小巴风特魔物蛋
+    Name: 小巴风特宠物蛋
     Type: Petegg
     Buy: 20
   - Id: 9025
     AegisName: Bongun_Egg
-    Name: 妖道魔物蛋
+    Name: 妖道宠物蛋
     Type: Petegg
     Buy: 20
   - Id: 9026
     AegisName: Zherlthsh_Egg
-    Name: 艾斯恩魔女魔物蛋
+    Name: 艾斯恩魔女宠物蛋
     Type: Petegg
     Buy: 20
   - Id: 9027
     AegisName: Alice_Egg
-    Name: 爱丽丝女仆魔物蛋
+    Name: 爱丽丝女仆宠物蛋
     Type: Petegg
     Buy: 20
   - Id: 9028
@@ -36684,52 +36670,52 @@ Body:
     Buy: 20
   - Id: 9032
     AegisName: Knife_Goblin_Egg
-    Name: 刺刀哥布灵魔物蛋
+    Name: 刺刀哥布灵宠物蛋
     Type: Petegg
     Buy: 20
   - Id: 9033
     AegisName: Flail_Goblin_Egg
-    Name: 链锤哥布灵魔物蛋
+    Name: 链锤哥布灵宠物蛋
     Type: Petegg
     Buy: 20
   - Id: 9034
     AegisName: Hammer_Goblin_Egg
-    Name: 榔头哥布灵魔物蛋
+    Name: 榔头哥布灵宠物蛋
     Type: Petegg
     Buy: 20
   - Id: 9035
     AegisName: Red_Deleter_Egg
-    Name: 七彩地龙魔物蛋
+    Name: 七彩地龙宠物蛋
     Type: Petegg
     Buy: 20
   - Id: 9036
     AegisName: Diabolic_Egg
-    Name: 赤焰小恶魔魔物蛋
+    Name: 赤焰小恶魔宠物蛋
     Type: Petegg
     Buy: 20
   - Id: 9037
     AegisName: Wanderer_Egg
-    Name: 邪骸浪人魔物蛋
+    Name: 邪骸浪人宠物蛋
     Type: Petegg
     Buy: 20
   - Id: 9038
     AegisName: New_Year_Doll_Egg
-    Name: 新年娃娃魔物蛋
+    Name: 新年娃娃宠物蛋
     Type: Petegg
     Buy: 20
   - Id: 9039
     AegisName: Bacsojin_Egg
-    Name: 白素贞魔物蛋
+    Name: Bacsojin Egg
     Type: Petegg
     Buy: 20
   - Id: 9040
     AegisName: Civil_Servant_Egg
-    Name: 狐仙魔物蛋
+    Name: 狐仙宠物蛋
     Type: Petegg
     Buy: 20
   - Id: 9041
     AegisName: Leaf_Cat_Egg
-    Name: 群叶猫魔物蛋
+    Name: 群叶猫宠物蛋
     Type: Petegg
     Buy: 20
   - Id: 9042
@@ -36744,7 +36730,7 @@ Body:
     Buy: 20
   - Id: 9044
     AegisName: Shinobi_Egg
-    Name: 火忍西怒毕魔物蛋
+    Name: 火忍西怒毕宠物蛋
     Type: Petegg
     Buy: 20
   - Id: 9045
@@ -36754,32 +36740,32 @@ Body:
     Buy: 20
   - Id: 9046
     AegisName: Goblin_Leader_Egg
-    Name: 哥布灵首领魔物蛋
+    Name: 哥布灵首领宠物蛋
     Type: Petegg
     Buy: 20
   - Id: 9047
     AegisName: Wicked_Nymph_Egg
-    Name: 妖仙女魔物蛋
+    Name: 妖仙女宠物蛋
     Type: Petegg
     Buy: 20
   - Id: 9048
     AegisName: Miyabi_Ningyo_Egg
-    Name: 米雅毕魔物蛋
+    Name: 米雅毕宠物蛋
     Type: Petegg
     Buy: 20
   - Id: 9049
     AegisName: Dullahan_Egg
-    Name: 无颅武士魔物蛋
+    Name: 无颅武士宠物蛋
     Type: Petegg
     Buy: 20
   - Id: 9050
     AegisName: Medusa_Egg
-    Name: 米杜沙魔物蛋
+    Name: 米杜沙宠物蛋
     Type: Petegg
     Buy: 20
   - Id: 9051
     AegisName: Stone_Shooter_Egg
-    Name: 石炮火树魔物蛋
+    Name: 石炮火树宠物蛋
     Type: Petegg
     Buy: 20
   - Id: 9052
@@ -36789,12 +36775,12 @@ Body:
     Buy: 20
   - Id: 9053
     AegisName: Golem_Egg
-    Name: 巨石怪魔物蛋
+    Name: 巨石怪宠物蛋
     Type: Petegg
     Buy: 20
   - Id: 9054
     AegisName: Nightmare_Terror_Egg
-    Name: 七彩梦魇魔物蛋
+    Name: 七彩梦魇宠物蛋
     Type: Petegg
     Buy: 20
   - Id: 9055
@@ -38686,7 +38672,7 @@ Body:
       bonus bUnbreakableWeapon;
   - Id: 13109
     AegisName: Wasteland_Outlaw_C
-    Name: 法外之徒
+    Name: Wasteland Outlaw
     Type: Weapon
     SubType: Revolver
     Buy: 20
@@ -39118,7 +39104,7 @@ Body:
       bonus bHit,-readparam(bDex)/3;
   - Id: 13167
     AegisName: Gate_KeeperDD
-    Name: 短口创DD
+    Name: 短口枪-DD
     Type: Weapon
     SubType: Shotgun
     Buy: 72000
@@ -39866,7 +39852,7 @@ Body:
     WeaponLevel: 4
     Script: |
       bonus bAtkEle,Ele_Fire;
-      bonus bHPDrainRate,1;
+      bonus2 bHPDrainRate,1000,1;
       bonus2 bSPLossRate,15,10000;
   - Id: 13404
     AegisName: Platinum_Shotel
@@ -39977,7 +39963,6 @@ Body:
     WeaponLevel: 4
     Script: |
       skill "TF_DOUBLE",5;
-      bonus bDoubleRate,25;
       bonus2 bAddRace,RC_DemiHuman,40;
       bonus2 bAddRace,RC_Player_Human,40;
   - Id: 13408
@@ -40364,14 +40349,16 @@ Body:
       NoMail: true
       NoAuction: true
     Script: |
-      bonus bInt,getrefine()-5;
+      .@r = getrefine();
+      bonus bInt,6;
+      bonus bInt,.@r-5;
       bonus bMatkRate,10;
       bonus bUnbreakableWeapon;
-      if (getrefine()>5)
+      if (.@r>5)
          bonus bUseSPrate,-10;
-      if (getrefine()>8)
+      if (.@r>8)
          bonus4 bAutoSpellOnSkill,"PA_PRESSURE","PR_LEXAETERNA",1,1000;
-      if (getrefine()>9)
+      if (.@r>9)
          bonus bInt,5;
   - Id: 13419
     AegisName: Holy_Saber
@@ -40641,7 +40628,7 @@ Body:
       bonus2 bAddSize,Size_All,40;
   - Id: 16030
     AegisName: Pilebuncker_S
-    Name: 冲击椎S
+    Name: 冲击锥 S
     Type: Weapon
     SubType: Mace
     Buy: 20
@@ -40660,7 +40647,7 @@ Body:
       bonus bAspdRate,getrefine()/2;
   - Id: 16031
     AegisName: Pilebuncker_P
-    Name: 冲击椎P
+    Name: 冲击锥 P
     Type: Weapon
     SubType: Mace
     Buy: 20
@@ -40678,7 +40665,7 @@ Body:
       bonus bBaseAtk,getrefine()*5;
   - Id: 16032
     AegisName: Pilebuncker_T
-    Name: 冲击椎T
+    Name: 冲击锥 T
     Type: Weapon
     SubType: Mace
     Buy: 20
@@ -40697,7 +40684,7 @@ Body:
       bonus bUseSPrate,getrefine()*-1;
   - Id: 18100
     AegisName: Shooting_Star_C
-    Name: 射击之星
+    Name: Shooting Star
     Type: Weapon
     SubType: Bow
     Buy: 20
@@ -40834,7 +40821,7 @@ Body:
     EquipLevelMin: 1
     View: 562
     Script: |
-      bonus bAtkRate,5;
+      bonus2 bAddClass,Class_All,5;
       bonus bMatkRate,5;
       bonus bMaxHPRate,10;
       bonus bMaxSPRate,10;
@@ -40908,7 +40895,7 @@ Body:
       }
   - Id: 18595
     AegisName: Horn_Of_Ancient
-    Name: 远古恶魔角
+    Name: Horn of Ancient
     Type: Armor
     Buy: 40
     Weight: 200
@@ -40974,18 +40961,12 @@ Body:
     Refineable: true
     View: 761
     Script: |
-      bonus bAtkRate,5;
-      if (getrefine() > 5 && getrefine() <= 12) {
+      bonus2 bAddClass,Class_All,5;
+      if (getrefine() > 5) {
          bonus2 bAddRace,RC_DemiHuman,(getrefine() - 5);
          bonus2 bSubRace,RC_DemiHuman,(getrefine() - 5);
          bonus2 bAddRace,RC_Player_Human,(getrefine() - 5);
          bonus2 bSubRace,RC_Player_Human,(getrefine() - 5);
-      }
-      if (getrefine() > 12) {
-         bonus2 bAddRace,RC_DemiHuman,7;
-         bonus2 bAddRace,RC_Player_Human,7;
-         bonus2 bSubRace,RC_DemiHuman,7;
-         bonus2 bSubRace,RC_Player_Human,7;
       }
   - Id: 18612
     AegisName: White_Musang_Hat
@@ -41057,7 +41038,7 @@ Body:
       bonus2 bMagicAddRace,RC_Demon,15;
   - Id: 19500
     AegisName: T_Mr_Smile
-    Name: (时装)笑脸面具
+    Name: T Mr Smile
     Type: Armor
     Locations:
       Costume_Head_Mid: true
@@ -41068,7 +41049,7 @@ Body:
       bonus bStr,2;
   - Id: 19501
     AegisName: T_Spinx_Helm
-    Name: (时装)狮身人面像帽子
+    Name: T Spinx Helm
     Type: Armor
     Slots: 1
     Locations:
@@ -41078,7 +41059,7 @@ Body:
     View: 137
   - Id: 19504
     AegisName: T_Sunglasses
-    Name: (时装)太阳眼镜
+    Name: T Sunglasses
     Type: Armor
     Locations:
       Costume_Head_Mid: true
@@ -41086,7 +41067,7 @@ Body:
     View: 12
   - Id: 19505
     AegisName: T_Cigarette
-    Name: (时装)香烟
+    Name: T Cigarette
     Type: Armor
     Locations:
       Costume_Head_Low: true
@@ -41094,7 +41075,7 @@ Body:
     View: 54
   - Id: 19506
     AegisName: T_Valkyrie_Feather_Band
-    Name: (时装)巴基力的羽毛发带
+    Name: T Valkyrie Feather Band
     Type: Armor
     Locations:
       Costume_Head_Top: true

@@ -791,7 +791,7 @@ function	script	refinemain	{
 			mes "那好吧, 欢迎下次再来!";
 			close;
 		}
-		if(getequippercentrefinery(.@part) < 100) {
+		if(getequippercentrefinery(.@part, REFINE_COST_NORMAL) < 100) {
 			mes "[" + .@npc_name$ + "]";
 			mes "那我要继续精炼它了哦?";
 			mes "这真是一个有难度的挑战啊啊啊!";
@@ -843,7 +843,7 @@ function	script	refinemain	{
 			close;
 		}
 
-		if(getequippercentrefinery(.@part) <= rand(100)) {
+		if(getequippercentrefinery(.@part, REFINE_COST_NORMAL) <= rand(100)) {
 			failedrefitem .@part;
 			mes "["+ .@npc_name$ +"]";
 			emotion (!rand(5))?ET_MONEY:ET_HUK;
@@ -951,7 +951,7 @@ function	script	refinemain	{
 		}
 		// anti-hack
 		if (callfunc("F_IsEquipIDHack", .@part, .@refineitemid) || callfunc("F_IsEquipCardHack", .@part, .@card[0], .@card[1], .@card[2], .@card[3]) ||
-				callfunc("F_IsEquipRefineHack", .@part, .@refinerycnt) || (.@menu2 == 1 && getequippercentrefinery(.@part) < 100)) {
+				callfunc("F_IsEquipRefineHack", .@part, .@refinerycnt) || (.@menu2 == 1 && getequippercentrefinery(.@part, REFINE_COST_NORMAL) < 100)) {
 			mes "[" + .@npc_name$ + "]";
 			mes "不要开玩笑了,你以为我是笨蛋吗 !! !?!";
 			mes "快出去...";
@@ -959,7 +959,7 @@ function	script	refinemain	{
 			close;
 		} 
 		mes "哐哐, 哐哐!!!";
-		if(.@menu2 == 2 && getequippercentrefinery(.@part) <= rand(100)) {
+		if(.@menu2 == 2 && getequippercentrefinery(.@part, REFINE_COST_NORMAL) <= rand(100)) {
 			failedrefitem .@part;
 			emotion ET_HUK;
 			mes "[" + .@npc_name$ + "]";

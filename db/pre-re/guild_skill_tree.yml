@@ -37,119 +37,119 @@ Header:
 
 Body:
   - Id: GD_APPROVAL
-    SkillName: 正式工会认证(10000)
+    Description: 正式工会认证(10000)
     MaxLevel: 1
 
   - Id: GD_KAFRACONTRACT
-    SkillName: 和卡普拉订契约(10001)
+    Description: 和卡普拉订契约(10001)
     MaxLevel: 1
     Required:
     - Id: GD_APPROVAL
-      SkillName: 正式工会认证(10000)
+      Description: 正式工会认证(10000)
       Level: 1
 
   - Id: GD_GUARDRESEARCH
-    SkillName: 研究监护人(10002)
+    Description: 研究监护人(10002)
     MaxLevel: 1
     Required:
     - Id: GD_APPROVAL
-      SkillName: 正式工会认证(10000)
+      Description: 正式工会认证(10000)
       Level: 1
 
   - Id: GD_GUARDUP
-    SkillName: 监护人魔物强化(10003)
+    Description: 监护人魔物强化(10003)
     MaxLevel: 3
 
   - Id: GD_EXTENSION
-    SkillName: 扩充组合体制(10004)
+    Description: 扩充组合体制(10004)
     MaxLevel: 10
 
   - Id: GD_GLORYGUILD
-    SkillName: 公会荣耀(10005)
+    Description: 公会荣耀(10005)
     MaxLevel: 0
 
   - Id: GD_LEADERSHIP
-    SkillName: 伟大的指导力(10006)
+    Description: 伟大的指导力(10006)
     MaxLevel: 5
 
   - Id: GD_GLORYWOUNDS
-    SkillName: 光荣的伤口(10007)
+    Description: 光荣的伤口(10007)
     MaxLevel: 5
 
   - Id: GD_SOULCOLD
-    SkillName: 冷漠之心(10008)
+    Description: 冷漠之心(10008)
     MaxLevel: 5
     Required:
     - Id: GD_GLORYWOUNDS
-      SkillName: 光荣的伤口(10007)
+      Description: 光荣的伤口(10007)
       Level: 1
 
   - Id: GD_HAWKEYES
-    SkillName: 尖锐的视线(10009)
+    Description: 尖锐的视线(10009)
     MaxLevel: 5
     Required:
     - Id: GD_LEADERSHIP
-      SkillName: 伟大的指导力(10006)
+      Description: 伟大的指导力(10006)
       Level: 1
 
   - Id: GD_BATTLEORDER
-    SkillName: 下达战斗命令(10010)
+    Description: 下达战斗命令(10010)
     MaxLevel: 1
     Required:
     - Id: GD_APPROVAL
-      SkillName: 正式工会认证(10000)
+      Description: 正式工会认证(10000)
       Level: 1
     - Id: GD_EXTENSION
-      SkillName: 扩充组合体制(10004)
+      Description: 扩充组合体制(10004)
       Level: 2
 
   - Id: GD_REGENERATION
-    SkillName: 复兴公会员体力(10011)
+    Description: 复兴公会员体力(10011)
     MaxLevel: 3
     Required:
     - Id: GD_APPROVAL
-      SkillName: 正式工会认证(10000)
+      Description: 正式工会认证(10000)
       Level: 1
     - Id: GD_EXTENSION
-      SkillName: 扩充组合体制(10004)
+      Description: 扩充组合体制(10004)
       Level: 5
     - Id: GD_BATTLEORDER
-      SkillName: 下达战斗命令(10010)
+      Description: 下达战斗命令(10010)
       Level: 1
 
   - Id: GD_RESTORE
-    SkillName: 恢复公会员体力(10012)
+    Description: 恢复公会员体力(10012)
     MaxLevel: 1
     Required:
     - Id: GD_REGENERATION
-      SkillName: 复兴公会员体力(10011)
+      Description: 复兴公会员体力(10011)
       Level: 1
 
   - Id: GD_EMERGENCYCALL
-    SkillName: 紧急呼叫(10013)
+    Description: 紧急呼叫(10013)
     MaxLevel: 1
     Required:
     - Id: GD_APPROVAL
-      SkillName: 正式工会认证(10000)
+      Description: 正式工会认证(10000)
       Level: 1
     - Id: GD_GUARDRESEARCH
-      SkillName: 研究监护人(10002)
+      Description: 研究监护人(10002)
       Level: 1
     - Id: GD_EXTENSION
-      SkillName: 扩充组合体制(10004)
+      Description: 扩充组合体制(10004)
       Level: 5
     - Id: GD_BATTLEORDER
-      SkillName: 下达战斗命令(10010)
+      Description: 下达战斗命令(10010)
       Level: 1
     - Id: GD_REGENERATION
-      SkillName: 复兴公会员体力(10011)
+      Description: 复兴公会员体力(10011)
       Level: 1
 
   - Id: GD_DEVELOPMENT
-    SkillName: 永久的发展(10014)
+    Description: 永久的发展(10014)
     MaxLevel: 1
     
   - Id: GD_GUILD_STORAGE
-    SkillName: 公会仓库扩充(10016)
+    Description: 公会仓库扩充(10016)
     MaxLevel: 5
     

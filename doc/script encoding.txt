@@ -1,0 +1,75 @@
+//===== BetterRA Documentation================================
+//= BetterRA Script Encoding
+//===== By:==================================================
+//= BetterRA Dev Team
+//===== Last Updated:========================================
+//= 20220308
+//===== Description:=========================================
+//= 将脚本编译为机器码，加简单的混淆操作。
+//= 不是常见的加密操作，只是将脚本程序转为机器可以识别的机器码。
+//= 被编码的脚本不需要解密操作，脚本底层可以直接识别
+//= 通过此操作编码的脚本，解密和反向成为几乎不可能的一件事情
+//===========================================================
+
+通过 map-server.exe 对脚本进行编码操作, 防止倒卖修改以及滥用
+
+参数:
+	-input <路径>	输入文件(被支持的类型: txt\conf\文件夹)
+	-output <路径>	输出文件(类型必须与 -input 对应)
+	-uid <UID>	绑定 UID(UID为整数类型)
+	-onlyenc		只加密带有 script_enc 的脚本
+	
+uid:
+	网络授权相关的ID
+	通过 UID 才能对脚本进行机器码绑定邮箱绑定和结算, 带有UID的文件如果没有经过网络授权该脚本无法使用
+	
+onlyenc:
+	脚本函数中的 script 关键字 改为 script_enc 并且在加密时脚本只对带有 script_enc 的脚本进行加密
+	
+使用方法：
+1.可对目录下的所有文件进行编码
+	例子: map-server.exe /generate-encode -input npc/BetterRa/ -output npc/BetterRa/
+
+2.可对单个文件进行编码
+	例子: map-server.exe /generate-encode -input npc/BetterRa/BetterRA_test.txt -output npc/BetterRa/BetterRA_test_enc.txt
+	
+3.可依次对 conf 配置中的所有文件进行编码
+	例子: map-server.exe /generate-encode -input npc/re/scripts_main.conf -output npc/BetterRa/
+	
+4.只加密 script_enc 脚本区块
+	例子: - 脚本
+
+将以下脚本复制到 npc/BetterRa/BetterRA_test.txt 中, 没有文件则创建一个
+
+prontera,154,119,5	script_enc	加密脚本	56,{
+	mes "[加密脚本]";
+	mes "脚本加密后, 我的内容是被加密内容.";
+	close;
+}
+prontera,160,119,5	script	未加密脚本	56,{
+	mes "[未加密脚本]";
+	mes "脚本加密后, 我的内容是被未被加密的.";
+	close;
+}
+执行以下命令
+map-server.exe /generate-encode -input npc/BetterRa/BetterRA_test.txt -output npc/BetterRa/BetterRA_test_enc.txt -onlyenc
+
+命令如何执行？
+	在服务端目录中创建一个 encodegenerate.bat 文件
+	将脚本内容复制进去, 保存关闭
+	执行 encodegenerate.bat 文件完成脚本加密
+
+例: 完成脚本加密后使用暂停(pause)以便查看报错
+@ECHO OFF
+map-server.exe /generate-encode -input npc/BetterRa/BetterRA_test.txt -output npc/BetterRa/BetterRA_test_enc.txt -onlyenc
+ECHO.
+pause
+
+头部文本相关说明:
+EncryptStart: 
+BindUID: 		绑定的UID, 带有此项的脚本必须通过脚本授权才可以使用
+Author: 		作者的账号邮箱, 方便联系作者, 请不要把自己的map-server.exe给别人
+UsedFunc:		加密脚本中使用过的脚本指令
+UsedVar: 		加密脚本中使用过的脚本变量
+SourceMD5: 		脚本在未加密时的文件md5, 方便对照源脚本审核脚本内容
+EncryptEnd

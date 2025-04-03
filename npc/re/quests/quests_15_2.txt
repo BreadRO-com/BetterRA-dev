@@ -2411,7 +2411,7 @@ OnTimer60000:
 	end;
 
 S_Type:
-	.@type = getarg(0):
+	.@type = getarg(0);
 	if (.@type == 3)
 		mes "Something may come out by a search.";
 	else {

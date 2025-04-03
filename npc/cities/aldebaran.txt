@@ -27,7 +27,7 @@
 //=     Kafra and Clock Tower NPCs pending remake. [DZeroX]
 //= 2.01 removed all .GATs [Lupus]
 //= 2.1 Rescripted most NPCs to Aegis 10.3 standards. [L0ne_W0lf]
-//= 2.2 Corrected NPC names to fall within proper resctrictions. [L0ne_W0lf]
+//= 2.2 Corrected NPC names to fall within proper restrictions. [L0ne_W0lf]
 //= 2.3 Fixed exploit with kafra pass
 //= 2.4 Updated Kafra Reserve to official dialog. [Capuche]
 //============================================================

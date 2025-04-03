@@ -235,9 +235,9 @@ OnInstanceInit:
 1@gef_in,74,144,0	shop	Trader#gef_0et1	1_F_01,911:-1,910:-1,912:-1
 1@gef_in,65,144,4	shop	Tool Dealer#gefb_0et1	1_M_WIZARD,1092:-1,1093:-1,713:-1
 
-1@gef_in,22,171,7	shop	Weapon Dealer#GMT	84,1146:-1,1245:-1
+1@gef_in,22,171,7	shop	武器商人#GMT	84,1146:-1,1245:-1
 1@gef_in,26,178,4	shop	Armor Dealer#GMT	66,2628:-1,2101:-1,2107:-1,2401:-1,2501:-1,2230:-1,2301:-1,2303:-1,2305:-1,2321:-1,2332:-1
-1@gef_in,30,178,4	shop	Weapon Dealer#GMT2	47,1750:-1,1751:-1,1101:-1,1701:-1,1201:-1,1204:-1,1207:-1,1210:-1,1213:-1,1216:-1,1601:-1,1604:-1,1607:-1,1610:-1
+1@gef_in,30,178,4	shop	武器商人#GMT2	47,1750:-1,1751:-1,1101:-1,1701:-1,1201:-1,1204:-1,1207:-1,1210:-1,1213:-1,1216:-1,1601:-1,1604:-1,1607:-1,1610:-1
 
 1@gef,193,152,4	shop	Pet Groomer#GMT	124,537:-1,643:-1,10013:-1,10014:-1,6113:-1,6114:-1,6115:-1,6110:-1,6100:-1,6098:-1,6112:-1,6104:-1,6108:-1,6111:-1,7824:1000,6097:1000,6107:1000
 1@gef,196,111,3	shop	Cook#gef_0et	85,7482:-1
@@ -260,7 +260,7 @@ L_Shield:
 				case 3: goto L_Menu; break;
 			}
 			mes .@n$;
-			mes "<ITEM>"+getitemname(.@item)+"<INFO>"+.@item+"</INFO></ITEM>";
+			mes mesitemlink( .@item, false );
 			mes "Price is "+.@cost+" coins";
 			mes "Do you wish to exchange your coins?";
 			next;
@@ -303,7 +303,7 @@ L_Ring:
 						break;
 				}
 			mes .@n$;
-			mes "<ITEM>"+getitemname(.@item)+"<INFO>"+.@item+"</INFO></ITEM>";
+			mes mesitemlink( .@item, false );
 			mes "Price is "+.@cost+" coins";
 			mes "Do you wish to exchange your coins?";
 			next;
@@ -345,7 +345,7 @@ L_Armor:
 						break;
 				}
 			mes .@n$;
-			mes "<ITEM>"+getitemname(.@item)+"<INFO>"+.@item+"</INFO></ITEM>";
+			mes mesitemlink( .@item, false );
 			mes "Price is "+.@cost+" coins";
 			mes "Do you wish to exchange your coins?";
 			next;
@@ -3978,7 +3978,6 @@ OnEnable:
 // Cutscenes
 
 
-//席席席席席席席席席
 //   Event 1
 //__________________
 1@gef,159,172,6	duplicate(#gmt_dummy)	Geffen Gangster#1	682
@@ -4235,7 +4234,6 @@ OnTimer1000:
 	end;
 }
 
-//席席席席席席席席席
 //   Event 2
 //__________________
 1@gef,75,172,4	duplicate(#gmt_dummy)	Geffen Bully#1	681
@@ -4525,7 +4523,6 @@ OnMobKilled:
 	end;
 }
 
-//席席席席席席席席席
 //   Event 3
 //__________________
 1@gef,111,146,4	duplicate(#gmt_dummy)	Geffen Resident#1	67

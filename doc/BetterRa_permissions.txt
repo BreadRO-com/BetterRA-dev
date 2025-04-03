@@ -1,0 +1,33 @@
+//===== rAthena Documentation ================================
+//= Permissions List
+//===== By: ==================================================
+//= rAthena Dev Team
+//===== Last Updated: ========================================
+//= 20240414
+//===== Description: =========================================
+//= List of available permissions and their functions.
+//============================================================
+
+该文件描述了玩家组权限的功能，
+权限功能在 "/conf/groups.conf" 文件中配置。
+也可以使用脚本指令 permission_add 对单个玩家添加该权限
+
+---------------------------------------
+
+*vending_unconditional (PC_PERM_VENDING_UNCONDITIONAL)
+
+允许玩家忽略挂店对地图格子的限制。
+
+---------------------------------------
+
+*buying_unconditional (PC_PERM_BUYING_UNCONDITIONAL)
+
+允许玩家忽略采购商店对地图格子的限制。
+
+---------------------------------------
+
+*nearnpc_unconditional (PC_PERM_NEARNPC_UNCONDITIONAL)
+
+允许玩家忽略靠近NPC使用功能的限制(采购\挂店\聊天室)。
+
+---------------------------------------

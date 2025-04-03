@@ -1,0 +1,105 @@
+# This file is a part of rAthena.
+#   Copyright(C) 2022 rAthena Development Team
+#   https://rathena.org - https://github.com/rathena
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+#
+###########################################################################
+# Map Zone Database
+###########################################################################
+#
+# Map Zone Settings
+#
+###########################################################################
+#
+# - Zone                             区域ID
+#   Target:                          区域特性对谁生效
+#   OnEnter:                         进入区域执行的脚本
+#   OnLeft:                          离开区域执行的脚本
+#
+###########################################################################
+#
+# 注意事项:
+#   Target(对谁生效) 只支援 Pc 和 Mob 随从类(宠物、元素等)根据主人的区域特性决定
+#   OnEnter 和 OnLeft 在玩家触发时自动与玩家关联
+#   OnEnter 和 OnLeft 无论谁触发该脚本 都会返回 $target_gid 即触发脚本的实体GID
+#   新增自定义区域需要先在 const.yml 中添加以 ZONE_ 为前缀的常量
+#   新增区域后可以对实体进行进出脚本设置
+#
+###########################################################################
+
+Header:
+  Type: ZONE_DB
+  Version: 1
+
+Body:
+  - Zone: Safe
+    Target:
+      Pc: true
+    OnEnter: |
+      dispbottom "你已经进入安全区, 安全区中的玩家无法被选择为攻击目标, 也无法攻击安全区外的魔物与玩家";
+    OnLeft: |
+      dispbottom "你已经离开安全区";
+  - Zone: Pvp
+    Target:
+      Pc: true
+    OnEnter: |
+      dispbottom "你已经进入PVP区域, 区域内禁止使用恢复类道具且玩家之间可以互相攻击";
+      setpcblock PCBLOCK_USEITEM, 1;
+    OnLeft: |
+      dispbottom "你已经离开PVP区域";
+      setpcblock PCBLOCK_USEITEM, 0;
+  - Zone: NoTeleport
+    Target:
+      Pc: true
+    OnEnter: |
+      dispbottom "你已经进入禁止瞬间移动区域";
+    OnLeft: |
+      dispbottom "你已经离开禁止瞬间移动区域";
+  - Zone: NoReturn
+    Target:
+      Pc: true
+    OnEnter: |
+      dispbottom "你已经进入禁止回城区域(蝴蝶翅膀、瞬间移动lv2)";
+    OnLeft: |
+      dispbottom "你已经离开禁止回城区域";
+  - Zone: NoSkill
+    Target:
+      Pc: true
+    OnEnter: |
+      dispbottom "你已经进入禁止使用技能区域";
+    OnLeft: |
+      dispbottom "你已经离开禁止使用技能区域";
+  - Zone: NoNemo
+    Target:
+      Pc: true
+    OnEnter: |
+      dispbottom "你已经进入禁止存点区域";
+    OnLeft: |
+      dispbottom "你已经离开禁止存点区域";
+  - Zone: NoToken
+    Target:
+      Pc: true
+    OnEnter: |
+      dispbottom "你已经进入禁止复活区域";
+    OnLeft: |
+      dispbottom "你已经离开禁止复活区域";
+  - Zone: Monster_NoTeleport
+    # Note: 进入该区域的魔物无法瞬移
+    Target:
+      Mob: true
+    OnEnter: |
+      unitaura $target_gid,12,3,-1;
+    OnLeft: |
+      unitdelaura $target_gid,12;

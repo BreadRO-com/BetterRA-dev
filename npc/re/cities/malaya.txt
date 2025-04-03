@@ -81,7 +81,7 @@ malaya,276,55,4	script	奥塔玛拉号 船员#malaya	100,{
 		mes "[奥塔玛拉号 船员]";
 		mes "好了!~我们起航返回艾尔贝塔!";
 		close2;
-		warp "alberta",239,68;
+		warp "alberta",192,217;
 		end;
 	case 2:
 		mes "[奥塔玛拉号 船员]";

@@ -25,8 +25,34 @@
 # - Combos:                 List of combo sets.
 #    - Combo:               Sequence of items to define a combo (minimum of 2 items).
 #       - <item name>       AEGIS name of the item
+#   Minimum:                身上穿着的装备到达该数量后则触发脚本, 不需要所有装备都穿齐就能触发脚本 (装备数量返回值 combos_pieces 可在script中调用)
 #   Script                  Script to execute when one of the combos is equipped. (Default: null)
 #   Clear                   Remove the defined combos from database. (Default: false)
+###########################################################################
+#
+# 例子: 棉衬衫\斗篷\轻便鞋\花戒指套装\绿棉虫卡片 
+#       当装备两件时 AGI + 5, 装备三件时 AGI + 10, 装备四件时 AGI + 15, 以此类推
+#
+#  - Combos:
+#      - Combo:
+#          - Cotton_Shirt
+#          - Manteau
+#          - Sandals
+#          - Flower_Ring
+#          - Flower_Ring
+#          - Fabre_Card
+#          - Fabre_Card
+#    Minimum: 2
+#    Script: |
+#      switch(combos_pieces){
+#        case 2: bonus bAgi,5;  break;
+#        case 3: bonus bAgi,10; break;
+#        case 4: bonus bAgi,15; break;
+#        case 5: bonus bAgi,20; break;
+#        case 6: bonus bAgi,25; break;
+#        case 7: bonus bAgi,30; break;
+#      }
+#
 ###########################################################################
 
 Header:

@@ -44,6 +44,7 @@
 #   EquipLevelMin           Minimum required level to equip. (Default: 0)
 #   EquipLevelMax           Maximum level that can equip. (Default: 0)
 #   Refineable              If the item can be refined. (Default: false)
+#   Gradable                If the item can be graded. (Default: false)
 #   View                    View sprite of an item. (Default: 0)
 #   AliasName               Another item's AegisName that will be sent to the client instead of this item's AegisName. (Default: null)
 #   Flags:                  Item flags. (Default: null)
@@ -55,16 +56,16 @@
 #     DropAnnounce          If the item has a special announcement to self on drop. (Default: false)
 #     NoConsume             If the item is consumed on use. (Default: false)
 #     DropEffect            If the item has a special effect on the ground when dropped by a monster. (Default: None)
-#     ForceUseItem          å½“ç©å®¶å¤„äºä¸èƒ½ä½¿ç”¨ç‰©å“çš„çŠ¶æ€æ—¶ä¾ç„¶å¯ä»¥ä½¿ç”¨å¸¦æœ‰æ­¤æ ‡ç­¾çš„ç‰©å“
-#     IgnoreNoFunc          ç‰©å“å½“åœ¨åœ°å›¾ mapflag æ ‡ç­¾æ²¡æœ‰ noitemfunc æ—¶è¢«ç¦ç”¨, æœ‰ noitemfunc åˆ™ç”Ÿæ•ˆ
-#     NoConsume2            ç‰©å“ä¸ä¼šç”±äºè¢«ç©å®¶ä¸»åŠ¨ä½¿ç”¨è€Œæ¶ˆè€—ï¼ˆæ—  NoConsume åœ¨ä½¿ç”¨æŠ€èƒ½å’Œåéª‘ä¸‹ä¸èƒ½ä½¿ç”¨çš„é™åˆ¶çš„é™åˆ¶ï¼‰
-#     NoSkillConsume        ç‰©å“ä¸ä¼šç”±äºè¢«å‘åŠ¨æŠ€èƒ½æ‰€éœ€è¦è€Œæ¶ˆè€—
-#     NoDropWithoutPlayer   é­”ç‰©åœ¨æ²¡æœ‰ç©å®¶å‚ä¸è¢«æ€æ­»æ—¶ä¸ä¼šæ‰è½è¯¥ç‰©å“
-#     DoDropEvent           é­”ç‰©è¢«ç©å®¶å‡»æ€æ—¶, ä¼šè§¦å‘ OnMOBDropItemFilter äº‹ä»¶
-#     TurnIntoCostume       æ’æœ‰è¯¥ç‰©å“çš„è£…å¤‡å˜ä¸ºæ—¶è£…/å½±è£… (å…ˆåœ¨ BetterRA.conf ä¸­ é…ç½® item_costume_cardä¸º yes å¼€å¯è¯¥åŠŸèƒ½)
-#     IgnoreScript          æ’æœ‰è¯¥ç‰©å“çš„è£…å¤‡ã€æ—¶è£…/å½±è£…æ‰€æœ‰å±æ€§ä¼šæ— æ•ˆåŒ–
-#     IgnoreAutoLoot        ç‰©å“æ— è§†è‡ªåŠ¨æ‹¾å–, ä¼šç›´æ¥æ‰åˆ°åœ°ä¸Š
-#     IgnoreEquipView       è£…å¤‡å¤–è§‚ä¸æ˜¾ç¤ºåœ¨è£…å¤‡æ çª—å£ä¸­
+#     ForceUseItem          µ±Íæ¼Ò´¦ÓÚ²»ÄÜÊ¹ÓÃÎïÆ·µÄ×´Ì¬Ê±ÒÀÈ»¿ÉÒÔÊ¹ÓÃ´øÓĞ´Ë±êÇ©µÄÎïÆ·
+#     IgnoreNoFunc          ÎïÆ·µ±ÔÚµØÍ¼ mapflag ±êÇ©Ã»ÓĞ noitemfunc Ê±±»½ûÓÃ, ÓĞ noitemfunc ÔòÉúĞ§
+#     NoConsume2            ÎïÆ·²»»áÓÉÓÚ±»Íæ¼ÒÖ÷¶¯Ê¹ÓÃ¶øÏûºÄ£¨ÎŞ NoConsume ÔÚÊ¹ÓÃ¼¼ÄÜºÍ×øÆïÏÂ²»ÄÜÊ¹ÓÃµÄÏŞÖÆµÄÏŞÖÆ£©
+#     NoSkillConsume        ÎïÆ·²»»áÓÉÓÚ±»·¢¶¯¼¼ÄÜËùĞèÒª¶øÏûºÄ
+#     NoDropWithoutPlayer   Ä§ÎïÔÚÃ»ÓĞÍæ¼Ò²ÎÓë±»É±ËÀÊ±²»»áµôÂä¸ÃÎïÆ·
+#     DoDropEvent           Ä§Îï±»Íæ¼Ò»÷É±µôÂä¸ÃÎïÆ·Ê±, »á´¥·¢ OnMobDropItemFilter Óë OnMobDropItemEvent ÊÂ¼ş
+#     TurnIntoCostume       ²åÓĞ¸ÃÎïÆ·µÄ×°±¸±äÎªÊ±×°/Ó°×° (ÏÈÔÚ BetterRA.conf ÖĞ ÅäÖÃ item_costume_cardÎª yes ¿ªÆô¸Ã¹¦ÄÜ)
+#     IgnoreScript          ²åÓĞ¸ÃÎïÆ·µÄ×°±¸¡¢Ê±×°/Ó°×°ËùÓĞÊôĞÔ»áÎŞĞ§»¯
+#     IgnoreAutoLoot        ÎïÆ·ÎŞÊÓ×Ô¶¯Ê°È¡, »áÖ±½Óµôµ½µØÉÏ
+#     IgnoreEquipView       ×°±¸Íâ¹Û²»ÏÔÊ¾ÔÚ×°±¸À¸´°¿ÚÖĞ
 #   Delay:                  Item use delay. (Default: null)
 #     Duration              Duration of delay in seconds.
 #     Status                Status Change used to track delay. (Default: None)
@@ -95,7 +96,7 @@
 
 Header:
   Type: ITEM_DB
-  Version: 2
+  Version: 3
 
 Body:
   - Id: 30000

@@ -44,6 +44,7 @@
 #   EquipLevelMin           Minimum required level to equip. (Default: 0)
 #   EquipLevelMax           Maximum level that can equip. (Default: 0)
 #   Refineable              If the item can be refined. (Default: false)
+#   Gradable                If the item can be graded. (Default: false)
 #   View                    View sprite of an item. (Default: 0)
 #   AliasName               Another item's AegisName that will be sent to the client instead of this item's AegisName. (Default: null)
 #   Flags:                  Item flags. (Default: null)
@@ -60,11 +61,15 @@
 #     NoConsume2            物品不会由于被玩家主动使用而消耗（无 NoConsume 在使用技能和坐骑下不能使用的限制的限制）
 #     NoSkillConsume        物品不会由于被发动技能所需要而消耗
 #     NoDropWithoutPlayer   魔物在没有玩家参与被杀死时不会掉落该物品
-#     DoDropEvent           魔物被玩家击杀时, 会触发 OnMOBDropItemFilter 事件
+#     DoDropEvent           魔物被玩家击杀掉落该物品时, 会触发 OnMobDropItemFilter 与 OnMobDropItemEvent 事件
 #     TurnIntoCostume       插有该物品的装备变为时装/影装 (先在 BetterRA.conf 中 配置 item_costume_card为 yes 开启该功能)
 #     IgnoreScript          插有该物品的装备、时装/影装所有属性会无效化
 #     IgnoreAutoLoot        物品无视自动拾取, 会直接掉到地上
 #     IgnoreEquipView       装备外观不显示在装备栏窗口中
+#   Announce:               物品获取公告
+#     MobDrop               当魔物掉落时公告
+#     MvpReward             当以MVP奖励方式获取时公告
+#     Steal                 当偷窃获得该物品时公告
 #   Delay:                  Item use delay. (Default: null)
 #     Duration              Duration of delay in seconds.
 #     Status                Status Change used to track delay. (Default: None)
@@ -74,6 +79,11 @@
 #     Cart                  If the stack is applied to the player's cart. (Default: false)
 #     Storage               If the stack is applied to the player's storage. (Default: false)
 #     GuildStorage          If the stack is applied to the player's guild storage. (Default: false)
+#   MaxAmount:              物品最大数量, 超过堆叠上限后, 将添加在另一个栏位, 可超过 30000
+#     Inventory             物品在背包中最大数量
+#     Cart                  物品在手推车中最大数量
+#     Storage               物品在仓库中最大数量
+#     GuildStorage          物品在公会仓库中最大数量
 #   NoUse:                  Conditions when the item is unusable. (Default: null)
 #     Override              Group level to override these conditions. (Default: 100)
 #     Sitting               If the item can not be used while sitting. (Default: false)
@@ -88,6 +98,8 @@
 #     NoGuildStorage        If the item can not be put in a guild storage. (Default: false)
 #     NoMail                If the item can not be put in a mail. (Default: false)
 #     NoAuction             If the item can not be put in an auction. (Default: false)
+#     ForceVending          无视交易限制可以挂店出售租赁和绑定物品等(租赁时间不会显示在商店内 Default: false)
+#     ForceTrade            无视交易限制可以交易租赁和绑定物品等(租赁时间不会显示在交易框内 Default: false)
 #   Script                  Script to execute when the item is used/equipped. (Default: null)
 #   EquipScript             Script to execute when the item is equipped. (Default: null)
 #   UnEquipScript           Script to execute when the item is unequipped or when a rental item expires. (Default: null)
@@ -95,7 +107,7 @@
 
 Header:
   Type: ITEM_DB
-  Version: 2
+  Version: 3
 
 Body:
   - Id: 501
@@ -1070,7 +1082,7 @@ Body:
       BuyingStore: true
       Container: true
     Script: |
-      getrandgroupitem(IG_BlueBox,1);
+      getgroupitem(IG_BLUEBOX);
   - Id: 604
     AegisName: Branch_Of_Dead_Tree
     Name: 枯树枝
@@ -1208,7 +1220,7 @@ Body:
       BuyingStore: true
       Container: true
     Script: |
-      getrandgroupitem(IG_CardAlbum,1);
+      getgroupitem(IG_CARDALBUM);
   - Id: 617
     AegisName: Old_Violet_Box
     Name: 神秘紫箱
@@ -1219,7 +1231,7 @@ Body:
       BuyingStore: true
       Container: true
     Script: |
-      getrandgroupitem(IG_VioletBox,1);
+      getgroupitem(IG_VIOLETBOX);
   - Id: 618
     AegisName: Worn_Out_Scroll
     Name: 老旧卷轴
@@ -1240,7 +1252,7 @@ Body:
     NoUse:
       Sitting: true
     Script: |
-      pet 1002;
+      pet;
   - Id: 620
     AegisName: Orange_Juice
     Name: 浓缩柳橙汁
@@ -1252,7 +1264,7 @@ Body:
     NoUse:
       Sitting: true
     Script: |
-      pet 1113;
+      pet;
   - Id: 621
     AegisName: Bitter_Herb
     Name: 苦味草
@@ -1264,7 +1276,7 @@ Body:
     NoUse:
       Sitting: true
     Script: |
-      pet 1031;
+      pet;
   - Id: 622
     AegisName: Rainbow_Carrot
     Name: 彩色红萝卜
@@ -1276,7 +1288,7 @@ Body:
     NoUse:
       Sitting: true
     Script: |
-      pet 1063;
+      pet;
   - Id: 623
     AegisName: Earthworm_The_Dude
     Name: 变态蚯蚓
@@ -1288,7 +1300,7 @@ Body:
     NoUse:
       Sitting: true
     Script: |
-      pet 1049;
+      pet;
   - Id: 624
     AegisName: Rotten_Fish
     Name: 腐臭之鱼
@@ -1300,7 +1312,7 @@ Body:
     NoUse:
       Sitting: true
     Script: |
-      pet 1011;
+      pet;
   - Id: 625
     AegisName: Lusty_Iron
     Name: 锈铁
@@ -1312,7 +1324,7 @@ Body:
     NoUse:
       Sitting: true
     Script: |
-      pet 1042;
+      pet;
   - Id: 626
     AegisName: Monster_Juice
     Name: 魔物饮料
@@ -1324,7 +1336,7 @@ Body:
     NoUse:
       Sitting: true
     Script: |
-      pet 1035;
+      pet;
   - Id: 627
     AegisName: Sweet_Milk
     Name: 魔物牛奶
@@ -1336,7 +1348,7 @@ Body:
     NoUse:
       Sitting: true
     Script: |
-      pet 1167;
+      pet;
   - Id: 628
     AegisName: Well_Dried_Bone
     Name: 营养大骨
@@ -1348,7 +1360,7 @@ Body:
     NoUse:
       Sitting: true
     Script: |
-      pet 1107;
+      pet;
   - Id: 629
     AegisName: Singing_Flower
     Name: 呢喃花
@@ -1360,7 +1372,7 @@ Body:
     NoUse:
       Sitting: true
     Script: |
-      pet 1052;
+      pet;
   - Id: 630
     AegisName: Dew_Laden_Moss
     Name: 青苔
@@ -1372,7 +1384,7 @@ Body:
     NoUse:
       Sitting: true
     Script: |
-      pet 1014;
+      pet;
   - Id: 631
     AegisName: Deadly_Noxious_Herb
     Name: 青嫩毒草
@@ -1384,7 +1396,7 @@ Body:
     NoUse:
       Sitting: true
     Script: |
-      pet 1077;
+      pet;
   - Id: 632
     AegisName: Fatty_Chubby_Earthworm
     Name: 营养蚯蚓
@@ -1396,7 +1408,7 @@ Body:
     NoUse:
       Sitting: true
     Script: |
-      pet 1019;
+      pet;
   - Id: 633
     AegisName: Baked_Yam
     Name: 魔物番薯
@@ -1408,7 +1420,7 @@ Body:
     NoUse:
       Sitting: true
     Script: |
-      pet 1056;
+      pet;
   - Id: 634
     AegisName: Tropical_Banana
     Name: 魔物香蕉
@@ -1420,7 +1432,7 @@ Body:
     NoUse:
       Sitting: true
     Script: |
-      pet 1057;
+      pet;
   - Id: 635
     AegisName: Horror_Of_Tribe
     Name: 魔物之证
@@ -1432,7 +1444,7 @@ Body:
     NoUse:
       Sitting: true
     Script: |
-      pet 1023;
+      pet;
   - Id: 636
     AegisName: No_Recipient
     Name: 魔物信件
@@ -1444,7 +1456,7 @@ Body:
     NoUse:
       Sitting: true
     Script: |
-      pet 1026;
+      pet;
   - Id: 637
     AegisName: Old_Broom
     Name: 魔物扫把
@@ -1456,7 +1468,7 @@ Body:
     NoUse:
       Sitting: true
     Script: |
-      pet 1110;
+      pet;
   - Id: 638
     AegisName: Silver_Knife_Of_Chaste
     Name: 纯洁银刃
@@ -1468,7 +1480,7 @@ Body:
     NoUse:
       Sitting: true
     Script: |
-      pet 1170;
+      pet;
   - Id: 639
     AegisName: Armlet_Of_Obedience
     Name: 驯服手镯
@@ -1480,7 +1492,7 @@ Body:
     NoUse:
       Sitting: true
     Script: |
-      pet 1029;
+      pet;
   - Id: 640
     AegisName: Shining_Stone
     Name: 闪烁之石
@@ -1492,7 +1504,7 @@ Body:
     NoUse:
       Sitting: true
     Script: |
-      pet 1155;
+      pet;
   - Id: 641
     AegisName: Contracts_In_Shadow
     Name: 黑暗合约书
@@ -1504,7 +1516,7 @@ Body:
     NoUse:
       Sitting: true
     Script: |
-      pet 1109;
+      pet;
   - Id: 642
     AegisName: Book_Of_Devil
     Name: 恶魔召唤书
@@ -1516,7 +1528,7 @@ Body:
     NoUse:
       Sitting: true
     Script: |
-      pet 1101;
+      pet;
   - Id: 643
     AegisName: Pet_Incubator
     Name: 携带用孵蛋器
@@ -1537,7 +1549,7 @@ Body:
       BuyingStore: true
       Container: true
     Script: |
-      getrandgroupitem(IG_GiftBox,1);
+      getgroupitem(IG_GIFTBOX);
   - Id: 645
     AegisName: Center_Potion
     Name: 集中药水
@@ -1628,7 +1640,7 @@ Body:
     NoUse:
       Sitting: true
     Script: |
-      pet 1188;
+      pet;
   - Id: 660
     AegisName: Prohibition_Red_Candle
     Name: 红色蜡烛
@@ -1640,7 +1652,7 @@ Body:
     NoUse:
       Sitting: true
     Script: |
-      pet 1200;
+      pet;
   - Id: 661
     AegisName: Sway_Apron
     Name: 摇曳的围裙
@@ -1652,7 +1664,7 @@ Body:
     NoUse:
       Sitting: true
     Script: |
-      pet 1275;
+      pet;
   - Id: 662
     AegisName: Inspector_Certificate
     Name: 马牌
@@ -1683,7 +1695,7 @@ Body:
       BuyingStore: true
       Container: true
     Script: |
-      getrandgroupitem(IG_GiftBox_1,1);
+      getgroupitem(IG_GIFTBOX_1);
   - Id: 665
     AegisName: Gift_Box_2
     Name: 礼盒
@@ -1694,7 +1706,7 @@ Body:
       BuyingStore: true
       Container: true
     Script: |
-      getrandgroupitem(IG_GiftBox_2,1);
+      getgroupitem(IG_GIFTBOX_2);
   - Id: 666
     AegisName: Gift_Box_3
     Name: 礼盒
@@ -1705,7 +1717,7 @@ Body:
       BuyingStore: true
       Container: true
     Script: |
-      getrandgroupitem(IG_GiftBox_3,1);
+      getgroupitem(IG_GIFTBOX_3);
   - Id: 667
     AegisName: Gift_Box_4
     Name: 礼盒
@@ -1716,7 +1728,7 @@ Body:
       BuyingStore: true
       Container: true
     Script: |
-      getrandgroupitem(IG_GiftBox_4,1);
+      getgroupitem(IG_GIFTBOX_4);
   - Id: 668
     AegisName: Handsei
     Name: 红包
@@ -1728,7 +1740,7 @@ Body:
       set Zeny,Zeny+rand(1000,10000);
   - Id: 669
     AegisName: Rice_Cake_Soup
-    Name: Tempting Rice-Cake Soup
+    Name: 年糕汤
     Type: Healing
     Buy: 500
     Weight: 100
@@ -1867,7 +1879,7 @@ Body:
       itemskill "MG_COLDBOLT",5;
   - Id: 690
     AegisName: Fire_Scroll_1_3
-    Name: 火箭术 等级3
+    Name: 火箭术卷轴Lv3
     Type: Delayconsume
     Buy: 1000
     Weight: 10
@@ -1879,7 +1891,7 @@ Body:
       itemskill "MG_FIREBOLT",3;
   - Id: 691
     AegisName: Fire_Scroll_1_5
-    Name: 火箭术 等级5
+    Name: 火箭术卷轴Lv5
     Type: Delayconsume
     Buy: 2000
     Weight: 10
@@ -1975,7 +1987,7 @@ Body:
       itemskill "MG_FIREWALL",1;
   - Id: 699
     AegisName: Fire_Scroll_3_5
-    Name: 火焰之壁 等级5
+    Name: 火焰之壁5级卷轴
     Type: Delayconsume
     Buy: 2000
     Weight: 10
@@ -2095,7 +2107,7 @@ Body:
       itemheal 0,150;
   - Id: 11506
     AegisName: Fanta_Orange
-    Name: 芬达橙汁口味
+    Name: Fanta Orange
     Type: Healing
     Buy: 800
     Weight: 100
@@ -2103,7 +2115,7 @@ Body:
       itemheal rand(50,70),rand(10,12);
   - Id: 11507
     AegisName: Fanta_Grape
-    Name: 芬达葡萄口味
+    Name: Fanta Grape
     Type: Healing
     Buy: 800
     Weight: 100
@@ -2111,7 +2123,7 @@ Body:
       itemheal rand(50,70),rand(10,12);
   - Id: 11508
     AegisName: Karada_Meguri_Tea
-    Name: 美味奶茶
+    Name: Karada Meguricha
     Type: Healing
     Buy: 800
     Weight: 100
@@ -2119,7 +2131,7 @@ Body:
       itemheal rand(50,70),rand(10,12);
   - Id: 11509
     AegisName: Royal_Milk_Tea
-    Name: 浓香红茶
+    Name: Black Tea Kochakaden
     Type: Healing
     Buy: 800
     Weight: 100
@@ -2127,7 +2139,7 @@ Body:
       itemheal rand(50,70),rand(10,12);
   - Id: 11510
     AegisName: Coke_Zero
-    Name: 零度可口可乐
+    Name: Coca Cola Zero
     Type: Healing
     Buy: 800
     Weight: 100
@@ -2135,7 +2147,7 @@ Body:
       itemheal rand(50,70),rand(10,12);
   - Id: 11511
     AegisName: Coke_No_Cal
-    Name: 无糖可口可乐
+    Name: Diet Coca Cola
     Type: Healing
     Buy: 800
     Weight: 100
@@ -2143,7 +2155,7 @@ Body:
       itemheal rand(50,70),rand(10,12);
   - Id: 11512
     AegisName: Coca_Cola
-    Name: 可口可乐
+    Name: Coca Cola
     Type: Healing
     Buy: 800
     Weight: 100
@@ -2345,7 +2357,7 @@ Body:
       itemheal 0,10;
   - Id: 11701
     AegisName: Girl_Bunch_Of_Flower
-    Name: (null)
+    Name: Girl's Bouquet
     Type: Healing
     Buy: 20
     Weight: 50
@@ -2367,7 +2379,7 @@ Body:
       itemheal 0,rand(25,35);
   - Id: 11704
     AegisName: KETUPAT_F
-    Name: KETUPAT
+    Name: Ketupat
     Type: Healing
     Buy: 2
     Weight: 10
@@ -2380,10 +2392,10 @@ Body:
     Buy: 1
     Weight: 10
     Script: |
-      itemheal rand(425,425),0;
+      itemheal 425,0;
   - Id: 11706
     AegisName: Steak
-    Name: 沙朗牛排
+    Name: 黑椒牛排
     Type: Healing
     Buy: 1
     Weight: 200
@@ -2463,7 +2475,7 @@ Body:
       itemskill "AL_HEAL",3;
   - Id: 12002
     AegisName: Holy_Scroll_1_5
-    Name: 治愈术 等级5
+    Name: 治愈术5级卷轴
     Type: Delayconsume
     Buy: 2000
     Weight: 10
@@ -2622,7 +2634,7 @@ Body:
     Flags:
       BuyingStore: true
     Script: |
-      sc_start SC_SlowDown,5000,0;
+      sc_start SC_SLOWDOWN,5000,100;
   - Id: 12018
     AegisName: Fire_Cracker
     Name: 鞭炮
@@ -2665,17 +2677,17 @@ Body:
       itemheal rand(70,99),0;
   - Id: 12023
     AegisName: Giftbox_China
-    Name: 周年庆礼物箱
+    Name: Wrapped Box
     Type: Usable
     Buy: 1000
     Weight: 200
     Flags:
       Container: true
     Script: |
-      getrandgroupitem(IG_GiftBoxChina,1);
+      getgroupitem(IG_GIFTBOXCHINA);
   - Id: 12024
     AegisName: Red_Pouch_Of_Surprise
-    Name: 红色炸弹
+    Name: Red Pouch
     Type: Usable
     Buy: 50
     Weight: 50
@@ -2692,7 +2704,7 @@ Body:
     Flags:
       Container: true
     Script: |
-      getrandgroupitem(IG_EggBoy,1);
+      getgroupitem(IG_EGGBOY);
   - Id: 12026
     AegisName: Egg_Girl
     Name: 被直立的鸡蛋
@@ -2702,7 +2714,7 @@ Body:
     Flags:
       Container: true
     Script: |
-      getrandgroupitem(IG_EggGirl,1);
+      getgroupitem(IG_EGGGIRL);
   - Id: 12027
     AegisName: Giggling_Box
     Name: 啼笑的箱子
@@ -2830,7 +2842,7 @@ Body:
     Flags:
       Container: true
     Script: |
-      getrandgroupitem(IG_LottoBox,1);
+      getgroupitem(IG_LOTTOBOX);
   - Id: 12039
     AegisName: Lotto_Box05
     Name: 号码箱
@@ -3545,7 +3557,7 @@ Body:
       BuyingStore: true
       Container: true
     Script: |
-      getrandgroupitem(IG_Quiver,1);
+      getgroupitem(IG_QUIVER);
   - Id: 12105
     AegisName: Set_Of_Taiming_Item
     Name: 饲养礼物礼盒
@@ -3556,9 +3568,9 @@ Body:
       BuyingStore: true
       Container: true
     Script: |
-      getrandgroupitem(IG_Taming,1);
-      getrandgroupitem(IG_Taming,1);
-      getrandgroupitem(IG_Taming,1);
+      getgroupitem(IG_TAMING);
+      getgroupitem(IG_TAMING);
+      getgroupitem(IG_TAMING);
   - Id: 12106
     AegisName: Accessory_Box
     Name: 宝石盒
@@ -3569,7 +3581,7 @@ Body:
       BuyingStore: true
       Container: true
     Script: |
-      getrandgroupitem(IG_Accesory,1);
+      getgroupitem(IG_ACCESORY);
   - Id: 12107
     AegisName: Wrapped_Mask
     Name: 包装的面具
@@ -3580,7 +3592,7 @@ Body:
       BuyingStore: true
       Container: true
     Script: |
-      getrandgroupitem(IG_Mask,1);
+      getgroupitem(IG_MASK);
   - Id: 12108
     AegisName: Bundle_Of_Magic_Scroll
     Name: 咒文书一迭
@@ -3591,11 +3603,11 @@ Body:
       BuyingStore: true
       Container: true
     Script: |
-      getrandgroupitem(IG_Scroll,1);
-      getrandgroupitem(IG_Scroll,1);
-      getrandgroupitem(IG_Scroll,1);
-      getrandgroupitem(IG_Scroll,1);
-      getrandgroupitem(IG_Scroll,1);
+      getgroupitem(IG_SCROLL);
+      getgroupitem(IG_SCROLL);
+      getgroupitem(IG_SCROLL);
+      getgroupitem(IG_SCROLL);
+      getgroupitem(IG_SCROLL);
   - Id: 12109
     AegisName: Poring_Box
     Name: 波利箱子
@@ -3617,11 +3629,11 @@ Body:
       BuyingStore: true
       Container: true
     Script: |
-      getrandgroupitem(IG_FirstAid,1);
-      getrandgroupitem(IG_FirstAid,1);
-      getrandgroupitem(IG_FirstAid,1);
-      getrandgroupitem(IG_FirstAid,1);
-      getrandgroupitem(IG_FirstAid,1);
+      getgroupitem(IG_FIRSTAID);
+      getgroupitem(IG_FIRSTAID);
+      getgroupitem(IG_FIRSTAID);
+      getgroupitem(IG_FIRSTAID);
+      getgroupitem(IG_FIRSTAID);
   - Id: 12111
     AegisName: Food_Package
     Name: 食物保鲜袋
@@ -3632,9 +3644,9 @@ Body:
       BuyingStore: true
       Container: true
     Script: |
-      getrandgroupitem(IG_FoodBag,1);
-      getrandgroupitem(IG_FoodBag,1);
-      getrandgroupitem(IG_FoodBag,1);
+      getgroupitem(IG_FOODBAG);
+      getgroupitem(IG_FOODBAG);
+      getgroupitem(IG_FOODBAG);
   - Id: 12112
     AegisName: Tropical_Sograt
     Name: 热带的苏克拉特
@@ -3826,9 +3838,9 @@ Body:
       BuyingStore: true
       Container: true
     Script: |
-      getrandgroupitem(IG_CookieBag,1);
-      getrandgroupitem(IG_CookieBag,1);
-      getrandgroupitem(IG_CookieBag,1);
+      getgroupitem(IG_COOKIEBAG);
+      getgroupitem(IG_COOKIEBAG);
+      getgroupitem(IG_COOKIEBAG);
   - Id: 12131
     AegisName: Lucky_Potion
     Name: 幸运药水
@@ -3873,7 +3885,7 @@ Body:
       sc_start SC_Confusion,10000,0,1000,0;
   - Id: 12136
     AegisName: Women's_Bundle
-    Name: 女生包裹
+    Name: Women's Bundle
     Type: Usable
     Weight: 100
     Script: |
@@ -4516,24 +4528,24 @@ Body:
       mercenary_heal 0,100;
   - Id: 12186
     AegisName: Red_Box
-    Name: 红色彩盒
+    Name: Old Red Box
     Type: Usable
     Buy: 50000
     Weight: 200
     Flags:
       Container: true
     Script: |
-      getrandgroupitem(IG_RedBox,1);
+      getgroupitem(IG_REDBOX);
   - Id: 12187
     AegisName: Green_Box
-    Name: 绿色彩盒
+    Name: Old Green Box
     Type: Usable
     Buy: 50000
     Weight: 200
     Flags:
       Container: true
     Script: |
-      getrandgroupitem(IG_GreenBox,1);
+      getgroupitem(IG_GREENBOX);
   - Id: 12188
     AegisName: Magical_Moon_Cake
     Name: 神奇的月饼
@@ -4551,7 +4563,7 @@ Body:
     Flags:
       Container: true
     Script: |
-      getrandgroupitem(IG_RedBox_2,1);
+      getgroupitem(IG_REDBOX_2);
   - Id: 12190
     AegisName: Moon_Cake
     Name: 月饼
@@ -4588,9 +4600,9 @@ Body:
       BuyingStore: true
       Container: true
     Script: |
-      getrandgroupitem(IG_HometownGift,1);
-      getrandgroupitem(IG_HometownGift,1);
-      getrandgroupitem(IG_HometownGift,1);
+      getgroupitem(IG_HOMETOWNGIFT);
+      getgroupitem(IG_HOMETOWNGIFT);
+      getgroupitem(IG_HOMETOWNGIFT);
   - Id: 12195
     AegisName: Plain_Rice_Cake
     Name: 纯味的糕饼
@@ -4654,7 +4666,7 @@ Body:
       itemskill "PR_MAGNIFICAT",3;
   - Id: 12201
     AegisName: Red_Box_C
-    Name: 平凡的_红色箱子
+    Name: Commonplace Red Box
     Type: Usable
     Buy: 20
     Weight: 200
@@ -4781,7 +4793,7 @@ Body:
       sc_start SC_EXPBOOST,1800000,50;
   - Id: 12209
     AegisName: Insurance
-    Name: '[非卖品]免趴证书'
+    Name: '[非卖品]免掉啪证书'
     Type: Usable
     Buy: 2
     Weight: 10
@@ -5026,7 +5038,7 @@ Body:
     NoUse:
       Sitting: true
     Script: |
-      pet 1245;
+      pet;
   - Id: 12226
     AegisName: Examination1
     Name: Examination 1
@@ -5194,7 +5206,7 @@ Body:
     Flags:
       Container: true
     Script: |
-      getrandgroupitem(IG_YellowBox,1);
+      getgroupitem(IG_YELLOWBOX);
   - Id: 12241
     AegisName: M_Center_Potion
     Name: 佣兵用集中药水
@@ -5234,7 +5246,7 @@ Body:
     Flags:
       Container: true
     Script: |
-      getrandgroupitem(IG_OldGiftBox,1);
+      getgroupitem(IG_OLDGIFTBOX);
   - Id: 12245
     AegisName: Green_Ale_US
     Name: 绿色麦酒
@@ -5253,7 +5265,7 @@ Body:
       BuyingStore: true
       Container: true
     Script: |
-      getrandgroupitem(IG_MagicCardAlbum,1);
+      getgroupitem(IG_MAGICCARDALBUM);
   - Id: 12247
     AegisName: Halohalo
     Name: 哈咯哈咯
@@ -5272,7 +5284,7 @@ Body:
     Flags:
       Container: true
     Script: |
-      getrandgroupitem(IG_Masquerade,1);
+      getgroupitem(IG_MASQUERADE);
   - Id: 12249
     AegisName: Payroll_Of_Kafra_
     Name: Payment Statement for Kafra Employee
@@ -5415,7 +5427,7 @@ Body:
       sc_start SC_SPEEDUP0,540000,25;
   - Id: 12263
     AegisName: Comp_Battle_Manual
-    Name: 补偿经验值书
+    Name: '[非卖品]经验值倍增书'
     Type: Usable
     Buy: 2
     Weight: 10
@@ -5431,7 +5443,7 @@ Body:
       sc_start SC_EXPBOOST,1800000,50;
   - Id: 12264
     AegisName: Comp_Bubble_Gum
-    Name: 掉宝率倍增糖
+    Name: '[非卖品]掉宝率倍增糖'
     Type: Usable
     Buy: 2
     Weight: 10
@@ -5447,7 +5459,7 @@ Body:
       sc_start SC_ITEMBOOST,1800000,100;
   - Id: 12265
     AegisName: Comp_Insurance
-    Name: 免趴证书
+    Name: 免掉啪证书
     Type: Usable
     Buy: 2
     Weight: 10
@@ -5463,7 +5475,7 @@ Body:
       sc_start SC_LIFEINSURANCE,1800000,0;
   - Id: 12266
     AegisName: Sesame_Pastry_
-    Name: Sesame Pastry
+    Name: 茶食
     Type: Usable
     Buy: 2
     Weight: 70
@@ -5665,14 +5677,14 @@ Body:
       mercenary_create 2060,1800000;
   - Id: 12279
     AegisName: Undead_Element_Scroll
-    Name: 不死属性卷轴
+    Name: Undead Elemental Scroll
     Type: Usable
     Weight: 10
     Script: |
       sc_start4 SC_ARMOR_RESIST,300000,20,20,20,20;
   - Id: 12280
     AegisName: Holy_Element_Scroll
-    Name: 圣属性卷轴
+    Name: Holy Elemental Scroll
     Type: Usable
     Weight: 10
     Script: |
@@ -5687,7 +5699,7 @@ Body:
     Flags:
       Container: true
     Script: |
-      getrandgroupitem(IG_Tresure_Box_WoE,1);
+      getgroupitem(IG_TRESURE_BOX_WOE);
   - Id: 12282
     AegisName: Internet_Cafe1
     Name: Internet Cafe1
@@ -5737,7 +5749,7 @@ Body:
     Flags:
       Container: true
     Script: |
-      getrandgroupitem(IG_Masquerade_2,1);
+      getgroupitem(IG_MASQUERADE_2);
   - Id: 12287
     AegisName: Love_Angel
     Name: Love Angel Magic Powder
@@ -5965,7 +5977,7 @@ Body:
       mercenary_create 1966,1800000;
   - Id: 12302
     AegisName: Ygnizem_Scroll
-    Name: 暗●剑士召唤书
+    Name: 闇●剑士召唤书
     Type: Usable
     Weight: 10
     Trade:
@@ -6350,7 +6362,7 @@ Body:
     Flags:
       Container: true
     Script: |
-      getrandgroupitem(IG_Cherish_Box,1);
+      getgroupitem(IG_CHERISH_BOX);
   - Id: 12335
     AegisName: Yummy_Skewered_Dish
     Name: 美味的烤肉串
@@ -6393,7 +6405,7 @@ Body:
     Flags:
       Container: true
     Script: |
-      getrandgroupitem(IG_Cherish_Box_Ori,1);
+      getgroupitem(IG_CHERISH_BOX_ORI);
   - Id: 12340
     AegisName: Mysterious_Rice_Powder
     Name: 神奇的糯米粉末
@@ -6410,7 +6422,7 @@ Body:
       NoMail: true
       NoAuction: true
     Script: |
-      pet 1815;
+      pet;
   - Id: 12341
     AegisName: Special_Alloy_Trap_Box
     Name: 特殊合金陷阱箱子
@@ -6632,10 +6644,10 @@ Body:
       BuyingStore: true
       Container: true
     Script: |
-      getrandgroupitem(IG_Xmas_Gift,1);
+      getgroupitem(IG_XMAS_GIFT);
   - Id: 12356
     AegisName: Louise_Costume_Box
-    Name: 露易丝的衣服箱
+    Name: Louise Costume Box
     Type: Usable
     Buy: 2
     Weight: 100
@@ -6643,15 +6655,15 @@ Body:
       BuyingStore: true
       Container: true
     Script: |
-      getrandgroupitem(IG_Louise_Costume_Box,1);
+      getgroupitem(IG_LOUISE_COSTUME_BOX);
   - Id: 12357
     AegisName: Shiny_Wing_Gown
-    Name: 闪亮姜饼
+    Name: Shiny Wing Gown
     Type: Usable
     Buy: 20
     Weight: 50
     Script: |
-      pet 1630;
+      pet;
   - Id: 12358
     AegisName: Fan_Of_Wind
     Name: 徐风魔扇
@@ -6663,7 +6675,7 @@ Body:
     NoUse:
       Sitting: true
     Script: |
-      pet 1513;
+      pet;
   - Id: 12359
     AegisName: Very_Soft_Plant
     Name: 光滑柔软草
@@ -6675,7 +6687,7 @@ Body:
     NoUse:
       Sitting: true
     Script: |
-      pet 1586;
+      pet;
   - Id: 12360
     AegisName: Very_Red_Juice
     Name: 红色果汁
@@ -6687,7 +6699,7 @@ Body:
     NoUse:
       Sitting: true
     Script: |
-      pet 1505;
+      pet;
   - Id: 12361
     AegisName: Delicious_Shaved_Ice
     Name: 恋夏雪花冰
@@ -6704,7 +6716,7 @@ Body:
       NoMail: true
       NoAuction: true
     Script: |
-      pet 1143;
+      pet;
   - Id: 12362
     AegisName: Kuloren
     Name: 黑梦魔剑
@@ -6716,7 +6728,7 @@ Body:
     NoUse:
       Sitting: true
     Script: |
-      pet 1401;
+      pet;
   - Id: 12363
     AegisName: Fit_Pipe
     Name: 橡木棺
@@ -6733,7 +6745,7 @@ Body:
       NoMail: true
       NoAuction: true
     Script: |
-      pet 1179;
+      pet;
   - Id: 12364
     AegisName: Staff_Of_Leader
     Name: 领袖手杖
@@ -6745,7 +6757,7 @@ Body:
     NoUse:
       Sitting: true
     Script: |
-      pet 1299;
+      pet;
   - Id: 12365
     AegisName: Charming_Lotus
     Name: 赏心悦目的莲花
@@ -6757,7 +6769,7 @@ Body:
     NoUse:
       Sitting: true
     Script: |
-      pet 1416;
+      pet;
   - Id: 12366
     AegisName: Gril_Doll
     Name: 恐怖女娃娃
@@ -6769,7 +6781,7 @@ Body:
     NoUse:
       Sitting: true
     Script: |
-      pet 1404;
+      pet;
   - Id: 12367
     AegisName: Luxury_Whisky_Bottle
     Name: 高级洋酒瓶
@@ -6781,7 +6793,7 @@ Body:
     NoUse:
       Sitting: true
     Script: |
-      pet 1504;
+      pet;
   - Id: 12368
     AegisName: Splendid_Mirror
     Name: 美艳手镜
@@ -6793,7 +6805,7 @@ Body:
     NoUse:
       Sitting: true
     Script: |
-      pet 1148;
+      pet;
   - Id: 12369
     AegisName: Oilpalm_Coconut
     Name: 油棕椰子
@@ -6805,7 +6817,7 @@ Body:
     NoUse:
       Sitting: true
     Script: |
-      pet 1495;
+      pet;
   - Id: 12370
     AegisName: Gril's_Naivety
     Name: 少女的纯情
@@ -6822,7 +6834,7 @@ Body:
       NoMail: true
       NoAuction: true
     Script: |
-      pet 1374;
+      pet;
   - Id: 12371
     AegisName: Magical_Lithography
     Name: 魔力石板
@@ -6834,7 +6846,7 @@ Body:
     NoUse:
       Sitting: true
     Script: |
-      pet 1040;
+      pet;
   - Id: 12372
     AegisName: Hell_Contract
     Name: 地域契约
@@ -6846,7 +6858,7 @@ Body:
     NoUse:
       Sitting: true
     Script: |
-      pet 1379;
+      pet;
   - Id: 12373
     AegisName: Boy's_Naivety
     Name: 少年的纯情
@@ -6858,7 +6870,7 @@ Body:
     NoUse:
       Sitting: true
     Script: |
-      pet 1370;
+      pet;
   - Id: 12374
     AegisName: Flaming_Ice
     Name: 火焰冰
@@ -6870,7 +6882,7 @@ Body:
     NoUse:
       Sitting: true
     Script: |
-      pet 1837;
+      pet;
   - Id: 12375
     AegisName: Acaraje
     Name: 阿卡拉杰油炸饼
@@ -6884,7 +6896,7 @@ Body:
       NoAuction: true
     Script: |
       specialeffect2 EF_STEAL;
-      bonus_script "{ bonus bHit,5; bonus bAspdRate,10; }",1200,0,0,EFST_ACARAJE;
+      sc_start2 SC_ACARAJE,1200000,10,5;
   - Id: 12376
     AegisName: Mysterious_Can2
     Name: Mysterious Can2
@@ -6913,7 +6925,7 @@ Body:
       itemskill "PR_MAGNIFICAT",1;
   - Id: 12378
     AegisName: 2009_Rice_Cake_Soup
-    Name: 年糕汤
+    Name: 章鱼年糕汤
     Type: Usable
     Buy: 10
     Weight: 100
@@ -7149,7 +7161,7 @@ Body:
     Flags:
       BuyingStore: true
     Script: |
-      pet 1519;
+      pet;
   - Id: 12396
     AegisName: Fools_Day_Box
     Name: 礼物箱子 Ⅰ
@@ -7309,7 +7321,7 @@ Body:
     Name: 海葵球
     Type: Usable
     Script: |
-      pet 2081;
+      pet;
   - Id: 12409
     AegisName: Pork_Belly_H
     Name: 霜降五花肉
@@ -8646,24 +8658,24 @@ Body:
     Type: Usable
     Weight: 10
     Script: |
-      searchstores 10,0;
+      searchstores 10, SEARCHSTORE_EFFECT_NORMAL;
   - Id: 12581
     AegisName: Vending_Search_Scroll2
     Name: 露天商店检索卡(金)
     Type: Usable
     Weight: 10
     Script: |
-      searchstores 10,1;
+      searchstores 10, SEARCHSTORE_EFFECT_REMOTE;
   - Id: 12591
     AegisName: Uni_Catalog_Bz
     Name: 露天商店检索卡(铜)
     Type: Usable
     Weight: 10
     Script: |
-      searchstores 10,1;
+      searchstores 10, SEARCHSTORE_EFFECT_REMOTE;
   - Id: 12609
     AegisName: Old_Ore_Box
-    Name: 老旧矿石箱子
+    Name: Old Ore Box
     Type: Usable
     Buy: 20
     Weight: 100
@@ -8687,8 +8699,8 @@ Body:
     Flags:
       Container: true
     Script: |
-      getrandgroupitem(IG_BleuBox,1);
-      getrandgroupitem(IG_BleuBox,1);
+      getgroupitem(IG_BLEUBOX);
+      getgroupitem(IG_BLEUBOX);
   - Id: 12703
     AegisName: Holy_Egg_2
     Name: Holy Egg
@@ -8805,7 +8817,7 @@ Body:
       NoMail: true
       NoAuction: true
     Script: |
-      getrandgroupitem(IG_Easter_Scroll,1);
+      getgroupitem(IG_EASTER_SCROLL);
   - Id: 12715
     AegisName: Black_Treasure_Box
     Name: Black Treasure Box
@@ -8906,7 +8918,7 @@ Body:
       sc_start SC_VENOMBLEED,15000,0,10,0;
   - Id: 12725
     AegisName: Runstone_Nosiege
-    Name: 束缚符文石
+    Name: 那特席兹卢恩石
     Type: Usable
     Buy: 100
     Weight: 100
@@ -8930,7 +8942,7 @@ Body:
          unitskilluseid getcharid(3),"RK_REFRESH",1;
   - Id: 12726
     AegisName: Runstone_Rhydo
-    Name: 调和符文石
+    Name: 莱德赫卢恩石
     Type: Usable
     Buy: 100
     Weight: 100
@@ -8954,7 +8966,7 @@ Body:
          unitskilluseid getcharid(3),"RK_CRUSHSTRIKE",1;
   - Id: 12727
     AegisName: Runstone_Verkana
-    Name: 再生符文石
+    Name: 贝尔卡诺卢恩石
     Type: Usable
     Buy: 100
     Weight: 100
@@ -8978,7 +8990,7 @@ Body:
          unitskilluseid getcharid(3),"RK_MILLENNIUMSHIELD",1;
   - Id: 12728
     AegisName: Runstone_Isia
-    Name: 静止符文石
+    Name: 伊札卢恩石
     Type: Usable
     Buy: 100
     Weight: 100
@@ -9002,7 +9014,7 @@ Body:
          unitskilluseid getcharid(3),"RK_VITALITYACTIVATION",1;
   - Id: 12729
     AegisName: Runstone_Asir
-    Name: 联合符文石
+    Name: 艾伊瓦兹卢恩石
     Type: Usable
     Buy: 100
     Weight: 100
@@ -9023,7 +9035,7 @@ Body:
          unitskilluseid getcharid(3),"RK_FIGHTINGSPIRIT",1;
   - Id: 12730
     AegisName: Runstone_Urj
-    Name: 轮回符文石
+    Name: 乌鲁兹卢恩石
     Type: Usable
     Buy: 100
     Weight: 100
@@ -9047,7 +9059,7 @@ Body:
          unitskilluseid getcharid(3),"RK_ABUNDANCE",1;
   - Id: 12731
     AegisName: Runstone_Turisus
-    Name: 自省符文石
+    Name: 突里萨兹卢恩石
     Type: Usable
     Buy: 100
     Weight: 100
@@ -9068,7 +9080,7 @@ Body:
          unitskilluseid getcharid(3),"RK_GIANTGROWTH",1;
   - Id: 12732
     AegisName: Runstone_Pertz
-    Name: 恐惧符文石
+    Name: 培尔多罗卢恩石
     Type: Usable
     Buy: 100
     Weight: 100
@@ -9089,7 +9101,7 @@ Body:
          unitskilluseid getcharid(3),"RK_STORMBLAST",1;
   - Id: 12733
     AegisName: Runstone_Hagalas
-    Name: 毁灭符文石
+    Name: 哈卡拉兹卢恩石
     Type: Usable
     Buy: 100
     Weight: 100
@@ -9190,7 +9202,7 @@ Body:
       BuyingStore: true
   - Id: 12740
     AegisName: Inc_Str_Scroll
-    Name: 力量倍化卷轴
+    Name: Amplification Scroll
     Type: Usable
     Buy: 1
     Trade:
@@ -9199,7 +9211,7 @@ Body:
       NoGuildStorage: true
   - Id: 12741
     AegisName: Inc_Int_Scroll
-    Name: 智力倍化卷轴
+    Name: Intellect Amplification Scroll
     Type: Usable
     Buy: 1
     Trade:
@@ -9208,15 +9220,15 @@ Body:
       NoGuildStorage: true
   - Id: 12742
     AegisName: Valentine_Gift_Box1
-    Name: 情人节金戒指箱子
+    Name: Valentine Gift Box
     Type: Usable
   - Id: 12743
     AegisName: Valentine_Gift_Box2
-    Name: 情人节银戒指箱子
+    Name: Valentine Gift Box
     Type: Usable
   - Id: 12744
     AegisName: Chocotate_Box
-    Name: 巧克力箱子
+    Name: Chocolate Box
     Type: Usable
   - Id: 12745
     AegisName: Skull_Scroll
@@ -9249,49 +9261,49 @@ Body:
       NoAuction: true
   - Id: 12747
     AegisName: Royal_Scroll
-    Name: 皇家卷轴
+    Name: Royal Scroll
     Type: Usable
     Buy: 20
     Weight: 10
   - Id: 12748
     AegisName: Immune_Scroll
-    Name: 免疫卷轴
+    Name: Immune Scroll
     Type: Usable
     Buy: 20
     Weight: 10
   - Id: 12749
     AegisName: Mystic_Scroll
-    Name: 魔法卷轴
+    Name: Mystic Scroll
     Type: Usable
     Buy: 20
     Weight: 10
   - Id: 12750
     AegisName: Battle_Scroll
-    Name: 战斗卷轴
+    Name: Battle Scroll
     Type: Usable
     Buy: 20
     Weight: 10
   - Id: 12751
     AegisName: Armor_Scroll
-    Name: 盔甲卷轴
+    Name: Armor Scroll
     Type: Usable
     Buy: 20
     Weight: 10
   - Id: 12752
     AegisName: Prayer_Scroll
-    Name: 祈祷卷轴
+    Name: Prayer Scroll
     Type: Usable
     Buy: 20
     Weight: 10
   - Id: 12753
     AegisName: Soul_Scroll
-    Name: 灵魂卷轴
+    Name: Soul Scroll
     Type: Usable
     Buy: 20
     Weight: 10
   - Id: 12754
     AegisName: New_Year_Bun
-    Name: 新春水饺
+    Name: 新春包子
     Type: Usable
     Weight: 10
     Trade:
@@ -9486,7 +9498,7 @@ Body:
       Third_Baby: true
   - Id: 12848
     AegisName: Falcon_Flute
-    Name: Falcon Flute
+    Name: 猎鹰魔笛
     Type: Delayconsume
     Weight: 10
     Script: |
@@ -9510,7 +9522,7 @@ Body:
       getitem 12208,10;
   - Id: 12901
     AegisName: Insurance_Package
-    Name: 免趴证书箱子
+    Name: 免掉啪证书箱子
     Type: Cash
     Buy: 20
     Weight: 10
@@ -11169,7 +11181,7 @@ Body:
       getitem 7139,10;
   - Id: 13547
     AegisName: Repair_Scroll_Box
-    Name: 武器修理卷轴箱子
+    Name: Repair Weapon Scroll Box
     Type: Cash
     Buy: 20
     Weight: 10
@@ -11335,7 +11347,7 @@ Body:
     Weight: 10
   - Id: 13569
     AegisName: PVP_Tele_Scroll_Box
-    Name: PVP_移动_卷抽_箱子
+    Name: PVP Teleport Scroll Box
     Type: Cash
     Buy: 20
     Weight: 10
@@ -11743,7 +11755,7 @@ Body:
     Weight: 10
   - Id: 13621
     AegisName: Greed_Box30
-    Name: 贪婪卷轴箱子(小)
+    Name: 贪婪卷轴30入箱子
     Type: Cash
     Buy: 20
     Weight: 10
@@ -11751,7 +11763,7 @@ Body:
       getitem 14529,30;
   - Id: 13622
     AegisName: Greed_Box50
-    Name: 贪婪卷轴箱子(中)
+    Name: 贪婪卷轴50入箱子
     Type: Cash
     Buy: 20
     Weight: 10
@@ -12383,28 +12395,28 @@ Body:
       getitem 7767,100;
   - Id: 13691
     AegisName: Freyja_Overcoat_Box
-    Name: 菲力亚的长袍箱子
+    Name: Freya's Clothes Box
     Type: Cash
     Weight: 10
     Script: |
       rentitem 2369,604800;
   - Id: 13692
     AegisName: Freyja_Boots_Box
-    Name: 菲力亚的长靴箱子
+    Name: Freya's Boots Box
     Type: Cash
     Weight: 10
     Script: |
       rentitem 2428,604800;
   - Id: 13693
     AegisName: Freyja_Cape_Box
-    Name: 菲力亚的披风箱子
+    Name: Freya's Manteau Box
     Type: Cash
     Weight: 10
     Script: |
       rentitem 2533,604800;
   - Id: 13694
     AegisName: Freyja_Crown_Box
-    Name: 菲力亚的冠冕箱子
+    Name: Freya's Crown Box
     Type: Cash
     Weight: 10
     Script: |
@@ -12418,7 +12430,7 @@ Body:
       getitem 14532,10;
   - Id: 13696
     AegisName: Battle_Manual100_Box
-    Name: 高级经验值倍增书箱子
+    Name: Field Manual 100% Box
     Type: Cash
     Weight: 10
     Trade:
@@ -12538,7 +12550,7 @@ Body:
       getitem 7776,10;
   - Id: 13711
     AegisName: Small_Life_Potion_Box
-    Name: 小型生命水箱子(小)
+    Name: 小型生命水10入箱子
     Type: Cash
     Buy: 20
     Weight: 10
@@ -12550,7 +12562,7 @@ Body:
       getitem 14534,10;
   - Id: 13712
     AegisName: Small_Life_Potion_Box30
-    Name: 小型生命水箱子(中)
+    Name: 小型生命水30入箱子
     Type: Cash
     Buy: 20
     Weight: 10
@@ -12574,7 +12586,7 @@ Body:
       getitem 14534,50;
   - Id: 13714
     AegisName: Med_Life_Potion_Box
-    Name: 中型生命水箱子(小)
+    Name: 中型生命水10入箱子
     Type: Cash
     Buy: 20
     Weight: 10
@@ -12586,7 +12598,7 @@ Body:
       getitem 14535,10;
   - Id: 13715
     AegisName: Med_Life_Potion_Box30
-    Name: 中型生命水箱子(中)
+    Name: 中型生命水30入箱子
     Type: Cash
     Buy: 20
     Weight: 10
@@ -13088,7 +13100,7 @@ Body:
       NoMail: true
       NoAuction: true
     Script: |
-      getitem 7804,1;
+      getitem 2713,1;
   - Id: 13766
     AegisName: Nagan_Box
     Name: Refined Nagan Box
@@ -13700,7 +13712,7 @@ Body:
       sc_start SC_INCDEX,60000,5;
   - Id: 13834
     AegisName: Dun_Tele_Scroll2_Box5
-    Name: 洞穴瞬间移动卷轴II 5个箱子
+    Name: 洞穴瞬间移动卷轴II5个箱子
     Type: Cash
     Buy: 20
     Weight: 10
@@ -14731,7 +14743,7 @@ Body:
       NoAuction: true
   - Id: 13912
     AegisName: Party_Blessing_Box
-    Name: 超大的 天使之赐福 箱子
+    Name: Party Blessing 10 Scroll Box
     Type: Cash
     Buy: 20
     Weight: 10
@@ -14743,7 +14755,7 @@ Body:
       getitem 14588,10;
   - Id: 13913
     AegisName: Party_Inc_Agi_Box
-    Name: 超大的 加速术 箱子
+    Name: Party Increase Agi 10 Scroll Box
     Type: Cash
     Buy: 20
     Weight: 10
@@ -14755,7 +14767,7 @@ Body:
       getitem 14589,10;
   - Id: 13914
     AegisName: Party_Assumptio_Box
-    Name: 超大的 圣母之祈福 箱子
+    Name: Party Assumptio 5 Scroll Box
     Type: Cash
     Buy: 20
     Weight: 10
@@ -15836,7 +15848,7 @@ Body:
       getitem 756,50;
   - Id: 13989
     AegisName: Acidbomb_10_Box
-    Name: 强酸火烟箱子
+    Name: Acid Bomb 10 Box
     Type: Cash
     Buy: 20
     Weight: 10
@@ -15949,7 +15961,7 @@ Body:
       getitem 12016,10;
   - Id: 13996
     AegisName: Big_Bun_Box100
-    Name: Big Bun 100 Box
+    Name: 大包子 100个箱子
     Type: Cash
     Buy: 20
     Weight: 10
@@ -15997,7 +16009,7 @@ Body:
       getitem 12212,500;
   - Id: 13999
     AegisName: Pill__Box100
-    Name: Pill 100 Box
+    Name: 丸药 100个箱子
     Type: Cash
     Buy: 20
     Weight: 10
@@ -16029,7 +16041,7 @@ Body:
       getitem 14523,500;
   - Id: 14001
     AegisName: Basic_Siege_Supply_Box
-    Name: 新兵攻城补给箱
+    Name: Recruit Siege Supply Box
     Type: Cash
     Buy: 20
     Weight: 10
@@ -17192,7 +17204,7 @@ Body:
       getitem 14538,10;
   - Id: 14076
     AegisName: F_Shadow_Armor_S_Box5
-    Name: 阴暗铠甲卷轴箱子(5)
+    Name: Scroll of Shadow Armor 5 Box
     Type: Cash
     Buy: 20
     Weight: 10
@@ -17208,7 +17220,7 @@ Body:
       getitem 14539,5;
   - Id: 14077
     AegisName: F_Shadow_Armor_S_Box10
-    Name: 阴暗铠甲卷轴箱子(10)
+    Name: Scroll of Shadow Armor 10 Box
     Type: Cash
     Buy: 20
     Weight: 10
@@ -17224,7 +17236,7 @@ Body:
       getitem 14539,10;
   - Id: 14078
     AegisName: F_Shadow_Armor_S_Box30
-    Name: 阴暗铠甲卷轴箱子(30)
+    Name: Scroll of Shadow Armor 30 Box
     Type: Cash
     Buy: 20
     Weight: 10
@@ -19807,7 +19819,7 @@ Body:
       getitem 2754,1;
   - Id: 14244
     AegisName: Clamorous_Ring_Box
-    Name: 呐喊之戒箱子(7天)
+    Name: 吶喊之戒箱子(7天)
     Type: Cash
     Buy: 20
     Weight: 10
@@ -19927,7 +19939,7 @@ Body:
       getitem 2754,1;
   - Id: 14254
     AegisName: Clamorous_Ring_Box2
-    Name: 呐喊之戒箱子(15天)
+    Name: 吶喊之戒箱子(15天)
     Type: Cash
     Buy: 20
     Weight: 10
@@ -20287,7 +20299,7 @@ Body:
       getitem 5421,1;
   - Id: 14304
     AegisName: Scuba_Mask_Box
-    Name: 潜水面具箱子
+    Name: Scuba Mask Box
     Type: Cash
     Buy: 20
     Weight: 10
@@ -20395,7 +20407,7 @@ Body:
       NoAuction: true
   - Id: 14349
     AegisName: Mental_Potion20_Box
-    Name: 精神药水20个箱子
+    Name: Mental Potion 20 Box
     Type: Cash
     Buy: 20
     Weight: 10
@@ -20419,7 +20431,7 @@ Body:
       getitem 14600,50;
   - Id: 14351
     AegisName: Tyr's_Blessing20_Box
-    Name: 托尔的祝福20个箱子
+    Name: Tyr's Blessing 20 Box
     Type: Cash
     Buy: 20
     Weight: 10
@@ -20431,7 +20443,7 @@ Body:
       getitem 14601,20;
   - Id: 14352
     AegisName: Tyr's_Blessing50_Box
-    Name: 托尔的祝福50个箱子
+    Name: Tyr's Blessing 50 Box
     Type: Cash
     Buy: 20
     Weight: 10
@@ -20483,7 +20495,7 @@ Body:
       getitem 12350,1;
   - Id: 14377
     AegisName: Shout_Megaphone_Box
-    Name: 呐喊的扩声器箱子
+    Name: 吶喊的扩声器箱子
     Type: Cash
     Buy: 20
     Weight: 10
@@ -20511,7 +20523,7 @@ Body:
       getitem 5490,1;
   - Id: 14393
     AegisName: Almighty_Charm_Box
-    Name: 万能咒符箱子
+    Name: Universal Amulet Box
     Type: Cash
     Buy: 20
     Weight: 10
@@ -20561,7 +20573,7 @@ Body:
       getitem 5497,1;
   - Id: 14447
     AegisName: Pirate's_Pride_Box
-    Name: 海贼的自尊心箱子
+    Name: Pirate's Pride Box
     Type: Cash
     Buy: 20
     Weight: 10
@@ -20589,7 +20601,7 @@ Body:
       getitem 5502,1;
   - Id: 14459
     AegisName: Rabbit_Magic_Hat_Box
-    Name: 兔子魔法帽箱子
+    Name: Magic Rabbit Hat Box
     Type: Cash
     Buy: 20
     Weight: 10
@@ -20605,7 +20617,7 @@ Body:
       getitem 5503,1;
   - Id: 14460
     AegisName: China_Wedding_Veil_Box
-    Name: RO5周年纪念头纱箱子
+    Name: RO 5th Wedding Anniversary Box
     Type: Cash
     Buy: 20
     Weight: 10
@@ -20637,7 +20649,7 @@ Body:
       getitem 5505,1;
   - Id: 14466
     AegisName: Valentine_Pledge_Box
-    Name: 人气冠军的箱子
+    Name: Valentine's Emblem Box
     Type: Usable
     Trade:
       NoDrop: true
@@ -20805,7 +20817,7 @@ Body:
       unitskilluseid getcharid(3),"AM_CP_WEAPON",5;
   - Id: 14521
     AegisName: Repair_Scroll
-    Name: 武器修理卷轴
+    Name: Repair Weapon Scroll
     Type: Usable
     Weight: 10
     NoUse:
@@ -20872,7 +20884,7 @@ Body:
       callfunc "F_CashDungeon",1;
   - Id: 14528
     AegisName: PVP_Tele_Scroll
-    Name: PVP 移动 卷抽
+    Name: PVP Teleport Scroll
     Type: Usable
     Weight: 10
   - Id: 14529
@@ -21316,7 +21328,7 @@ Body:
       NoMail: true
       NoAuction: true
     Script: |
-      pet 1122;
+      pet;
   - Id: 14570
     AegisName: Flail_Goblin_Ring
     Name: 链锤哥布灵的戒指
@@ -21331,7 +21343,7 @@ Body:
       NoMail: true
       NoAuction: true
     Script: |
-      pet 1123;
+      pet;
   - Id: 14571
     AegisName: Hammer_Goblin_Ring
     Name: 榔头哥布灵的戒指
@@ -21346,7 +21358,7 @@ Body:
       NoMail: true
       NoAuction: true
     Script: |
-      pet 1125;
+      pet;
   - Id: 14572
     AegisName: Holy_Marble
     Name: 火珠
@@ -21361,7 +21373,7 @@ Body:
       NoMail: true
       NoAuction: true
     Script: |
-      pet 1385;
+      pet;
   - Id: 14573
     AegisName: Red_Burning_Stone
     Name: 烧红的石头
@@ -21376,7 +21388,7 @@ Body:
       NoMail: true
       NoAuction: true
     Script: |
-      pet 1382;
+      pet;
   - Id: 14574
     AegisName: Skull_Of_Vagabond
     Name: 浪人的遗骨
@@ -21391,7 +21403,7 @@ Body:
       NoMail: true
       NoAuction: true
     Script: |
-      pet 1208;
+      pet;
   - Id: 14575
     AegisName: Str_Dish05_
     Name: Lutie Lady's Pancake
@@ -21495,7 +21507,7 @@ Body:
       NoGuildStorage: true
   - Id: 14587
     AegisName: Repair_Scroll_
-    Name: 武器修理卷轴
+    Name: Equipment Repair Spell Book
     Type: Delayconsume
     Weight: 10
     NoUse:
@@ -21512,7 +21524,7 @@ Body:
       itemskill "BS_REPAIRWEAPON",1;
   - Id: 14588
     AegisName: Pty_Blessing_Scroll
-    Name: 超大的 天使之赐福 卷轴
+    Name: Party Blessing 10 Scroll
     Type: Delayconsume
     Buy: 10
     Weight: 10
@@ -21525,7 +21537,7 @@ Body:
       itemskill "CASH_BLESSING",10;
   - Id: 14589
     AegisName: Pty_Inc_Agi_Scroll
-    Name: 超大的 加速术 卷轴
+    Name: Party Increase Agi 10 Scroll
     Type: Delayconsume
     Buy: 10
     Weight: 10
@@ -21538,7 +21550,7 @@ Body:
       itemskill "CASH_INCAGI",10;
   - Id: 14590
     AegisName: Pty_Assumptio_Scroll
-    Name: 超大的 圣母之祈福 卷轴
+    Name: Party Assumptio 5 Scroll
     Type: Delayconsume
     Buy: 10
     Weight: 10
@@ -21631,12 +21643,12 @@ Body:
     Flags:
       Container: true
     Script: |
-      getrandgroupitem(IG_Pierre_Treasurebox,1);
-      getrandgroupitem(IG_Pierre_Treasurebox,1);
-      getrandgroupitem(IG_Pierre_Treasurebox,1);
-      getrandgroupitem(IG_Pierre_Treasurebox,1);
-      getrandgroupitem(IG_Pierre_Treasurebox,1);
-      getrandgroupitem(IG_Pierre_Treasurebox,1);
+      getgroupitem(IG_PIERRE_TREASUREBOX);
+      getgroupitem(IG_PIERRE_TREASUREBOX);
+      getgroupitem(IG_PIERRE_TREASUREBOX);
+      getgroupitem(IG_PIERRE_TREASUREBOX);
+      getgroupitem(IG_PIERRE_TREASUREBOX);
+      getgroupitem(IG_PIERRE_TREASUREBOX);
   - Id: 14597
     AegisName: PhreeoniS
     Name: 皮里恩卷轴
@@ -21810,7 +21822,7 @@ Body:
       percentheal 10,10;
   - Id: 16134
     AegisName: King_Frog_Hat_Box
-    Name: 青蛙王子头饰箱子
+    Name: Frog King Hat Box
     Type: Cash
     Buy: 20
     Weight: 10
@@ -21840,7 +21852,7 @@ Body:
       getitem 5529,1;
   - Id: 16247
     AegisName: Dragon_Arhat_Mask_Box
-    Name: 降龙罗汉脸谱箱子
+    Name: Dragon Arhat Mask Box
     Type: Cash
     Buy: 20
     Weight: 10
@@ -21856,7 +21868,7 @@ Body:
       getitem 5565,1;
   - Id: 16248
     AegisName: Tiger_Arhat_Mask_Box
-    Name: 伏虎罗汉脸谱箱子
+    Name: Tiger Arhat Mask Box
     Type: Cash
     Buy: 20
     Weight: 10

@@ -32,139 +32,450 @@
 Header:
   Type: ATCOMMAND_DB
   Version: 1
-
 Body:
-  - Command: help
+  - Command: accept
+    Help: |
+      接受决斗邀请.
+  - Command: accinfo
     Aliases:
-      - h
+      - accountinfo
     Help: |
-      指令参数: <想寻求帮助的指令名称>
-      可以帮您查某个指令的使用方法.
-  - Command: noask
-    Help: |
-      自动拒绝交易和所有邀请(邀请包括: 添加好友邀请、组队邀请和公会邀请).
-  - Command: gmotd
-    Help: |
-      将 conf/motd.txt 中配置的公告信息发送给全部玩家(以黄字公告样式显示).
-  - Command: me
-    Help: |
-      指令参数: <讯息>
-      将消息以指定的格式发送出去, 格式为 * :角色名 讯息: * (类似 mIRC 中的 /me 指令).
-  - Command: fakename
-    Help: |
-      指令参数: <要伪装成什么角色名>
-      临时修改你的角色名.
-  - Command: npctalk
+      Params: <char name>. Searches for a character with the name <char name>. You may use % as a placeholder.
+      Params: <account ID>. Searches login information for the account <account ID>.
+      Displays basic information about the account with the account ID <account ID> or with the character <char name> on it.
+  - Command: addfame
     Aliases:
-      - npctalkc
+      - famepoint
+      - famepoints
     Help: |
-      指令参数: <NPC名称> <讯息>
-      强制让指定的NPC显示一个普通的对话消息.
+      Params: <amount>.
+      Adds or reduces the player's fame points by <amount>.
+  - Command: addperm
+    Help: |
+      指令参数: <权限名称>
+      临时赋予玩家指定的权限(权限名称请参考 doc/permissions.txt).
+  - Command: addwarp
+    Help: |
+      指令参数: <目的地地图名称> <目的地X坐标> <目的地Y坐标> <传送点的NPC名称>
+      在指令使用者的脚下, 生成一个传送点(NPC名称只要不冲突, 随意起名)
+  - Command: adjgroup
+    Help: |
+      指令参数: <Group等级> <角色名称>
+      临时提升玩家的分组级别(下线不保存, 若设置为99则等于超级管理员).
+  - Command: adopt
+    Help: |
+      Params: <char name>
+      Adopts the specified player <char name>.
+  - Command: agi
+    Help: |
+      指令参数: <+/- 数量>
+      增加/减少角色指定数量的 AGI(敏捷).
+  - Command: agitend
+    Help: |
+      关闭 GvG 攻城战
+  - Command: agitend2
+    Help: |
+      End War of Emperium SE
+  - Command: agitend3
+    Help: |
+      End War of Emperium TE
+  - Command: agitstart
+    Help: |
+      开启 GvG 攻城战
+  - Command: agitstart2
+    Help: |
+      Starts War of Emperium SE
+  - Command: agitstart3
+    Help: |
+      Starts War of Emperium TE
+  - Command: alive
+    Help: |
+      将自己从死亡状态中复活.
+  - Command: allowks
+    Help: |
+      Enables or disables kill stealing on this map.
+  - Command: allskill
+    Aliases:
+      - allskills
+      - skillall
+      - skillsall
+    Help: |
+      学会所有技能能.
+  - Command: auction
+    Help: |
+      Opens the auction window.
+  - Command: autoloot
+    Help: |
+      指令参数: <on|off|数值<1-100%>>
+      开启/关闭自动拾取模式.
+  - Command: autolootitem
+    Aliases:
+      - alootid
+    Help: |
+      Params: None. Shows a short help.
+      Params: +<Item ID> to add an item ID
+      Params: -<Item ID> to remove an item ID
+      Params: reset to remove all item IDs
+      Makes items of this specific item ID go straight into your inventory.
+  - Command: autoloottype
+    Aliases:
+      - aloottype
+    Help: |
+      Params: None. Shows a short help.
+      Params: +<type name/ID> to add an item type
+      Params: -<type name/ID> to remove an item type
+      Params: reset to remove all item types
+      Makes items of this specific item type go straight into your inventory.
+      Type List:
+        healing = 0, usable = 2, etc = 3, weapon = 4, armor = 5,
+        card = 6, petegg = 7, petarmor = 8, ammo = 10
+  - Command: autotrade
+    Aliases:
+      - at
+    Help: |
+     开启离线挂店(你将会立刻掉线, 但你的角色将会留在服务器中继续摆摊).
+  - Command: ban
+    Aliases:
+      - banish
+    Help: |
+      指令参数: <time> <角色名称>
+      临时封禁指定角色所属的账号.
+      时间代码: 由 (+/- 号) 和时间以及单位组合而成 (单位代码: y, m, d, h, mn, s)
+      单位代码说明: y(年) m(月) d(日) h(时) mn(分) s(秒)
+      例如: @ban +1m-2mn1s 小明 (封禁小明 1个月减去2分1秒)
+  - Command: baselevelup
+    Aliases:
+      - baselevel
+      - baselvl
+      - baselvup
+      - baselvlup
+      - blevel
+      - blvl
+      - lvup
+    Help: |
+      指令参数: <要增减的基础等级>
+      根据指定数值来调整角色的基础等级(若使用负数, 则是降低基础等级).
+  - Command: bodystyle
+    Help: |
+      Params: <bodystyle> - value between 0-1
+      Changes the character's bodystyle to <bodystyle>.
+  - Command: breakguild
+    Help: |
+      Breaks the guild of the attached character.
+      You must be the guildmaster to use this command.
   - Command: broadcast
     Help: |
       指令参数: <讯息>
       在带有你角色名的情况下,进行全服广播(黄色字体).
-  - Command: kami
+  - Command: camerainfo
+    Aliases:
+      - viewpointvalue
+      - setcamera
     Help: |
-      指令参数: <讯息>
-      不带有你角色名的情况下,进行全服广播(黄色字体).
-  - Command: kamib
+      显示或更新客户端的相机设置.
+      焦距(range) 旋转(rotation) 维度(latitude)
+  - Command: cart
     Help: |
-      指令参数: <讯息>
-      不带有你角色名的情况下,进行全服广播(蓝色字体).
-  - Command: localbroadcast
+      Params: <cart ID>
+      Gives or removes a cart to a player and also change the cart skin.
+      Available cart IDs:
+          0: remove cart
+        1-5: normal carts
+        6-9: new carts
+  - Command: cartlist
     Help: |
-      指令参数: <讯息>
-      在带有你角色名的情况下,对当前地图进行广播(黄色字体).
+      Displays a list of items in the cart.
+  - Command: cash
+    Help: |
+      指令参数: <要增减的现金点券> 
+      - 让你获得指定数量的现金点券(若使用负数, 则是扣减现金点券).
+  - Command: changedress
+    Aliases:
+      - nocosplay
+    Help: |
+      移除所有角色服装.
+  - Command: changegm
+    Help: |
+      指令参数: <新任会长的角色名>
+      任命新的公会会长 (你必须是会长才能执行此操作).
+  - Command: changeleader
+    Help: |
+      指令参数: <新任队长的角色名>
+      任命新的队伍组长 (你必须是队长才能执行此操作).
+  - Command: channel
+    Aliases:
+      - main
+    Help: |
+      If you run this command without any parameters, you will get a more detailed help information.
+  - Command: changecharsex
+    Help: |
+      Changes your character's gender.
+  - Command: changelook
+    Help: |
+      Params: <position> <view ID>
+      Changes the player's appearance to the specified view ID.
+      Available positions:
+        1: Top
+        2: Middle
+        3: Bottom
+        4: Weapon
+        5: Shield
+        6: Shoes
+        7: Robe
+        8: Bodystyle
+  - Command: changesex
+    Help: |
+      改变账号性别.
+  - Command: char_ban
+    Aliases:
+      - charban
+    Help: |
+      指令参数: <time> <角色名称>
+      临时封禁指定角色.
+      时间代码: 由 (+/- 号) 和时间以及单位组合而成 (单位代码: y, m, d, h, mn, s)
+      单位代码说明: y(年) m(月) d(日) h(时) mn(分) s(秒)
+      例如: @char_ban +1m-2mn1s 小明 (封禁小明 1个月减去2分1秒)
+  - Command: char_block
+    Aliases:
+      - block
+    Help: |
+      指令参数: <角色名称>
+      永久封禁指定角色所属的账号.
+  - Command: char_unban
+    Aliases:
+      - charunban
+    Help: |
+      指令参数: <角色名称> 
+      - 解除指定角色的临时封禁
+  - Command: char_unblock
+    Aliases:
+      - unblock
+    Help: |
+      指令参数: <角色名称>
+      解除指定角色所属账号的永久封禁.
+  - Command: charcommands
+    Help: |
+      Displays a list of charcommands that you can use.
+  - Command: checkquest
+    Help: |
+      Params: <quest ID>
+      Shows status information for the quest with quest ID <quest ID>.
+  - Command: clanspy
+    Help: |
+      Params: <clan name|id>
+      You will receive all messages of the clan chat (Chat logging must be enabled)
+  - Command: cleanarea
+    Aliases:
+      - cleararea
+    Help: |
+      Deletes floor items in sight range.
+  - Command: cleanmap
+    Aliases:
+      - clearmap
+    Help: |
+      Deletes floor items on the current map.
+  - Command: clearcart
+    Help: |
+      Deletes all items in the cart.
+  - Command: cleargstorage
+    Help: |
+      Deletes all items in the guild storage.
+  - Command: clearstorage
+    Help: |
+      Deletes all items in the storage.
+  - Command: clearweather
+    Help: |
+      Stops all weather effects on the current map.
+  - Command: clone
+    Help: |
+      指令参数: <角色名称>
+      根据指定的角色生成一个友好的克隆体(会随机移动且主动攻击怪物).
+  - Command: cloneequip
+    Aliases:
+      - eqclone
+    Help: |
+      Params: <char name>
+      Params: <char ID>
+      Copies the equipment of player <char name/char ID>.
+  - Command: clonestat
+    Aliases:
+      - stclone
+    Help: |
+      Params: <char name>
+      Params: <char ID>
+      Copies the status values of player <char name/char ID>.
+  - Command: clouds
+    Help: |
+      开启/关闭当前地图的"云雾"天气效果.
+  - Command: clouds2
+    Help: |
+      开启/关闭当前地图的"另一种云雾"天气效果(20150916客户端实测无效).
   - Command: commands
     Help: |
       显示出所有目前您可以使用的指令.
-  - Command: rates
+  - Command: completequest
     Help: |
-      显示服务器目前的倍率设置信息, 包括: 经验倍率、物品掉落倍率等等.
-  - Command: uptime
+      指令参数: <任务ID>
+      完成指定任务.
+  - Command: con
     Help: |
-      显示服务器距离上一次维护之后,已经持续运行多长时间.
-  - Command: showdelay
+      指令参数: <+/- 数量>
+      增加/减少角色指定数量的 CON(集中).
+  - Command: costume
     Help: |
-      显示/隐藏技能冷却提示(当使用正在冷却的技能时,是否提示此技能正在冷却? 默认不显示).
-  - Command: exp
+      Params: <costume>
+      Changes the player's visible appearance to that of the selected <costume>.
+      Available costumes:
+        Hanbok
+        Oktoberfest
+        Summer
+        Wedding
+        Xmas
+  - Command: crt
     Help: |
-      显示当前的等级,以及经验的百分比进度.
-  - Command: mobinfo
+      指令参数: <+/- 数量>
+      增加/减少角色指定数量的 CRT(再生).
+  - Command: day
+    Help: |
+      关闭夜晚模式并回到白天, 对所有在线玩家都有效.
+  - Command: delitem
+    Help: |
+      Params: <item name> <amount>
+      Params: <item ID> <amount>
+      Deletes <amount> of the specified item <item name/ID> from the player's inventory.
+  - Command: dex
+    Help: |
+      指令参数: <+/- 数量>
+      增加/减少角色指定数量的 DEX(灵巧).
+  - Command: disguise
+    Help: |
+      指令参数: <魔物名称|魔物编号|NPC外观编号>
+      将玩家伪装成魔物或者NPC.
+  - Command: disguiseall
+    Help: |
+      Params: <monster name|ID>
+      Disguises all online characters.
+  - Command: disguiseguild
+    Help: |
+      指令参数: <魔物名称|魔物ID>
+      伪装公会的所有在线角色.
+  - Command: displayskill
+    Help: |
+      Params: <skill ID> {<skill level>}
+      Displays the skill animation of a skill without really using the skill.
+  - Command: displayskillcast
+    Help: |
+      Params: <skill ID> {<skill level> <ground target flag> <cast time>}
+      Displays the cast animation of a skill without really casting the skill.
+  - Command: displayskillunit
+    Help: |
+      Params: <skill unit ID> {<skill level> <range>}
+      Displays the skill unit animation of a skill unit without really using the skill.
+  - Command: displaystatus
+    Help: |
+      Params: <status ID> <flag> <tick> {<val1> <val2> <val3>}
+      Displays the status animation of a status change without really having the status change.
+  - Command: divorce
+    Help: |
+      让玩家离婚, 回到单身状态.
+  - Command: doom
+    Help: |
+      杀死服务器中所有不是GM的玩家.
+  - Command: doommap
+    Help: |
+      杀死当前地图所有不是GM的玩家.
+  - Command: dropall
+    Help: |
+      指令参数: [<物品类型编号>]
+      把角色身上指定类型的物品全部丢到地上(无论是否已装备). 若没有指定物品类型, 则丢弃全部物品.
+  - Command: duel
+    Help: |
+     开始决斗(开始决斗后, 可以使用 @invite 来邀请玩家参与决斗).
+  - Command: dye
     Aliases:
-      - monsterinfo
-      - mi
+      - ccolor
     Help: |
-      指令参数: <魔物名称|魔物编号>
-      显示指定魔物的信息(能力, 经验值, 掉落的道具信息等).
-  - Command: iteminfo
-    Aliases:
-      - ii
+      指令参数: <服装染色编号>
+      改变角色的服装染色.
+  - Command: effect
     Help: |
-      指令参数: <物品名称|物品编号>
-      显示指定物品的信息(物品类型, 重量等).
-  - Command: whodrops
-    Help: |
-      指令参数: <物品名称|物品编号>
-      查询指定的物品可以从哪些魔物身上获得(按照魔物的掉率排序).
-  - Command: version
-    Help: |
-      显示服务端的版本号信息.
+      指令参数: <效果编号> [<标记>]
+      给你的角色赋予一个效果(比如晕眩的动画效果等).
   - Command: email
     Help: |
       指令参数: <现在使用的邮件地址> <新的邮件地址>
       修改你账号的邮件地址(邮件地址在部分版本的客户端中, 将作为删除角色的确认密码使用).
-  - Command: where
+  - Command: enchantgradeui
+    Help: |
+      打开评级UI
+  - Command: erasequest
+    Help: |
+      Params: <quest ID>
+      Removes the quest <quest ID> from the quest log.
+  - Command: evilclone
     Help: |
       指令参数: <角色名称>
-      查询指定角色所处的位置(所在地图和坐标).
-  - Command: time
+      根据指定的角色生成一个友好的克隆体, 并跟随在指令的使用者身边.
+  - Command: exp
+    Help: |
+      显示当前的等级,以及经验的百分比进度.
+  - Command: fakename
+    Help: |
+      指令参数: <要伪装成什么角色名>
+      临时修改你的角色名.
+  - Command: feelreset
+    Help: |
+      Resets a Star Gladiator's marked maps.
+  - Command: fireworks
+    Help: |
+      开启/关闭当前地图的"烟花"天气效果(20150916客户端实测无效).
+  - Command: fog
+    Help: |
+      开启/关闭当前地图的"雾霾"天气效果.
+  - Command: font
+    Help: |
+      Params: <type> - value between 0-9
+      Sets the client font to <type>.
+      Available types:
+        0: Default
+        1: RixLoveangel
+        2: RixSquirrel
+        3: NHCgogo
+        4: RixDiary
+        5: RixMiniHeart
+        6: RixFreshman
+        7: RixKid
+        8: RixMagic
+        9: RixJJangu
+  - Command: fontcolor
+    Help: |
+      Params: <color_name>
+      Sets channel chat font color for the invoking character only.
+  - Command: follow
+    Help: |
+      指令参数: <角色名称>
+      跟踪一个玩家.
+  - Command: fullstrip
+    Help: |
+      Params: <char name>
+      Unequips all items currently equipped by <char name>.
+  - Command: gat
+    Help: |
+      返回当前位置为中心, 5x5范围内的区域可否移动 (调试使用)
+  - Command: guildlevelup
     Aliases:
-      - date
-      - serverdate
-      - servertime
+      - glevel
+      - glvl
+      - guildlevel
+      - guildlvl
+      - guildlvlup
+      - guildlvup
     Help: |
-      显示服务器的日期和时间, 以及游戏内的昼夜时间.
-  - Command: showexp
+      指令参数: <要增减的公会等级>
+      根据指定数值来调整公会等级(若使用负数, 则是降低公会等级).
+  - Command: gmotd
     Help: |
-      显示/隐藏获得的经验值.
-  - Command: showzeny
-    Help: |
-      显示/隐藏获得的金币.
-  - Command: mobsearch
-    Help: |
-      指令参数: <魔物名称|编号>
-      搜索当前地图中, 指定魔物的位置(可以用这个指令来查BOSS位置, 再利用 jump 指令瞬移过去).
-  - Command: who
-    Aliases:
-      - whois
-    Help: |
-      指令参数: [<角色名称>]
-      显示全服玩家的队伍和公会名称(若指定角色名, 则只查找特定的角色).
-  - Command: who2
-    Help: |
-      指令参数: [<角色名称>]
-      显示全服玩家的等级和职业(若指定角色名, 则只查找特定的角色).
-  - Command: who3
-    Help: |
-      指令参数: [<角色名称>]
-      显示全服玩家的账号编号和所在的位置(若指定角色名, 则只查找特定的角色).
-  - Command: whomap
-    Help: |
-      @whomap/@whomap2/@whomap3 [地图名称] - 与 @who/@who2/@who3 类似, 但只针对指定的地图.
-  - Command: whogm
-    Help: |
-      指令参数: [关键词] - 类似 @who+@who2+who3 的集合, 但只针对在线的GM(如果指定了关键词, 那么只搜索出名称包含指定关键词的在线GM).
-  - Command: guildspy
-    Help: |
-      指令参数: <公会名称|编号> - 你将会收到指定公会的“公会频道”中的所有聊天信息 (聊天记录必须启用).
-  - Command: partyspy
-    Help: |
-      @partyspy <队伍名称|编号> - 你将会收到指定队伍的“队伍频道”中的所有聊天信息 (聊天记录必须启用).
-  - Command: mapinfo
-    Help: |
-      指令参数: [<0-3> [地图名称]] - 显示出指定地图的详细信息 (常规内容 +: 0: 没有其他信息, 1: 玩家信息, 2: NPC信息, 3: 聊天室信息).
+      将 conf/motd.txt 中配置的公告信息发送给全部玩家(以黄字公告样式显示).
   - Command: go
     Help: |
       指令参数: <城市名称|城市编号>
@@ -186,75 +497,188 @@ Body:
         11: 昆仑               28: 辉煌领域
         12: 汶巴拉             29: 巴西
         13: 尼芙菲姆           30: 埃迪斯特斯
-  - Command: jumpto
+  - Command: grade
+    Help: |
+      Params: <equip position> <+/- amount>
+  - Command: guild
+    Help: |
+      指令参数: <公会名称>
+      创建一个公会(无需消耗华丽金属).
+  - Command: guildrecall
+    Help: |
+      指令参数: <公会名称|公会编号>
+      将指定公会的在线玩家召唤到你的身边.
+  - Command: guildspy
+    Help: |
+      指令参数: <公会名称|编号>
+      你将会收到指定公会的“公会频道”中的所有聊天信息 (聊天记录必须启用).
+  - Command: guildstorage
     Aliases:
-      - goto
-      - warpto
+      - gstorage
     Help: |
-      指令参数: <角色名称>
-      将您传送到指定角色的身边.
-  - Command: follow
-    Help: |
-      指令参数: <角色名称>
-      跟踪一个玩家.
-  - Command: mount
+      打开公会仓库.
+  - Command: gvgoff
     Aliases:
-      - mountpeco
+      - gpvpoff
     Help: |
-      给予/移除职业基础坐骑(就算没有学习技能也可以获得坐骑).
-  - Command: mount2
+      关闭当前地图的 GvG 模式
+  - Command: gvgon
+    Aliases:
+      - gpvpon
     Help: |
-      给予/移除商城坐骑(九尾狐、羊驼等).
-  - Command: disguise
+      开启当前地图的 GvG 模式
+  - Command: hair_color
+    Aliases:
+      - haircolor
+      - hcolor
     Help: |
-      指令参数: <魔物名称|魔物编号|NPC外观编号>
-      将玩家伪装成魔物或者NPC.
-  - Command: undisguise
+      指令参数 <发色编号>
+      改变角色的发色.
+  - Command: hair_style
+    Aliases:
+      - hairstyle
+      - hstyle
     Help: |
-      还原被 @disguise 指令修改过的外观.
-  - Command: disguiseguild
+      指令参数: <发型编号>
+      改变角色的发型.
+  - Command: hatch
     Help: |
-      与 @disguise 类似, 可以将指定公会的成员伪装成魔物或者NPC.
-  - Command: undisguiseguild
+      打开宠物蛋孵化选择界面(相当于使用了“携带用孵蛋器”).
+  - Command: hatereset
     Help: |
-      还原被 @disguiseguild 指令修改过的外观.
-  - Command: model
+      Resets a Star Gladiator's marked monsters.
+  - Command: heal
     Help: |
-      指令参数:  <发型编号: 0-17> <发色编号: 0-8> <服装染色编号: 0-4>
-      - 改变你角色的外观.
-  - Command: size
+      指令参数: [<HP> <SP>]
+      恢复定量的HP和SP. 如果没有指定参数, 则恢复全量的HP和SP.
+  - Command: healap
     Help: |
-      指令参数:  <0-2> 
-      改变角色的体型大小 (0-普通 1-小型 2-大型)
-  - Command: sizeall
+      Params: [<AP>]
+      恢复定量的AP. 如果没有指定参数, 则恢复全量的AP.
+  - Command: help
+    Aliases:
+      - h
     Help: |
-      与 @size 指令类似, 可以改变全服玩家的体型大小.
-  - Command: sizeguild
-    Help: |
-      指令参数:  <0-2> <公会名称|公会编号>
-      与 @size 指令类似, 可以改变指定公会成员的体型大小.
+      指令参数: <想寻求帮助的指令名称>
+      可以帮您查某个指令的使用方法.
   - Command: hide
     Help: |
       把自己设置为隐身(不会被任何技能发现). 再次输入此指令则取消隐身.
-  - Command: save
+  - Command: hidenpc
     Help: |
-      把当前位置设置为我的复活点.
-  - Command: load
+      指令参数: <NPC名称>
+      禁用指定的NPC.
+  - Command: homevolution
     Aliases:
-      - return
+      - homevolve
     Help: |
-      传送到你的复活点.
-  - Command: warp
+      Evolves your homunculus, if possible.
+  - Command: homfriendly
+    Help: |
+      Params: <level of intimacy> - value between 0-1000
+      Sets your homunculus intimacy level to the desired value.
+  - Command: homhungry
+    Help: |
+      Params: <level of hunger> - value between 0-100
+      Sets your homunculus hunger level to the desired value.
+  - Command: hominfo
+    Help: |
+      Displays homunculus stats.
+  - Command: homlevel
     Aliases:
-      - rura
-      - mapmove
+      - hlvl
+      - hlevel
+      - homlvl
+      - homlvup
     Help: |
-      指令参数: <地图名称> [<X坐标> <Y坐标>]
-      传送到你指定的地图和位置.
-  - Command: jump
+      Params: <level>
+      Increases the homunculus level by <level>.
+  - Command: hommutate
     Help: |
-      指令参数: [<X坐标> [<Y坐标>]]
-      随机传送, 效果类似苍蝇翅膀.
+      Params: <mutated homunculus ID>
+      Mutates your homunculus to <mutated homunculus ID>, if possible.
+  - Command: homshuffle
+    Help: |
+      Recalculates the homunculus stats, as if the homunculus was leveled again from level 1.
+  - Command: homstats
+    Help: |
+      Displays homunculus stats.
+  - Command: homtalk
+    Help: |
+      Params: <message>
+      Let the player's homunculus say the text <message>.
+  - Command: identify
+    Help: |
+      Opens the identification window if any unidentified items are in your inventory.
+  - Command: identifyall
+    Help: |
+      Any unidentified items in your inventory will automatically be identified.
+  - Command: idsearch
+    Help: |
+      指令参数: <物品名称关键词>
+      搜索所有包含"物品名称关键词"的物品, 并列出它们的物品编号
+  - Command: int
+    Help: |
+      指令参数: <+/- 数量>
+      增加/减少角色指定数量的 INT(智力).
+  - Command: invite
+    Help: |
+      邀请指定的玩家参与决斗.
+  - Command: item
+    Help: |
+      指令参数: <物品名称|物品编号> <数量>
+      创造出指定的物品.
+  - Command: item2
+    Help: |
+      指令参数: <物品名称|物品编号> <数量> <是否已鉴定> <精炼等级> <是否已损坏> <卡片编号1> <卡片编号2> <卡片编号3> <卡片编号4>
+      创造出指定的物品.
+  - Command: itembound
+    Help: |
+      Params: <item name or ID> <quantity> <bound type>
+      Creates an item bounded to the character.
+      The items cannot be dropped, sold, vended, auctioned, or mailed, and in some cases cannot be traded or stored.
+      Available bound types:
+        1: Account
+        2: Guild
+        3: Party
+        4: Character
+  - Command: itembound2
+    Help: |
+      Params: <item name or ID> <quantity> <identified_flag> <refine> <broken_flag> <Card1> <Card2> <Card3> <Card4> <bound type>
+      Creates an item bounded to the character.
+      The items cannot be dropped, sold, vended, auctioned, or mailed, and in some cases cannot be traded or stored.
+      Available bound types:
+        1: Account
+        2: Guild
+        3: Party
+        4: Character
+  - Command: iteminfo
+    Aliases:
+      - ii
+    Help: |
+      指令参数: <物品名称|物品编号>
+      显示指定物品的信息(物品类型, 重量等).
+  - Command: itemlist
+    Aliases:
+      - inventorylist
+    Help: |
+      Displays a list of items in the inventory.
+  - Command: itemreset
+    Aliases:
+      - clearinventory
+    Help: |
+      清空玩家背包中所持有的一切物品.
+  - Command: jail
+    Help: |
+      指令参数: <角色名称>
+      将指定的角色送到监狱
+  - Command: jailfor
+    Help: |
+      Params: <time> <char name>
+      Sends specified character in jails for the given <time>.
+  - Command: jailtime
+    Help: |
+      Displays remaining jail time.
   - Command: jobchange
     Aliases:
       - job
@@ -288,18 +712,18 @@ Body:
       4075 宫廷乐师       4076 浪姬舞者       4077 修罗             4078 基因学者
       4079 魅影追踪者
       ----- 四转职业 -----
-      4252 龙骑士         4253 巨匠         4254 十字暗影     4255 首席法师
-      4256 枢机主教       4257 风鹰         4258 帝国守卫     4259 生物学家
-      4260 深渊追踪者     4261 元素大师     4262 审判官       4263 游唱诗人
-      4264 游唱乐姬
+      4252 卢恩龙爵       4253 机甲神匠       4254 十字暗影         4255 禁咒魔导士
+      4256 枢机主教       4257 风鹰狩猎者     4258 帝国圣卫军       4259 生命缔造者
+      4260 深渊追迹者     4261 元素支配者     4262 圣裁者           4263 天籁颂者
+      4264 乐之舞灵
       ----- 拓展职业 -----
         23 超级初学者       24 枪手             25 忍者             4045 超初宝宝
       4046 跆拳少年       4047 拳圣           4049 灵媒             4050 Gangsi
       4051 死亡骑士       4052 黑暗收集者     4190 进阶超级初学者   4191 进阶超初宝宝
       4211 日影忍者       4212 月影忍者       4215 反叛者           4218 召唤师
       4239 星帝           4240 灵魂收割者
-      4302 天帝           4303 灵导士         4304 蜃气楼           4305 不知火
-      4306 夜卫队         4307 顶级初学者     4308 魂灵师
+      4302 天帝           4303 灵导士         4304 神鬼狼           4305 不知火
+      4306 夜巡者         4307 顶尖初学者     4308 魂灵师
       ----- 宝宝 初学者 / 宝宝 一转职业 -----
       4023 初学者宝宝     4024 剑士宝宝       4025 魔法师宝宝       4026 弓箭手宝宝
       4027 服事宝宝       4028 商人宝宝       4029 盗贼宝宝
@@ -317,101 +741,108 @@ Body:
       4220 召唤师宝宝     4222 忍者宝宝       4223 日影忍者宝宝     4224 月影忍者宝宝
       4225 跆拳少年宝宝   4226 拳圣宝宝       4227 灵媒宝宝         4228 枪手宝宝
       4229 反叛者宝宝     4241 星帝宝宝       4242 灵魂收割者宝宝
-  - Command: option
-    Help: |
-      指令参数: <参数1> <参数2>(可堆叠) <参数3>(可堆叠)
-      为你的角色添加指定的视觉效果(负面效果往往也伴随着禁止移动).
-       <参数1>       <参数2>        <参数3>
-      01: 石化       01: 中毒       01: 火狩          512: 手推车 Lv 4
-      02: 冰冻       02: 诅咒       02: 隐匿         1024: 手推车 Lv 5
-      03: 晕眩       04: 沉默       04: 伪装         2048: 兽人脸
-      04: 睡眠       08: Signum     08: 手推车 Lv 1  4096: Wedding
-      06: Petrify    16: 盲目       16: 猎鹰         8192: 光猎
-      07: 烧伤       32: Angelus    32: 乘坐大嘴鸟  16384: Chasewalk
-      08: 禁足       64: Bleeding   64: 不可见
-      16: 无效果    128: 致命荼毒  128: 手推车 Lv 2
-      32: 被挑衅    256: 害怕      256: 手推车 Lv 3
-      可堆叠的意思是, 使用 @option 指令时, 把参数的2个值相加可以同时得到两种效果.
-      例如: “参数3” 中的 1 表示火狩, 2 表示隐匿. 那么当你用 @option 0 0 3 的时候,
-            你将同时获得这两种效果, 因为 1(火狩) + 2(隐匿) 等于 3.
-      注意: 上述没翻译的效果, 皆于 2016年5月27日在 20150916 客户端中测试无效.
-  - Command: heal
-    Help: |
-      指令参数: [<HP> <SP>]
-      恢复定量的HP和SP. 如果没有指定参数, 则恢复全量的HP和SP.
-  - Command: healap
-    Help: |
-      Params: [<AP>]
-      恢复定量的AP. 如果没有指定参数, 则恢复全量的AP.
-  - Command: dye
+  - Command: joblevelup
     Aliases:
-      - ccolor
+      - jlevel
+      - jlvl
+      - joblevel
+      - joblvl
+      - joblvlup
+      - joblvup
     Help: |
-      指令参数: <服装染色编号>
-      改变角色的服装染色.
-  - Command: hairstyle
+      指令参数: <要增减的职业等级>
+      根据指定数值来调整角色的职业等级(若使用负数, 则是降低职业等级).
+  - Command: join
+    Help: |
+      Params: <#channel_name> {<password>}
+      Joins the specified channel <#channel_name>, if necessary by using the supplied <password>.
+  - Command: jump
+    Help: |
+      指令参数: [<X坐标> [<Y坐标>]]
+      随机传送, 效果类似苍蝇翅膀.
+  - Command: jumpto
     Aliases:
-      - hstyle
+      - goto
+      - warpto
     Help: |
-      指令参数: <发型编号>
-      改变角色的发型.
-  - Command: haircolor
+      指令参数: <角色名称>
+      将您传送到指定角色的身边.
+  - Command: kami
+    Help: |
+      指令参数: <讯息>
+      不带有你角色名的情况下,进行全服广播(黄色字体).
+  - Command: kamib
+    Help: |
+      指令参数: <讯息>
+      不带有你角色名的情况下,进行全服广播(蓝色字体).
+  - Command: kamic
+    Help: |
+      Params: <color> <message> - color is a hexadecimal value
+      Broadcasts a message without your name in the color <color>.
+  - Command: kick
+    Help: |
+      指令参数: <角色名称>
+      将指定的角色踢下线.
+  - Command: kickall
+    Help: |
+      将在线玩家全部踢下线.
+  - Command: kill
     Aliases:
-      - hcolor
+      - die
     Help: |
-      指令参数 <发色编号>
-      改变角色的发色.
-  - Command: speed
-    Help: |
-      指令参数: <1-1000>
-      改变角色的移动速度. 1 为最快, 1000 为最慢. 默认的移动速度是 150..
-  - Command: effect
-    Help: |
-      指令参数: <效果编号> [<标记>]
-      给你的角色赋予一个效果(比如晕眩的动画效果等).
-  - Command: dropall
-    Help: |
-      指令参数: [<物品类型编号>]
-      把角色身上指定类型的物品全部丢到地上(无论是否已装备). 若没有指定物品类型, 则丢弃全部物品.
-  - Command: storeall
-    Help: |
-      将角色背包中的所有物品存到仓库中去.
+      杀死玩家.
   - Command: killable
     Help: |
-      让你的角色在非 PvP 和 Gvg 的情况下, 也能被其他玩家攻击并杀死(攻击者需要按Shift或执行/ns后才能攻击你).
-  - Command: memo
+      让你的角色在非 PVP 和 GVG 的情况下, 也能被其他玩家攻击并杀死(攻击者需要按Shift或执行/ns后才能攻击你).
+  - Command: killer
     Help: |
-      指令参数: [记录点编号]
-      将指定编号的记录点设置为当前角色站立的位置 (若不指定编号, 则显示现在的记录点列表)..
-  - Command: spiritball
+      Allows you to attack other players outside of PvP.
+  - Command: killmonster
     Help: |
-      指令参数: <1-100>
-      给你指定数量的"气弹", 和使用"蓄气"技能类似..
-  - Command: questskill
+      指令参数: <map>
+      杀死当前地图的所有魔物(会掉落物品). 也可以通过参数来指定目标地图名称
+  - Command: killmonster2
     Help: |
-      指令参数: <任务技能编号>
-      让您能够习得特殊的任务技能
-        初学者  =   142: 紧急治疗,     143: 装死
-        弓箭手  =   147: 制作箭,       148: 冲锋箭
-          剑士  =   144: 移动时恢复HP, 145: 攻击弱点,   146: 狂暴状态
-          服事  =   156: 神圣之光
-          盗贼  =   149: 喷砂,         150: 后退回避,   151: 捡石头,    152: 投掷石头
-          商人  =   153: 手推车攻击,   154: 改装手推车, 155: 大声呐喊, 2535: 开设采购商店
-        魔法师  =   157: 能量外套
-          猎人  =  1009: 幻影箭
-          诗人  =  1010: 阵痛之声
-          舞娘  =  1011: 眨眼之诱
-          骑士  =  1001: 冲锋攻击
-        十字军  =  1002: 退缩
-          牧师  =  1014: 舍身取义
-          武僧  =  1015: 真气注入,   1016: 发劲
-          刺客  =  1003: 超音速投掷, 1004: 毒刃
-          流氓  =  1005: 紧密的约束
-          铁匠  =  1012: 诡计的商术, 1013: 贪婪
-      炼金术师  =   238: 生命伦理
-          巫师  =  1006: 火狩芽
-          贤者  =  1007: 元素肯贝特制作, 1008: 元素更换(水), 1017: 元素更换(地),
-                   1018: 元素更换(火),   1019: 元素更换(风)
+      指令参数: <想杀死魔物的地图名>
+      杀死当前地图的所有魔物(不会掉落物品). 也可以通过参数来指定目标地图名称..
+  - Command: ksprotection
+    Aliases:
+      - noks
+    Help: |
+      Params: None. Disables kill stealing protection or displays a help message.
+      Params: self. Enables kill stealing protection against any other players.
+      Params: party. Enables kill stealing protection against any other players not in your party.
+      Params: guilds. Enables kill stealing protection against any other players not in your guild.
+      Prevents other players from kill stealing.
+  - Command: langtype
+    Help: |
+      指令参数: <语言编号>
+      更改语言设置.
+  - Command: leave
+    Help: |
+      离开决斗(当你开始或者接受了一个决斗后, 可以使用 @leave 来离开决斗).
+  - Command: leaves
+    Help: |
+      开启/关闭当前地图的"枫叶飘落"天气效果.
+  - Command: limitedsale
+    Help: |
+      打开"限量促销"窗口.
+  - Command: lkami
+    Help: |
+      Params: <message>
+      Broadcasts a message without your name on the current map (in yellow).
+  - Command: load
+    Aliases:
+      - return
+    Help: |
+      传送到你的复活点.
+  - Command: loadnpc
+    Help: |
+      指令参数: <脚本文件路径>
+      加载指定路径的脚本文件, 例如 npc/test.txt.
+  - Command: localbroadcast
+    Help: |
+      在带有你角色名的情况下,对当前地图进行广播(黄色字体).
   - Command: lostskill
     Help: |
       指令参数: <任务技能编号>
@@ -437,151 +868,86 @@ Body:
           巫师  =  1006: 火狩芽
           贤者  =  1007: 元素肯贝特制作, 1008: 元素更换(水), 1017: 元素更换(地),
                    1018: 元素更换(火),   1019: 元素更换(风)
-  - Command: skillid
-    Help: |
-      指令参数: <技能名称>
-      根据技能名称来查询技能编号
-  - Command: useskill
-    Help: |
-      指令参数: <技能编号> <技能等级> <目标玩家名称>
-      对指定的玩家使用技能, 若目标玩家名称为 self 则表示对自己使用.
-  - Command: skilltree
-    Help: |
-      指令参数: <技能编号> <角色名称>
-      显示想要习得“指定技能”所需的“前置技能”.
-  - Command: marry
-    Help: |
-      指令参数: <对方的角色名>
-      与指定的玩家结婚.
-  - Command: divorce
-    Help: |
-      让玩家离婚, 回到单身状态.
-  - Command: alive
-    Help: |
-      将自己从死亡状态中复活.
-  - Command: blvl
-    Aliases:
-      - lvup
-      - blevel
-      - baselvl
-      - baselvup
-      - baselevel
-      - baselvlup
-    Help: |
-      指令参数: <要增减的基础等级>
-      根据指定数值来调整角色的基础等级(若使用负数, 则是降低基础等级).
-  - Command: jlvl
-    Aliases:
-      - jlevel
-      - joblvl
-      - joblvup
-      - joblevel
-      - joblvlup
-    Help: |
-      指令参数: <要增减的职业等级>
-      根据指定数值来调整角色的职业等级(若使用负数, 则是降低职业等级).
-  - Command: allskill
-    Aliases:
-      - allskills
-      - skillall
-      - skillsall
-    Help: |
-      让你学到所有能学到的技能.
-  - Command: stpoint
-    Help: |
-      指令参数: <要增减的能力点数> 
-      - 让你获得指定数量的能力点数(若使用负数, 则是扣减能力点数).
-  - Command: trpoint
-    Help: |
-      Params: <number of points> - Gives you the desired number of trait stat points.
-  - Command: skpoint
-    Help: |
-      指令参数: <要增减的技能点数> 
-      - 让你获得指定数量的技能点数(若使用负数, 则是扣减技能点数).
-  - Command: zeny
-    Help: |
-      指令参数: <要增减的金币数量> 
-      - 让你获得指定数量的金币(若使用负数, 则是扣减金币).
-  - Command: cash
-    Help: |
-      指令参数: <要增减的现金点券> 
-      - 让你获得指定数量的现金点券(若使用负数, 则是扣减现金点券).
-  - Command: points
-    Help: |
-      指令参数: <要增减的免费点券> 
-      - 让你获得指定数量的免费点券(若使用负数, 则是扣减免费点券).
-  - Command: str
-    Help: |
-      指令参数: <+/- 数量>
-      增加/减少角色指定数量的 STR(力量).
-  - Command: agi
-    Help: |
-      指令参数: <+/- 数量>
-      增加/减少角色指定数量的 AGI(敏捷).
-  - Command: dex
-    Help: |
-      指令参数: <+/- 数量>
-      增加/减少角色指定数量的 DEX(灵巧).
-  - Command: vit
-    Help: |
-      指令参数: <+/- 数量>
-      增加/减少角色指定数量的 VIT(体力).
-  - Command: int
-    Help: |
-      指令参数: <+/- 数量>
-      增加/减少角色指定数量的 INT(智力).
   - Command: luk
     Help: |
       指令参数: <+/- 数量>
       增加/减少角色指定数量的 LUK(幸运).
-  - Command: pow
+  - Command: macrochecker
     Help: |
-      指令参数: <+/- 数量>
-      增加/减少角色指定数量的 POW(特攻).
-  - Command: sta
+      Params: <mapname>
+      Trigger a macro detection on all players of the given map.
+  - Command: mail
     Help: |
-      指令参数: <+/- 数量>
-      增加/减少角色指定数量的 STA(耐力).
-  - Command: wis
+      打开邮箱.
+  - Command: makeegg
     Help: |
-      指令参数: <+/- 数量>
-      增加/减少角色指定数量的 WIS(魔抗).
-  - Command: spl
+      指令参数: <魔物编号>
+      根据给定的魔物编号, 创造出一个与其匹配的宠物蛋
+  - Command: makehomun
     Help: |
-      指令参数: <+/- 数量>
-      增加/减少角色指定数量的 SPL(魔攻).
-  - Command: con
+      Params: <homunculus ID>
+      Creates a homunculus with the given <homunculus ID>.
+  - Command: mapexit
     Help: |
-      指令参数: <+/- 数量>
-      增加/减少角色指定数量的 CON(集中).
-  - Command: crt
+      关闭地图服务器.
+  - Command: mapflag
     Help: |
-      指令参数: <+/- 数量>
-      增加/减少角色指定数量的 CRT(再生).
-  - Command: allstats
+      Params: None - Shows mapflags that are active on the current map.
+      Params: "available" - Shows a list of possible mapflags.
+      Params: <name> - Activates mapflag <name> on the current map.
+  - Command: mapinfo
+    Help: |
+      指令参数: [<0-3> [地图名称]]
+      显示出指定地图的详细信息 (常规内容 +: 0: 没有其他信息, 1: 玩家信息, 2: NPC信息, 3: 聊天室信息).
+  - Command: mapmove
     Aliases:
-      - allstat
-      - statall
-      - statsall
+      - rura
+      - warp
     Help: |
-      指令参数: <要提升的值>
-      将角色的全部能力增加你指定的数值 (若不携带参数, 则提升到最大值).
-  - Command: alltraits
+      指令参数: <地图名称> [<X坐标> <Y坐标>]
+      传送到你指定的地图和位置.
+  - Command: marry
+    Help: |
+      指令参数: <对方的角色名>
+      与指定的玩家结婚.
+  - Command: me
+    Help: |
+      指令参数: <讯息>
+      将消息以指定的格式发送出去, 格式为 * :角色名 讯息: * (类似 mIRC 中的 /me 指令).
+  - Command: memo
+    Help: |
+      指令参数: [记录点编号]
+      将指定编号的记录点设置为当前角色站立的位置 (若不指定编号, 则显示现在的记录点列表)..
+  - Command: misceffect
+    Help: |
+      Params: <effect ID>
+      Does some visual effect on the character.
+      Available effect IDs:
+        0 = base level up
+        1 = job level up
+        2 = refine failure
+        3 = refine success
+        4 = game over
+        5 = pharmacy success
+        6 = pharmacy failure
+        7 = base level up (super novice)
+        8 = job level up (super novice)
+        9 = base level up (taekwon)
+  - Command: mobinfo
     Aliases:
-      - alltrait
-      - traitall
-      - traitsall
+      - monsterinfo
+      - mi
     Help: |
-      指令参数: <要提升的值>
-      将角色的特质能力增加你指定的数值 (若不携带参数, 则提升到最大值).
-  - Command: addwarp
+      指令参数: <魔物名称|魔物编号>
+      显示指定魔物的信息(能力, 经验值, 掉落的道具信息等).
+  - Command: mobsearch
     Help: |
-      指令参数: <目的地地图名称> <目的地X坐标> <目的地Y坐标> <传送点的NPC名称>
-      在指令使用者的脚下, 生成一个传送点(NPC名称只要不冲突, 随意起名)
-  - Command: killmonster2
+      指令参数: <魔物名称|编号>
+      搜索当前地图中, 指定魔物的位置(可以用这个指令来查BOSS位置, 再利用 jump 指令瞬移过去).
+  - Command: model
     Help: |
-      指令参数: <想杀死魔物的地图名>
-      杀死当前地图的所有魔物(不会掉落物品). 也可以通过参数来指定目标地图名称..
+      指令参数:  <发型编号: 0-17> <发色编号: 0-8> <服装染色编号: 0-4>
+      - 改变你角色的外观.
   - Command: monster
     Aliases:
       - spawn
@@ -591,168 +957,95 @@ Body:
       @spawn/@monster/@summon/@monster2 "召唤出来的魔物名称" <魔物名称|编号> [<召唤数量> [<x坐标> [<y坐标>]]]
       @spawn/@monster/@summon/@monster2 <魔物名称|编号> "召唤出来的魔物名称" [<召唤数量> [<x坐标> [<y坐标>]]]
       以指定的魔物名称召唤出指定的魔物.
-  - Command: monstersmall
-    Help: |
-      指令参数: <魔物名称|编号>
-      召唤一个看起来体型较小的魔物.
   - Command: monsterbig
     Help: |
       指令参数: <魔物名称|编号>
       召唤一个看起来体型更大的魔物.
-  - Command: killmonster
-    Help: |
-      指令参数: <map>
-      杀死当前地图的所有魔物(会掉落物品). 也可以通过参数来指定目标地图名称
-  - Command: autoloot
-    Help: |
-      指令参数: <on|off|数值<1-100%>>
-      开启/关闭自动拾取模式.
-  - Command: autotrade
+  - Command: monsterignore
     Aliases:
-      - at
+      - battleignore
     Help: |
-      开启离线挂店(你将会立刻掉线, 但你的角色将会留在服务器中继续摆摊).
-  - Command: changegm
+      Makes the player unattackable by monsters, other players, etc.
+  - Command: monstersmall
     Help: |
-      指令参数: <新任会长的角色名>
-      任命新的公会会长 (你必须是会长才能执行此操作).
-  - Command: changeleader
+      指令参数: <魔物名称|编号>
+      召唤一个看起来体型较小的魔物.
+  - Command: mount_peco
+    Aliases:
+      - mount
+      - mountpeco
     Help: |
-      指令参数: <新任队长的角色名>
-      任命新的队伍组长 (你必须是队长才能执行此操作).
-  - Command: request
+      给予/移除职业基础坐骑(就算没有学习技能也可以获得坐骑).
+  - Command: mount2
     Help: |
-      指令参数: <讯息>
-      通过私聊系统, 发消息给所有在线的游戏管理员.
-  - Command: sound
+      给予/移除商城坐骑(九尾狐、羊驼等).
+  - Command: mute
     Help: |
-      指令参数: <以data目录为基准的相对路径>
-      播放data文件夹中或grf文件中的wav音效文件(如 @sound wav\dracula_die.wav).
-  - Command: clone
+      Params: <char name>
+      Mutes the player <char name> (prevents talking, usage of skills, and commands).
+  - Command: mutearea
+    Aliases:
+      - stfu
+    Help: |
+      Params: <time> amount of minutes to mute the players
+      Mutes every player on screen for the specified time (prevents talking, usage of skills, and commands).
+  - Command: night
+    Help: |
+      切换到夜晚模式, 对所有在线玩家都有效.
+  - Command: noask
+    Help: |
+      自动拒绝交易和所有邀请(邀请包括: 添加好友邀请、组队邀请和公会邀请).
+  - Command: npcmove
+    Help: |
+      指令参数: <x坐标> <y坐标> <NPC名称>
+      将指定的NPC移动到当前地图指定的位置.
+  - Command: npctalk
+    Aliases:
+      - npctalkc
+    Help: |
+      指令参数: <NPC名称> <讯息>
+      强制让指定的NPC显示一个普通的对话消息.
+  - Command: nuke
     Help: |
       指令参数: <角色名称>
-      根据指定的角色生成一个友好的克隆体(会随机移动且主动攻击怪物).
-  - Command: slaveclone
+      让某个玩家自爆, 伤害会波及到附近的魔物.
+  - Command: option
     Help: |
-      指令参数: <角色名称>
-      根据指定的角色生成一个友好的克隆体(会随机移动且主动攻击怪物).
-  - Command: evilclone
-    Help: |
-      指令参数: <角色名称>
-      根据指定的角色生成一个友好的克隆体, 并跟随在指令的使用者身边.
-  - Command: changesex
-    Help: |
-      改变你的角色性别.
-  - Command: duel
-    Help: |
-      开始决斗(开始决斗后, 可以使用 @invite 来邀请玩家参与决斗).
-  - Command: invite
-    Help: |
-      邀请指定的玩家参与决斗.
-  - Command: accept
-    Help: |
-      接受决斗邀请.
-  - Command: reject
-    Help: |
-      拒绝决斗邀请.
-  - Command: leave
-    Help: |
-      离开决斗(当你开始或者接受了一个决斗后, 可以使用 @leave 来离开决斗).
-  - Command: mail
-    Help: |
-      打开邮箱.
-  - Command: storage
-    Help: |
-      打开个人仓库.
-  - Command: itemreset
-    Aliases:
-      - clearinventory
-    Help: |
-      清空玩家背包中所持有的一切物品.
-  - Command: guildstorage
-    Aliases:
-      - gstorage
-    Help: |
-      打开公会仓库.
-  - Command: idsearch
-    Help: |
-      指令参数: <物品名称关键词>
-      搜索所有包含"物品名称关键词"的物品, 并列出它们的物品编号
-  - Command: refine
-    Help: |
-      指令参数: <装备位置编号> <+/- 精炼值>
-  - Command: produce
-    Help: |
-      指令参数: <装备类的物品编号> <属性> <几级强悍>
-      属性: 0=无属性 1=水属性 2=地属性 3=火属性 4=风属性
-      强化: 0=无强悍 1=一级强悍 2=二级强悍 3=三级强悍
-  - Command: repairall
-    Help: |
-      修理角色背包中所有损坏的装备
-  - Command: item
-    Help: |
-      指令参数: <物品名称|物品编号> <数量>
-      创造出指定的物品.
-  - Command: item2
-    Help: |
-      指令参数: <物品名称|物品编号> <数量> <是否已鉴定> <精炼等级> <是否已损坏> <卡片编号1> <卡片编号2> <卡片编号3> <卡片编号4>
-      创造出指定的物品.
-  - Command: pvpon
-    Help: |
-      开启当前地图的 PvP 模式
-  - Command: pvpoff
-    Help: |
-      关闭当前地图的 PvP 模式
-  - Command: gvgon
-    Aliases:
-      - gpvpon
-    Help: |
-      开启当前地图的 GvG 模式
-  - Command: gvgoff
-    Aliases:
-      - gpvpoff
-    Help: |
-      关闭当前地图的 GvG 模式
-  - Command: agitstart
-    Help: |
-      开启 GvG 攻城战
-  - Command: agitend
-    Help: |
-      关闭 Gvg 攻城战
+      指令参数: <参数1> <参数2>(可堆叠) <参数3>(可堆叠)
+      为你的角色添加指定的视觉效果(负面效果往往也伴随着禁止移动).
+       <参数1>       <参数2>        <参数3>
+      01: 石化       01: 中毒       01: 火狩          512: 手推车 Lv 4
+      02: 冰冻       02: 诅咒       02: 隐匿         1024: 手推车 Lv 5
+      03: 晕眩       04: 沉默       04: 伪装         2048: 兽人脸
+      04: 睡眠       08: Signum     08: 手推车 Lv 1  4096: Wedding
+      06: Petrify    16: 盲目       16: 猎鹰         8192: 光猎
+      07: 烧伤       32: Angelus    32: 乘坐大嘴鸟  16384: Chasewalk
+      08: 禁足       64: Bleeding   64: 不可见
+      16: 无效果    128: 致命荼毒  128: 手推车 Lv 2
+      32: 被挑衅    256: 害怕      256: 手推车 Lv 3
+      可堆叠的意思是, 使用 @option 指令时, 把参数的2个值相加可以同时得到两种效果.
+      例如: “参数3” 中的 1 表示火狩, 2 表示隐匿. 那么当你用 @option 0 0 3 的时候,
+            你将同时获得这两种效果, 因为 1(火狩) + 2(隐匿) 等于 3.
+      注意: 上述没翻译的效果, 皆于 2016年5月27日在 20150916 客户端中测试无效.
   - Command: party
     Help: |
       指令参数: <队伍名称>
       建立一个队伍.
-  - Command: guild
+  - Command: partyoption
     Help: |
-      指令参数: <公会名称>
-      创建一个公会(无需消耗华丽金属).
-  - Command: glvl
-    Aliases:
-      - glevel
-      - guildlvl
-      - guildlvup
-      - guildlevel
-      - guildlvlup
-      - guildup
-    Help: |
-      指令参数: <要增减的公会等级>
-      根据指定数值来调整公会等级(若使用负数, 则是降低公会等级).
-  - Command: guildrecall
-    Help: |
-      指令参数: <公会名称|公会编号>
-      将指定公会的在线玩家召唤到你的身边.
+      Params: <item sharing> <item distribution> - yes/no
+      Changes party options for item sharing and item distribution.
   - Command: partyrecall
     Help: |
       指令参数: <队伍名称|队伍编号>
       将指定队伍的在线玩家召唤到你的身边.
-  - Command: petrename
+  - Command: partysharelvl
     Help: |
-      准许对宠物重新命名(宠物默认只能改一次名, 使用该指令可以让你重新获得改名的机会)
-  - Command: pettalk
+      Params: <level difference>
+      Temporarily adjusts the party share level range to <level difference>.
+  - Command: partyspy
     Help: |
-      指令参数: <想让宠物说的话>
-      让你的宠物能够说出你指定的消息.
+      @partyspy <队伍名称|编号> - 你将会收到指定队伍的“队伍频道”中的所有聊天信息 (聊天记录必须启用).
   - Command: petfriendly
     Help: |
       指令参数: <0-1000>
@@ -761,185 +1054,123 @@ Body:
     Help: |
       指令参数: <0-1000>
       设置宠物的饥饿值, 有效范围为 0-100, 100 = 最饱
-  - Command: hatch
+  - Command: petrename
     Help: |
-      打开宠物蛋孵化选择界面(相当于使用了“携带用孵蛋器”).
-  - Command: makeegg
+      准许对宠物重新命名(宠物默认只能改一次名, 使用该指令可以让你重新获得改名的机会)
+  - Command: pettalk
     Help: |
-      指令参数: <魔物编号>
-      根据给定的魔物编号, 创造出一个与其匹配的宠物蛋
-  - Command: kick
+      指令参数: <想让宠物说的话>
+      让你的宠物能够说出你指定的消息.
+  - Command: points
     Help: |
-      指令参数: <角色名称>
-      将指定的角色踢下线.
-  - Command: unjail
-    Aliases:
-      - discharge
+      指令参数: <要增减的免费点券> 
+      - 让你获得指定数量的免费点券(若使用负数, 则是扣减免费点券).
+  - Command: pow
     Help: |
-      指令参数: <角色名称>
-      将指定的玩家从监狱中释放出来
-  - Command: kill
-    Aliases:
-      - die
+      指令参数: <+/- 数量>
+      增加/减少角色指定数量的 POW(特攻).
+  - Command: produce
     Help: |
-      杀死玩家.
-  - Command: recall
+      指令参数: <装备类的物品编号> <属性> <几级强悍>
+      属性: 0=无属性 1=水属性 2=地属性 3=火属性 4=风属性
+      强化: 0=无强悍 1=一级强悍 2=二级强悍 3=三级强悍
+  - Command: pvpoff
     Help: |
-      指令参数: <角色名称>
-      将指定的角色召唤到你的身边.
+      关闭当前地图的 PVP 模式
+  - Command: pvpon
+    Help: |
+      开启当前地图的 PVP 模式
+  - Command: questskill
+    Help: |
+      指令参数: <任务技能编号>
+      让您能够习得特殊的任务技能
+        初学者  =   142: 紧急治疗,     143: 装死
+        弓箭手  =   147: 制作箭,       148: 冲锋箭
+          剑士  =   144: 移动时恢复HP, 145: 攻击弱点,   146: 狂暴状态
+          服事  =   156: 神圣之光
+          盗贼  =   149: 喷砂,         150: 后退回避,   151: 捡石头,    152: 投掷石头
+          商人  =   153: 手推车攻击,   154: 改装手推车, 155: 大声呐喊, 2535: 开设采购商店
+        魔法师  =   157: 能量外套
+          猎人  =  1009: 幻影箭
+          诗人  =  1010: 阵痛之声
+          舞娘  =  1011: 眨眼之诱
+          骑士  =  1001: 冲锋攻击
+        十字军  =  1002: 退缩
+          牧师  =  1014: 舍身取义
+          武僧  =  1015: 真气注入,   1016: 发劲
+          刺客  =  1003: 超音速投掷, 1004: 毒刃
+          流氓  =  1005: 紧密的约束
+          铁匠  =  1012: 诡计的商术, 1013: 贪婪
+      炼金术师  =   238: 生命伦理
+          巫师  =  1006: 火狩芽
+          贤者  =  1007: 元素肯贝特制作, 1008: 元素更换(水), 1017: 元素更换(地),
+                   1018: 元素更换(火),   1019: 元素更换(风)
   - Command: raise
     Aliases:
       - revive
     Help: |
       指令参数: <角色名称>
       复活指定的角色(若不指定角色, 则复活自己).
-  - Command: block
-    Help: |
-      指令参数: <角色名称>
-      永久封禁指定角色所属的账号.
-  - Command: unblock
-    Help: |
-      指令参数: <角色名称>
-      解除指定角色所属账号的永久封禁.
-  - Command: ban
-    Aliases:
-      - banish
-    Help: |
-      指令参数: <time> <角色名称>
-      临时封禁指定角色所属的账号.
-      时间代码: 由 (+/- 号) 和时间以及单位组合而成 (单位代码: y, m, d, h, mn, s)
-      单位代码说明: y(年) m(月) d(日) h(时) mn(分) s(秒)
-      例如: @ban +1m-2mn1s 小明 (封禁小明 1个月减去2分1秒)
-  - Command: unban
-    Aliases:
-      - unbanish
-    Help: |
-      指令参数: <角色名称> 
-      - 解除指定角色所属账号的临时封禁
-  - Command: jail
-    Help: |
-      指令参数: <角色名称>
-      - 将指定的角色送到监狱
-  - Command: trade
-    Help: |
-      指令参数: <角色名称>
-      - 邀请指定的玩家进行交易(需要对方点接受交易才能打开交易窗口)
-  - Command: recallall
-    Help: |
-      将所有在线的角色召唤到你的身边.
-  - Command: doom
-    Help: |
-      杀死服务器中所有不是GM的玩家.
-  - Command: doommap
-    Help: |
-      杀死当前地图所有不是GM的玩家.
   - Command: raisemap
     Help: |
       复活当前地图的所有玩家.
-  - Command: night
+  - Command: rates
     Help: |
-      切换到夜晚模式, 对所有在线玩家都有效.
-  - Command: day
-    Help: |
-      关闭夜晚模式并回到白天, 对所有在线玩家都有效.
-  - Command: skillon
-    Help: |
-      允许在当前地图中使用技能.
-  - Command: skilloff
-    Help: |
-      禁止在当前地图中使用技能(相当于给地图添加了 noskill 地图标记).
-  - Command: snow
-    Help: |
-      开启/关闭当前地图的"下雪"天气效果.
-  - Command: clouds
-    Help: |
-      开启/关闭当前地图的"云雾"天气效果.
-  - Command: clouds2
-    Help: |
-      开启/关闭当前地图的"另一种云雾"天气效果(20150916客户端实测无效).
-  - Command: fog
-    Help: |
-      开启/关闭当前地图的"雾霾"天气效果.
-  - Command: fireworks
-    Help: |
-      开启/关闭当前地图的"烟花"天气效果(20150916客户端实测无效).
-  - Command: sakura
-    Help: |
-      开启/关闭当前地图的"樱花飘落"天气效果.
-  - Command: leaves
-    Help: |
-      开启/关闭当前地图的"枫叶飘落"天气效果.
-  - Command: shownpc
-    Help: |
-      指令参数: <NPC名称>
-      启用指定的NPC.
-  - Command: hidenpc
-    Help: |
-      指令参数: <NPC名称>
-      禁用指定的NPC.
-  - Command: npcmove
-    Help: |
-      指令参数: <x坐标> <y坐标> <NPC名称>
-      将指定的NPC移动到当前地图指定的位置.
-  - Command: loadnpc
-    Help: |
-      指令参数: <脚本文件路径>
-      加载指定路径的脚本文件, 例如 npc/test.txt.
-  - Command: unloadnpc
-    Help: |
-      指令参数: <NPC名称>
-      卸载指定名称的NPC.
-  - Command: unloadnpcfile
-    Help: |
-      指令参数: <脚本文件路径>
-      卸载指定路径的脚本文件, 包括里面包含的全部 NPC (但不会卸载里面声明的地图标记和魔物刷新点).
-  - Command: adjgroup
-    Help: |
-      指令参数: <Group等级> <角色名称>
-      临时提升玩家的分组级别(下线不保存, 若设置为99则等于超级管理员).
-  - Command: addperm
-    Help: |
-      指令参数: <权限名称>
-      临时赋予玩家指定的权限(权限名称请参考 doc/permissions.txt).
-  - Command: rmvperm
-    Help: |
-      指令参数: <权限名称>
-      临时移除玩家指定的权限(权限名称请参考 doc/permissions.txt).
-  - Command: kickall
-    Help: |
-      将在线玩家全部踢下线.
-  - Command: mapexit
-    Help: |
-      关闭地图服务器.
-  - Command: gat
-    Help: |
-      返回当前位置为中心, 5x5范围内的区域可否移动 (调试使用)
-  - Command: send
-    Help: |
-      指令参数: <十六进制封包头> [<值>]
-      发送一个封包给服务端 (调试使用)
-  - Command: nuke
+      显示服务器目前的倍率设置信息, 包括: 经验倍率、物品掉落倍率等等.
+  - Command: recall
     Help: |
       指令参数: <角色名称>
-      让某个玩家自爆, 伤害会波及到附近的魔物.
+      将指定的角色召唤到你的身边.
+  - Command: recallall
+    Help: |
+      将所有在线的角色召唤到你的身边.
+  - Command: refine
+    Help: |
+      指令参数: <装备位置编号> <+/- 精炼值>
+  - Command: refineui
+    Help: |
+      Opens the refine UI.
+  - Command: refineui
+    Help: |
+      Opens the refine UI.
+  - Command: refresh
+    Help: |
+      Synchronizes the position and state between client and server.
+  - Command: refreshall
+    Help: |
+      Synchronizes the position and state of all players between client and server.
+  - Command: reject
+    Help: |
+      拒绝决斗邀请.
   - Command: reloadachievementdb
     Help: |
-      Reload achievement database.
+      重新加载成就数据文件.
   - Command: reloadatcommand
     Help: |
-      重新加载指令配置文件.
+      重新加载指令设置.
   - Command: reloadattendancedb
     Help: |
-      Reload attendance database.
+      重新加载签到数据库.
+  - Command: reloadbarterdb
+    Help: |
+      Reload the barter database.
   - Command: reloadbattleconf
     Help: |
       重新加载战斗配置文件.
+  - Command: reloadcashdb
+    Aliases:
+      - reloadcashshop
+    Help: |
+      重新加载商城数据文件
   - Command: reloadinstancedb
     Help: |
       重新加载副本数据文件.
   - Command: reloaditemdb
     Help: |
       重新加载物品数据文件.
+  - Command: reloadlogconf
+    Help: |
+      Reload the log settings.
   - Command: reloadmobdb
     Help: |
       重新加载魔物数据文件.
@@ -949,6 +1180,15 @@ Body:
   - Command: reloadmsgconf
     Help: |
       重新加载信息配置文件.
+  - Command: reloadnpcfile
+    Aliases:
+      - reloadnpc
+    Help: |
+      重新读取N指定PC脚本文件.
+  - Command: reloadnpcfile
+    Help: |
+      Params: <path> - path to script
+      Unloads and loads a script file from <path>.
   - Command: reloadpcdb
     Help: |
       重新加载玩家配置文件.
@@ -970,86 +1210,337 @@ Body:
   - Command: reloadeffectdb
     Help: |
       重新加载特效数据文件.
-  - Command: reload
+  - Command: reloadsynthesisdb
     Help: |
-      指令参数: <要重载的数据类型>
-      重新加载一个数据库或者配置文件.
-      itemdb                mobdb          skilldb
-      atcommand        battleconf         statusdb
-      pcdb                   motd           script
-      questdb             msgconf         packetdb
-      pathdb             effectdb
-  - Command: langtype
+      重新加载合成数据文件.
+  - Command: reloadupgradedb
     Help: |
-      指令参数: <语言编号>
-      更改语言设置.
-  - Command: limitedsale
+      重新加载升级数据文件.
+  - Command: reloadbonusattachdb
     Help: |
-      打开"限量促销"窗口.
-  - Command: changedress
+      重新加载附加数据文件.
+  - Command: repairall
+    Help: |
+      修理角色背包中所有损坏的装备
+  - Command: request
+    Help: |
+      指令参数: <讯息>
+      通过私聊系统, 发消息给所有在线的游戏管理员.
+  - Command: reset
+    Help: |
+      Resets the player's status and skill points.
+  - Command: resetcooltime
     Aliases:
-      - nocosplay
+      - resetcooldown
     Help: |
-      移除所有角色服装.
-  - Command: camerainfo
-    Aliases:
-      - viewpointvalue
-      - setcamera
-    Help: |
-      显示或更新客户端的相机设置.
-      焦距(range) 旋转(rotation) 维度(latitude)
-  - Command: resetstat
-    Aliases:
-      - streset
-    Help: |
-      重置属性点.
+      重置技能冷却时间.
   - Command: resetskill
     Aliases:
       - skreset
     Help: |
       重置技能点.
-  - Command: homlevel
+  - Command: resetstat
     Aliases:
-      - hlvl
-      - hlevel
-      - homlvl
-      - homlvup
+      - streset
     Help: |
-      生命体等级.
-  - Command: homevolution
-    Aliases:
-      - homevolve
-  - Command: mutearea
-    Aliases:
-      - stfu
+      重置基础素质点.
+  - Command: resurrect
     Help: |
-      全部禁言.
-  - Command: monsterignore
+      Resurrects a player, if the necessary conditions (items in inventory or status changes) are fulfilled.
+  - Command: rmvperm
+    Help: |
+      指令参数: <权限名称>
+      临时移除玩家指定的权限(权限名称请参考 doc/permissions.txt).
+  - Command: roulette
+    Help: |
+      打开转盘UI.
+  - Command: sakura
+    Help: |
+      开启/关闭当前地图的"樱花飘落"天气效果.
+  - Command: save
+    Help: |
+      把当前位置设置为我的复活点.
+  - Command: send
+    Help: |
+      指令参数: <十六进制封包头> [<值>]
+      发送一个封包给服务端 (调试使用)
+  - Command: servertime
     Aliases:
-      - battleignore
-  - Command: accinfo
+      - date
+      - serverdate
+      - time
+    Help: |
+      显示服务器的日期和时间, 以及游戏内的昼夜时间.
+  - Command: set
+    Help: |
+      Params: <variable name> {<value>}
+      Shows the value of the variable <variable name>.
+      If a <value> is provided, it changes the variable <variable name> to the given value.
+  - Command: setbattleflag
+    Help: |
+      Params: <battle config name> <value> {<reload>}
+      Changes <battle config name> to <value> without rebooting the server.
+      If <reload> is specified, the monster database will also be reloaded.
+  - Command: setcard
+    Help: |
+      在装备插槽中插入卡片或附魔.
+  - Command: setquest
+    Help: |
+      Params: <quest ID>
+      Activates the quest with quest ID <quest ID>.
+  - Command: showdelay
+    Help: |
+      显示/隐藏技能冷却提示(当使用正在冷却的技能时,是否提示此技能正在冷却? 默认不显示).
+  - Command: showexp
+    Help: |
+      显示/隐藏获得的经验值.
+  - Command: showmobs
+    Help: |
+      Params: <monster ID>
+      Params: <monster name>
+      Locates and displays the position of a certain mob on your mini-map.
+      This shows up as a small white cross (+).
+  - Command: shownpc
+    Help: |
+      指令参数: <NPC名称>
+      启用指定的NPC.
+  - Command: showrate
+    Help: |
+      Enable or disable to show the rate information on every mapchange.
+  - Command: showzeny
+    Help: |
+      显示/隐藏获得的金币.
+  - Command: size
+    Help: |
+      指令参数:  <0-2> 
+      改变角色的体型大小 (0-普通 1-小型 2-大型)
+  - Command: sizeall
+    Help: |
+      与 @size 指令类似, 可以改变全服玩家的体型大小.
+  - Command: sizeguild
+    Help: |
+      指令参数:  <0-2> <公会名称|公会编号>
+      与 @size 指令类似, 可以改变指定公会成员的体型大小.
+  - Command: skillid
+    Help: |
+      指令参数: <技能名称>
+      根据技能名称来查询技能编号
+  - Command: skilloff
+    Help: |
+      禁止在当前地图中使用技能(相当于给地图添加了 noskill 地图标记).
+  - Command: skillon
+    Help: |
+      允许在当前地图中使用技能.
+  - Command: skillpoint
     Aliases:
-      - accountinfo
-  - Command: channel
+      - skpoint
+    Help: |
+      指令参数: <要增减的技能点数> 
+      - 让你获得指定数量的技能点数(若使用负数, 则是扣减技能点数).
+  - Command: skilltree
+    Help: |
+      指令参数: <技能编号> <角色名称>
+      显示想要习得“指定技能”所需的“前置技能”.
+  - Command: slaveclone
+    Help: |
+      指令参数: <角色名称>
+      根据指定的角色生成一个友好的克隆体(会随机移动且主动攻击怪物).
+  - Command: snow
+    Help: |
+      开启/关闭当前地图的"下雪"天气效果.
+  - Command: soulball
+    Help: |
+      Params: <amount> - value between 0-20
+      Summons the specified <amount> of soul spheres around you.
+  - Command: sound
+    Help: |
+      指令参数: <以data目录为基准的相对路径>
+      播放data文件夹中或grf文件中的wav音效文件(如 @sound wav\dracula_die.wav).
+  - Command: speed
+    Help: |
+      指令参数: <1-1000>
+      改变角色的移动速度. 1 为最快, 1000 为最慢. 默认的移动速度是 150..
+  - Command: spiritball
+    Help: |
+      指令参数: <1-100>
+      给你指定数量的"气弹", 和使用"蓄气"技能类似..
+  - Command: spl
+    Help: |
+      指令参数: <+/- 数量>
+      增加/减少角色指定数量的 SPL(魔攻).
+  - Command: sta
+    Help: |
+      指令参数: <+/- 数量>
+      增加/减少角色指定数量的 STA(耐力).
+  - Command: stat_all
     Aliases:
-      - main
-  - Command: autoloottype
+      - allstat
+      - allstats
+      - statall
+      - statsall
+    Help: |
+      指令参数: <要提升的值>
+      将角色的全部能力增加你指定的数值 (若不携带参数, 则提升到最大值).
+  - Command: stats
+    Help: |
+      Displays the stats of the player in your chat.
+  - Command: statuspoint
     Aliases:
-      - aloottype
-  - Command: cloneequip
+      - stpoint
+    Help: |
+      指令参数: <要增减的能力点数> 
+      - 让你获得指定数量的能力点数(若使用负数, 则是扣减能力点数).
+  - Command: stockall
+    Help: |
+      指令参数: [<物品类型>]
+      将商品从购物车存到仓库。未指定类型将保存所有物品.
+  - Command: storage
+    Help: |
+      打开仓库.
+  - Command: storeall
+    Help: |
+      将角色背包中的所有物品存到仓库中去..
+  - Command: storagelist
+    Help: |
+      Displays a list of items in the storage.
+  - Command: str
+    Help: |
+      指令参数: <+/- 数量>
+      增加/减少角色指定数量的 STR(力量).
+  - Command: stylist
+    Help: |
+      Opens the stylist user interface.
+  - Command: summon
+    Help: |
+      Params: <monster name/ID> {<duration>}
+      Spawns the monster with <monster name/ID> and let it treat you as their master.
+      If a duration is specified, it will stay with you until the duration has ended.
+  - Command: tonpc
+    Help: |
+      Params: <NPC name>
+      Warps to the specified NPC.
+  - Command: trade
+    Help: |
+      指令参数: <角色名称>
+      - 邀请指定的玩家进行交易(需要对方点接受交易才能打开交易窗口)
+  - Command: trait_all
     Aliases:
-      - eqclone
-  - Command: clonestat
+      - alltrait
+      - alltraits
+      - traitall
+      - traitsall
+    Help: |
+      指令参数: <要提升的值>
+      将角色的特质能力增加你指定的数值 (若不携带参数, 则提升到最大值).
+  - Command: traitpoint
     Aliases:
-      - stclone
-  - Command: reloadnpcfile
+      - trpoint
+    Help: |
+      指令参数: <要增减的能力点数> 
+      - 让你获得指定数量的特殊能力点数(若使用负数, 则是扣减能力点数).
+  - Command: unban
     Aliases:
-      - reloadnpc
-  - Command: addfame
+      - unbanish
+    Help: |
+      Params: <角色名称> - 解封账号
+  - Command: undisguise
+    Help: |
+      还原被 @disguise 指令修改过的外观.
+  - Command: undisguiseall
+    Help: |
+      Restore the normal appearance of all connected players.
+  - Command: undisguiseguild
+    Help: |
+      还原被 @disguiseguild 指令修改过的外观.
+  - Command: unjail
     Aliases:
-      - famepoint
-      - famepoints
-
+      - discharge
+    Help: |
+      指令参数: <角色名称>
+      将指定的玩家从监狱中释放出来
+  - Command: unloadnpc
+    Help: |
+      指令参数: <NPC名称>
+      卸载指定名称的NPC.
+  - Command: unloadnpcfile
+    Help: |
+      指令参数: <脚本文件路径>
+      卸载指定路径的脚本文件, 包括里面包含的全部 NPC (但不会卸载里面声明的地图标记和魔物刷新点).
+  - Command: unmute
+    Help: |
+      Params: <char name>
+      Unmutes the player <char name>.
+  - Command: uptime
+    Help: |
+      显示服务器距离上一次维护之后,已经持续运行多长时间.
+  - Command: users
+    Help: |
+      Displays the distribution of players on the server per map.
+  - Command: useskill
+    Help: |
+      指令参数: <技能编号> <技能等级> <目标玩家名称>
+      对指定的玩家使用技能, 若目标玩家名称为 self 则表示对自己使用.
+  - Command: version
+    Help: |
+      显示服务端的版本号信息.
+  - Command: vip
+    Help: |
+      Params: <+/- time> <char name>
+      Set a player in VIP mode for a limited time.
+      Time elements: y/a, m, d/j, h, mn, s
+  - Command: vit
+    Help: |
+      指令参数: <+/- 数量>
+      增加/减少角色指定数量的 VIT(体力).
+  - Command: where
+    Help: |
+      指令参数: <角色名称>
+      查询指定角色所处的位置(所在地图和坐标).
+  - Command: whereis
+    Help: |
+      Params: <monster name/ID>
+      Displays the maps in which monster <monster name/ID> normally spawns.
+  - Command: who
+    Aliases:
+      - whois
+    Help: |
+      指令参数: [<角色名称>]
+      显示全服玩家的队伍和公会名称(若指定角色名, 则只查找特定的角色).
+  - Command: who2
+    Help: |
+      指令参数: [<角色名称>]
+      显示全服玩家的等级和职业(若指定角色名, 则只查找特定的角色).
+  - Command: who3
+    Help: |
+      指令参数: [<角色名称>]
+      显示全服玩家的账号编号和所在的位置(若指定角色名, 则只查找特定的角色).
+  - Command: whodrops
+    Help: |
+      指令参数: <物品名称|物品编号>
+      查询指定的物品可以从哪些魔物身上获得(按照魔物的掉率排序).
+  - Command: whogm
+    Help: |
+      指令参数: [关键词] - 类似 @who+@who2+who3 的集合, 但只针对在线的GM(如果指定了关键词, 那么只搜索出名称包含指定关键词的在线GM).
+  - Command: whomap
+    Help: |
+      指令参数: [地图名称]
+      与 @who 但只针对指定的地图.
+  - Command: whomap2
+    Help: |
+      指令参数: [地图名称]
+      与 @who2 但只针对指定的地图.
+  - Command: whomap3
+    Help: |
+      指令参数: [地图名称]
+      与 @who3 但只针对指定的地图.
+  - Command: wis
+    Help: |
+      指令参数: <+/- 数量>
+      增加/减少角色指定数量的 WIS(魔抗).
+  - Command: zeny
+    Help: |
+      指令参数: <要增减的金币数量> 
+      - 让你获得指定数量的金币(若使用负数, 则是扣减金币).
 Footer:
   Imports:
     - Path: conf/import/atcommands.yml

@@ -56,6 +56,7 @@
 #   WalkSpeed               Walk speed. (Default: DEFAULT_WALK_SPEED)
 #   AttackDelay             Attack speed. (Default: 0)
 #   AttackMotion            Attack animation speed. (Default: 0)
+#   ClientAttackMotion      Client attack speed. (Default: AttackMotion)
 #   DamageMotion            Damage animation speed. (Default: 0)
 #   DamageTaken             Rate at which the monster will receive incoming damage. (Default: 100)
 #   Ai                      Aegis monster type AI behavior. (Default: 06)
@@ -72,12 +73,13 @@
 #       Rate                Drop rate of item. (Default: 1)
 #       StealProtected      If the item is shielded from TF_STEAL. (Default: false)
 #       RandomOptionGroup   Random Option Group applied to item on drop. (Default: None)
+#       DropEvent           当掉落物品时触发 OnMobDropItemFilter 与 OnMobDropItemEvent 事件 (Default: false)
 #       Index               Index used for overwriting item. (Optional)
 ###########################################################################
 
 Header:
   Type: MOB_DB
-  Version: 3
+  Version: 4
 
 Footer:
   Imports:

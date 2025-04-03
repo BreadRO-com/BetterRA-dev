@@ -1,0 +1,100 @@
+# This file is a part of rAthena.
+#   Copyright(C) 2022 rAthena Development Team
+#   https://rathena.org - https://github.com/rathena
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+#
+###########################################################################
+# Currency Database
+###########################################################################
+#
+# Currency Settings
+#
+###########################################################################
+# - Id:                     用于记录货币ID方便储存和调用, 必须大于 1 否则会报错.
+#   NoticeName:             打开商店时提示的货币名称
+#   StoreType:              支援的商店类型. (商店默认为 'All: true')
+#     All: true             支援采购和贩卖商店
+#     Buying: true          支援采购商店
+#     Vending: true         支援贩卖商店
+#   Option:                 货币类型:
+#                               Item     为物品型货币
+#                               Variable 为变量货币
+#                               Param    为参数货币 (例: Zeny,Cashpoints,Kafrapoins,BaseExp,JobExp) 其他还有很多不一一列举
+#   Require:                当商店为物品型货币时此项填货币的 ageis 名称, 为变量型货币时填变量名称
+#   ViewItemId:             选择货币列表时, 显示在列表中的物品外观, 兼容旧版时此处填旧版货币ID
+#   Tax:                    交易税, 交易完成后扣除相应的数量返给卖家
+#     - Threshold:          税率起征点, 超过此值时才会起征税率, 可以设置多个起征额度额度从高到低.
+#       Rate:               税率, 交易完成后扣除的百分比.
+###########################################################################
+
+Header:
+  Type: STORE_CURRENCY_DB
+  Version: 1
+
+Body:
+  - Id: 1
+    NoticeName: Zeny金币
+    Option: Variable
+    Require: 'Zeny'
+    ViewItemId: 30000
+  - Id: 2
+    NoticeName: 现金点数
+    Option: Variable
+    Require: '#CASHPOINTS'
+    ViewItemId: 30001
+    Tax:
+      - Threshold: 400
+        Rate: 20
+      - Threshold: 300
+        Rate: 15
+      - Threshold: 200
+        Rate: 10
+      - Threshold: 100
+        Rate: 5
+  - Id: 3
+    NoticeName: 卡普拉点数
+    StoreType:
+      Vending: true
+    Option: Variable
+    Require: '#KAFRAPOINTS'
+    ViewItemId: 503
+  - Id: 4
+    NoticeName: 波斯尼亚旅游券
+    StoreType:
+      Vending: true
+    Option: Item
+    Require: TCG_Card
+    ViewItemId: 7227
+  - Id: 5
+    NoticeName: 迷思力币
+    StoreType:
+      Vending: true
+    Option: Item
+    Require: Mithril_Coin
+    ViewItemId: 674
+  - Id: 6
+    NoticeName: 银币
+    StoreType:
+      Vending: true
+    Option: Item
+    Require: Silver_Coin
+    ViewItemId: 675
+  - Id: 7
+    NoticeName: 铜币
+    StoreType:
+      Vending: true
+    Option: Item
+    Require: Copper_Coin
+    ViewItemId: 673

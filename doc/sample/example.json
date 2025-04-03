@@ -1,0 +1,24 @@
+{
+	"StrTest": "测试字符串返回",
+	"IntTest": 1234567890,
+	"Data": {
+		"StrArrayTest": {
+			"0": "s123",
+			"1": "s234",
+			"2": "s345"
+		},
+		"IntArrayTest": {
+			"0": 456,
+			"1": 567,
+			"2": 678
+		},
+		"ObjectReturn": [{
+			"screen_x": 1920,
+			"screen_y": 1080
+		}, {
+			"screen_x": 640,
+			"screen_y": 480
+		}]
+	},
+	"中文键": "中文值"
+}

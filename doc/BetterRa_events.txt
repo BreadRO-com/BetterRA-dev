@@ -2,14 +2,11 @@
 //= BetterRa 事件标签说明文件
 //===== 作者: ================================================
 //= BetterRa 开发团队
-//===== 最后更新: ============================================
-//= 20170831
 //===== 文档简介: ============================================
 //= BetterRa 是基于 rAthena 进行二次开发的, 在 rAthena 官方支
 //= 持的事件标签基础上, BetterRa 也拓展了一些事件标签, 请参阅
 //= 下面的说明, 它会介绍这些事件的触发时机和使用方法.
 //============================================================
-
 事件名称约定:
 	On[事件关联到的对象][事件名称][事件类型]
 
@@ -29,16 +26,34 @@
 中断说明:
 	如果一个事件可被中断, 那么会具体描述一下中断后的效果
 
+
+1.- 全局事件, 即放在任何NPC下当条件满足时均可被触发.
+2.- NPC事件, 即放在指定NPC下当该NPC满足条件时单独触发NPC下的事件.
+
+=====================
+|1.-   全局事件    .|
+=====================
+---------------------------------------
+
+*OnDestroy:
+
+当NPC被卸载时触发
+
+---------------------------------------
+
+*OnPCStatCalcFilter
+
+	当角色的能力被重新计算前触发的事件
+	
+注意:
+	一般用于清除玩家变量, 当玩家的装备脚本中有变量赋值时, 清除变量后将在后面装备的脚本计算中重新赋值, 可以获取正确的结果
+	在此事件下使用 bonus 无任何效果
+
 ---------------------------------------
 
 *OnPCStatCalcEvent:
 
-
 	当角色的能力被重新计算时触发的事件
-
-BetterRa 在官方的基础上做了以下改进:
-	- 此事件默认不会被放入“事件队列”, 只要被触发都能被立刻执行
-	- 在 conf/battle/extend.conf 的 execute_npce_statcalc_right_now 选项可以改回官方默认流程
 
 当此事件不会被放入“事件队列”时, 以下部分脚本指令将不会被执行:
 	mes,next,end,close,close2,menu,select,prompt,
@@ -48,25 +63,7 @@ BetterRa 在官方的基础上做了以下改进:
 
 ---------------------------------------
 
-*OnPCInChatroomFilter:
-
-
-	当玩家双击进入本NPC开启的聊天室时, 将触发此事件 (关联到进入此NPC聊天室的玩家)
-
-事件顺序:
-	我们知道 waitingroom 本身自带一个事件, 当聊天室中的成员
-	数量足够时, 就会被触发。
-
-	在这里你需要知道的是, 若您使用 processhalt 中断了本事件, 那么
-	这个 rAthena 自带的 waitingroom 事件将不会被触发。
-
-中断说明: 
-	中断后客户端将不会打开聊天室窗口
-
----------------------------------------
-
 *OnPCKillMvpEvent:
-
 
 	杀死MVP魔物时触发的事件 (关联到给MVP带来最后一击的玩家)
 	死了一个MVP魔物的话, 此事件只会被触发1次
@@ -105,7 +102,6 @@ BetterRa 在官方的基础上做了以下改进:
 
 *OnPCEquipFilter:
 
-
 	当玩家准备穿戴上一件物品的时候, 此事件会被触发 (关联到穿戴物品的玩家)
 
 参数说明:
@@ -123,7 +119,6 @@ BetterRa 在官方的基础上做了以下改进:
 ---------------------------------------
 
 *OnPCUnequipFilter:
-
 
 	当玩家准备脱掉一件物品的时候, 此事件会被触发 (关联到脱下物品的玩家)
 
@@ -149,7 +144,6 @@ BetterRa 在官方的基础上做了以下改进:
 
 *OnPCEquipEvent:
 
-
 	当玩家成功穿戴上一件物品的时候, 此事件会被触发 (关联到穿戴物品的玩家)
 
 参数说明:
@@ -160,7 +154,6 @@ BetterRa 在官方的基础上做了以下改进:
 
 *OnPCUnequipEvent:
 
-
 	当玩家成功脱掉一件物品的时候, 此事件会被触发 (关联到脱下物品的玩家)
 
 参数说明:
@@ -170,7 +163,6 @@ BetterRa 在官方的基础上做了以下改进:
 ---------------------------------------
 
 *OnPCBuffStartEvent:
-
 
 	当玩家获得了一个状态(Buff)后, 此事件会被触发 (关联获得状态的玩家)
 
@@ -208,7 +200,6 @@ BetterRa 在官方的基础上做了以下改进:
 ---------------------------------------
 
 *OnPCBuffEndEvent:
-
 
 	当玩家解除了一个状态(Buff)后, 此事件会被触发 (关联解除状态的玩家)
 
@@ -296,6 +287,18 @@ BetterRa 在官方的基础上做了以下改进:
 	
 ---------------------------------------
 
+*OnPCPetMenuFilter:
+
+	当点击宠物菜单时触发此事件(宠物菜单是右键宠物时弹出的)
+	
+参数说明:
+	@pet_id 宠物GID
+
+中断说明: 
+	中断后服务端会无视玩家本次使用菜单指令的请求
+	
+---------------------------------------
+
 *OnPCPetLootEvent:
 
 	当玩家的宠物拾取到物品之后, 此事件会被触发 (关联到宠物的主人)
@@ -371,12 +374,8 @@ BetterRa 在官方的基础上做了以下改进:
 	@view_equip_target_name$	被查看者的角色名
 	@view_equip_target_cid	被查看者的角色编号
 	@view_equip_target_aid	被查看者的账号编号
+	@view_equip_target_show     是否公开了装备
 	
-	@vieweq_name$ 	为了兼容CSEA服务端, 被赋予了和 @view_equip_target_name$ 一样的值
-	@vieweq_cid 	为了兼容CSEA服务端, 被赋予了和 @view_equip_target_cid 一样的值
-	@vieweq_aid 	为了兼容CSEA服务端, 被赋予了和 @view_equip_target_aid 一样的值
-	@eqview_cid 	为了兼容CSEA服务端, 被赋予了和 @view_equip_target_cid 一样的值
-
 中断说明: 
 	中断后服务端会无视玩家本次查看他人装备信息的请求
 	
@@ -532,10 +531,11 @@ BetterRa 在官方的基础上做了以下改进:
 	当玩家使用GM指令时触发
 	
 参数说明:
-	@cmd_aid		使用GM指令的玩家AID
-	@cmd_name$		所使用的指令名称
-	@cmd_params$	指令附带的参数
-	@cmd_target_aid	目标玩家的AID, 此指令对谁生效, 一般与#调用指令有关
+	$@cmd_type          使用类型(0: 脚本调用<atcommand>, 1: 玩家调用, 2: 控制台调用, 3: 脚本调用<useatcmd>)
+	$@cmd_aid			使用GM指令的玩家AID
+	$@cmd_name$			所使用的指令名称
+	$@cmd_params$		指令附带的参数
+	$@cmd_target_aid	目标玩家的AID, 此指令对谁生效, 一般与#调用指令有关
 	
 中断说明:
 	中断后指令使用失败
@@ -546,13 +546,13 @@ BetterRa 在官方的基础上做了以下改进:
 
 	当玩家点击地面的某个格子想要移动时, 此事件会在玩家开始走路之前触发 (关联到想要移动的玩家)
 	
-	若 conf/battle/extend.conf 的 pc_move_event_trigger_type 值为 0
+	若 conf/battle/BetterRA.conf 的 pc_move_event_trigger_type 值为 0
 	那么永远不会触发此事件
 	
-	若 conf/battle/extend.conf 的 pc_move_event_trigger_type 值为 1
+	若 conf/battle/BetterRA.conf 的 pc_move_event_trigger_type 值为 1
 	那么必须先调用 when_pcmove_doevent; 脚本指令后, 玩家的下一次移动才会触发本事件
 	
-	若 conf/battle/extend.conf 的 pc_move_event_trigger_type 值为 2
+	若 conf/battle/BetterRA.conf 的 pc_move_event_trigger_type 值为 2
 	那么玩家的所有移动都会触发本事件(人多的话可能会影响性能)
 
 参数说明:
@@ -561,7 +561,28 @@ BetterRa 在官方的基础上做了以下改进:
 	
 中断说明: 
 	中断后服务端会无视玩家本次移动的请求
+	
+---------------------------------------
 
+*OnPCDirChangeEvent:
+
+	当玩家转身时触发该事件
+	
+	若 conf/battle/BetterRA.conf 的 always_pc_dir_event 为 yes 则永远触发此事件
+	若 conf/battle/BetterRA.conf 的 always_pc_dir_event 为 no 则先调用 when_pcdir_doevent 后玩家的才会触发此事件
+
+参数说明:
+	@body_dir	玩家的朝向
+	
+---------------------------------------
+
+*OnPCSitStandEvent:
+
+	当玩家站起坐下时触发
+
+参数说明:
+	@sitting	1 时玩家正在坐下 0 时玩家站起
+	
 ---------------------------------------
 
 *OnPCWillLoadMapEvent:
@@ -694,20 +715,14 @@ BetterRa 在官方的基础上做了以下改进:
 
 ---------------------------------------
 
-*OnHTTPReceivedEvent:
+*OnPCMacroEvent:
 
-使用http_get指令成功后的事件.用于获取HTTP GET内容
-
-事件返回变量:
-	$@http_name$          HTTP header 返回名(数组),
-	$@http_val$           HTTP header 值(数组),
-	$@http_header_count   HTTP header 数组长度.
-
-	$@http_num      为 http_get脚本指令中的 <保存数字>
-	$@http_url$     为 http_get脚本指令中的 <URL>
-	$@http_host$    为 http_get脚本指令中的 <网址>
-	$@http_folder$  为 http_get脚本指令中的 <网址剩余部分>
-	$@http_str$     为返回的内容
+	当检测到玩家使用封包挂\按键精灵\AI识别挂\鼠标宏挂机自动刷怪时触发该事件, 由于鼠标宏吃药容易引发误判, 鼠标宏等吃药暂时不检测
+	可同过脚本指令 is_hanging(封包挂<包含小鸟挂>) is_rohelper(小鸟挂) is_macro(鼠标宏, AI识别挂, 按键精灵) 判断是哪种挂
+	
+注意:
+	该事件必须配合 BetterRA.dll(防挂版本) 一起使用才能生效, 特殊开关需勾选防挂功能, 本功能只对服务版开放
+	当玩家被标记使用辅助软件时, 需退出客户端重开才能解除对该玩家的标记
 
 ---------------------------------------
 
@@ -761,6 +776,15 @@ BetterRa 在官方的基础上做了以下改进:
 
 ---------------------------------------
 
+*OnPCRefineUIOpenFilter:
+
+	当打开精炼UI时触发事件
+	
+中断说明: 
+	中断后服务端会忽略本次打开精炼UI的请求
+
+---------------------------------------
+
 *OnPCRefineUIFilter:
 
 	准备使用精炼UI时触发事件, 可通过修改 @refine_rate 变量修改精炼成功率
@@ -768,7 +792,7 @@ BetterRa 在官方的基础上做了以下改进:
 参数说明:
 	@refine_idx			精炼物品的在背包中的序列
 	@refine_nameid		精炼物品的物品ID
-	@refine_rate		精炼概率（可以通过修改这个数值更改精炼概率）
+	@refine_rate		精炼成功概率（可以通过修改这个数值更改成功概率）
 	@refine_zeny		精炼时消耗的zeny
 	@refine_cost		精炼时消耗的精炼道具ID
 	@refine_blessing	精炼是否使用祝福矿石
@@ -790,6 +814,100 @@ BetterRa 在官方的基础上做了以下改进:
 	@refine_nameid		精炼物品的物品ID
 	@refine_blessing	精炼是否使用祝福矿石
 	@refine_success     精炼成功返回 1 否则返回 0
+		
+---------------------------------------
+
+*OnPCEnchantGradeUIFilter:
+
+	使用评价UI时触发该事件
+
+参数说明:
+	@enchantgrade_idx					物品在背包中的序号idx
+	@enchantgrade_blessing				是否使用祝福物品
+	@enchantgrade_blessing_amount		使用祝福物品的数量
+	@enchantgrade_item					消耗物品ID (Option - Item)
+	@enchantgrade_amount				消耗物品数量 (Option - Amount)
+	@enchantgrade_zeny					消耗Zeny数量 (Option - Zeny)
+	@enchantgrade_breaking_rate			物品损坏的概率 (Option - BreakingRate)
+	@enchantgrade_downgrade_amount		评价失败后降多少评价等级
+	@enchantgrade_change				基础成功率 (不加催化剂概率和消耗物品数量概率)
+	@enchantgrade_catalyst				催化剂物品ID
+	
+中断说明: 
+	中断后本次装备评价无效可以通过指令重写规则, 中断后可以通过 @enchantgrade_result 变量更改评级结果动画.
+	
+---------------------------------------
+
+*OnPCEnchantGradeUIEvent:
+
+	使用评价UI后触发该事件, 如果想获得其他参数请使用 OnPCEnchantGradeUIFilter 事件
+
+参数说明:
+	@enchantgrade_idx					物品在背包中的序号idx, 如果物品因评级被损坏则此序号无效果
+	@enchantgrade_result				评价结果 (0 - 成功, 1 - 失败, 2 - 损坏, 3 - 降级)
+
+---------------------------------------
+
+*OnPCItemReformUIOpenFilter:
+
+	当打开改造UI时触发事件
+	
+中断说明: 
+	中断后服务端会忽略本次打开改造UI的请求
+
+---------------------------------------
+
+*OnPCItemReformUIFilter:
+
+	使用改造UI时触发该事件
+
+参数说明:
+	@itemform_idx		改造的物品在背包中的序号idx
+	@itemform_item		打开改造界面使用的物品
+	
+中断说明: 
+	中断后本次改造无效可通过指令重写改造规则
+		
+---------------------------------------
+
+*OnPCItemReformUIEvent:
+
+	使用改造UI后触发该事件
+
+参数说明:
+	@itemform_idx		改造后的物品在背包中的序号idx
+	@itemform_item		打开改造界面使用的物品
+	@itemform_item_old	改造之前的物品ID
+	
+---------------------------------------
+
+*OnPCEnchantUIFilter:
+
+	准备使用评级UI时触发事件, 可通过修改 @refine_rate 变量修改精炼成功率
+
+参数说明:
+	@enchant_idx			评级物品的在背包中的序列
+	@enchant_nameid			评级物品的物品ID
+	@enchant_rate			评级成功概率（可以通过修改这个数值更改成功概率）
+	@enchant_zeny			评级时消耗的zeny
+	@enchant_cost[]			评级时消耗的道具ID
+	@enchant_amount[]		评级时消耗的道具数量
+	@enchant_catalysator	评级是否使用催化剂
+	
+中断说明: 
+	中断后服务端会忽略本次评级请求
+	
+---------------------------------------
+
+*OnPCEnchantUIEvent:
+
+	使用评级UI评级完成后触发事件
+
+参数说明:
+	@enchant_idx			评级物品的在背包中的序列
+	@enchant_nameid			评级物品的物品ID
+	@enchant_success		评级成功返回 1 否则返回 0
+	@enchant_catalysator	评级是否使用催化剂
 	
 ---------------------------------------
 
@@ -867,6 +985,34 @@ BetterRa 在官方的基础上做了以下改进:
 
 中断说明: 
 	中断后玩家说话将被屏蔽且没有任何提示
+	
+---------------------------------------
+
+*OnPCTalkFilter:
+
+	当玩家在聊天窗中发送信息时触发该事件
+
+参数说明:
+	@talk_type      聊天类型
+	@talk_name$     玩家名(只限私聊)
+    @talk_mes$      聊天玩家的內容
+	
+聊天类型:
+	- PKL_PUBLIC(0)
+	- PKL_PARTY(1)
+	- PKL_GUILD(2)
+	- PKL_BATTLE(3)
+	- PKL_CLAN(4)
+	- PKL_WHISPER(5)
+	- PKL_CHAN(6)
+
+注意事项
+	使用该事件时配置选项 betterra.conf 中的 talk_event_type 设置后可以全局生效
+	也可以使用指令 pc_talkevent_mark 对指定玩家触发该指令
+	也可以使用地图标记 talkevent 对指定地图触发该事件
+	
+中断说明:
+	中断后无法发送本次发言
 
 ---------------------------------------
 
@@ -883,18 +1029,73 @@ BetterRa 在官方的基础上做了以下改进:
 	
 ---------------------------------------
 
-*OnMOBDropItemFilter:
+*OnMobDropItemFilter:
 
-	当魔物掉落在 item_flag.txt 中标记有2048的物品时触发该事件
+	当魔物掉落指定物品时触发该事件
+	
+触发条件:
+	当 item_flag.txt 中节点 Drops -> DropEvent   为 true 时
+	当 item_db.yml   中节点 Flags -> DoDropEvent 为 true 时
+	当 BetterRA.conf 中配置 mob_drop_event 为相应物品类型时
 	
 参数说明:
-    @drop_mobid 掉落该物品的魔物的ID
-    @drop_itemid 掉落物品的ID
-	@drop_rate 掉落概率
-	@drop_ratefix 修正后的掉落概率
+	$killedgid		魔物的 GID
+	$killedrid		魔物 ID
+	$killerrid		尾刀玩家的 AID
+	$src_gid		MVP玩家的 AID
+	$item_id 		掉落的物品 ID
+	$drop_rate 		魔物掉落该物品的概率
+	$drop_disprate 	魔物掉落该物品的显示概率
 	
 中断说明: 
 	中断后本次击杀不掉落该物品
+		
+---------------------------------------
+
+*OnMobDropItemEvent:
+
+	当魔物掉落指定物品后触发该事件
+	
+触发条件:
+	当 item_flag.txt 中节点 Drops -> DropEvent   为 true 时
+	当 item_db.yml   中节点 Flags -> DoDropEvent 为 true 时
+	当 BetterRA.conf 中配置 mob_drop_event 为相应物品类型时
+	
+参数说明:
+	$src_gid		物品掉落在地面上的 GID (可使用getunitdata/setunitdata对地面物品进行操作)
+	$killedrid		魔物 ID
+	$item_id 		掉落的物品 ID
+	
+---------------------------------------
+
+*OnMobUseSkillFilter:
+
+	当魔物在使用技能时触发该事件
+	
+参数说明：
+	$useskill_src 释放技能对象的GID
+	$useskill_id 技能ID
+	$useskill_lv 技能等级
+	$useskill_target 目标GID
+	$useskill_x 目标坐标x 如果是单体技能则返回目标的x坐标
+	$useskill_y 目标坐标x 如果是单体技能则返回目标的y坐标
+	
+中断说明: 
+	中断后本次使用技能失败
+	
+---------------------------------------
+
+*OnMobUseSkillEvent:
+
+	当魔物在使用技能后触发该事件
+	
+参数说明：
+	$useskill_src 释放技能对象的GID
+	$useskill_id 技能ID
+	$useskill_lv 技能等级
+	$useskill_target 目标GID
+	$useskill_x 目标坐标x 如果是单体技能则返回目标的x坐标
+	$useskill_y 目标坐标x 如果是单体技能则返回目标的y坐标
 
 ---------------------------------------
 
@@ -925,6 +1126,61 @@ BetterRa 在官方的基础上做了以下改进:
 	
 ---------------------------------------
 
+*OnMerUseSkillFilter:
+
+	当佣兵在使用技能时触发该事件
+	
+参数说明：
+	$useskill_src 释放技能对象的GID
+	$useskill_id 技能ID
+	$useskill_lv 技能等级
+	$useskill_target 目标GID
+	$useskill_x 目标坐标x 如果是单体技能则返回目标的x坐标
+	$useskill_y 目标坐标x 如果是单体技能则返回目标的y坐标
+	
+中断说明: 
+	中断后本次使用技能失败
+	
+---------------------------------------
+
+*OnMerUseSkillEvent:
+
+	当佣兵在使用技能后触发该事件
+	
+参数说明：
+	$useskill_src 释放技能对象的GID
+	$useskill_id 技能ID
+	$useskill_lv 技能等级
+	$useskill_target 目标GID
+	$useskill_x 目标坐标x 如果是单体技能则返回目标的x坐标
+	$useskill_y 目标坐标x 如果是单体技能则返回目标的y坐标
+
+---------------------------------------
+
+*OnPCOpenUIFilter:
+
+	当打开UI时触发, 该事件不是对所有UI都生效
+	
+参数说明：
+	@ui_type 打开UI的类型
+			 0  - 银行
+			 1  - 造型师
+			 2  - 验证码
+			 5  - 小贴士 (仅通过 opentips 脚本指令打开的UI)
+			 6  - 任务 (仅通过 open_quest_ui 脚本指令打开的UI)
+			 7  - 签到
+			 8  - 装备评级
+	
+其他打开UI的事件:
+	- OnPCRefineUIOpenFilter
+	- OnPCItemReformUIOpenFilter
+	- OnPCCashShopOpenFilter
+
+中断说明: 
+	中断后服务端会忽略本次打开精炼UI的请求
+
+---------------------------------------
+
 *OnPCOpenVendFilter:
 
 	当玩家开启挂店之前触发
@@ -934,6 +1190,7 @@ BetterRa 在官方的基础上做了以下改进:
 	@vend_amount	物品出售的数量 (数组 可通过修改实际出售数量)
 	@vend_price		物品出售的单价 (数组 可通过修改实际出售单价)
 	@vend_loot		使用货币的物品ID
+	@vend_currency	使用货币的货币ID
 	@vend_count		一共出售多少种物品
 	
 中断说明: 
@@ -955,6 +1212,44 @@ BetterRa 在官方的基础上做了以下改进:
 中断说明: 
 	中断后本次采购失败
 	
+---------------------------------------
+
+*OnPCTradeVendingFilter:
+
+	当玩家从挂店购买物品时触发该事件, 事件关联挂店玩家, 方便从手推车中获取物品数据
+	
+参数说明:
+	@vend_idx			购买物品在手推车中的位置序号(数组)
+	@vend_nameid		购买物品的物品ID            (数组)
+	@vend_amount		购买物品的数量              (数组)
+	@vend_price			购买物品的单价              (数组)
+	@vend_pricetotal	购买物品的总价
+	@vend_loot			购买使用货币的物品ID
+	@vend_currency		购买使用货币的货币ID
+	@vend_count			购买多少种物品
+	
+中断说明: 
+	中断后本次挂店失败
+			
+---------------------------------------
+
+*OnPCTradeBuyingFilter:
+
+	当玩家在采购商店中出售物品时触发, 事件关联出售物品的玩家, 方便从背包中获取物品数据
+	
+参数说明:
+    @buying_idx         出售物品在背包中的ID (数组)
+	@buying_nameid		出售物品的ID         (数组)
+	@buying_amount		出售物品的数量       (数组)
+	@buying_price		出售物品的单价       (数组)
+	@buying_pricetotal  出售物品的总价格
+	@buying_loot		出售使用货币的物品ID
+	@buying_currency	出售使用货币的货币ID
+	@buying_count		出售采购多少种物品
+	
+中断说明: 
+	中断后本次出售失败
+		
 ---------------------------------------
 
 *OnPCTradeAddFilter
@@ -987,38 +1282,90 @@ BetterRa 在官方的基础上做了以下改进:
 
 ---------------------------------------
 
+*OnPCMailSendFilter
+
+	当发送邮件时触发该事件, 此事件只拦截玩家发送的邮件, 系统邮件脚本发送的邮件不拦截
+	
+参数说明：
+	@mail_name$     收件人姓名
+	@mail_title$    邮件标题
+	@mail_body$     邮件文本内容
+	@mail_zeny      附件中Zeny数量
+	@mail_itemid[]  附件物品的ID(数组)
+	@mail_amount[]  附件物品的数量(数组)
+
+中断说明: 
+	中断后添邮件发送失败
+
+---------------------------------------
+
+*OnPCMailGetAttachFilter
+
+	当获取邮件附件时触发该事件
+	
+参数说明：
+	@mail_name$     收件人姓名
+	@mail_title$    邮件标题
+	@mail_body$     邮件文本内容
+	@mail_zeny      附件中Zeny数量
+	@mail_itemid[]  附件物品的ID(数组)
+	@mail_amount[]  附件物品的数量(数组)
+
+中断说明: 
+	中断后添邮件发送失败
+	
+---------------------------------------
+
 *OnPCInventoryAddFilter
 
 	当背包中放入物品时触发
 	
 参数说明：
-	@recv_itemid 收到的物品ID
-	@recv_amount 收到的物品数量
-	@recv_source 来自于哪里
-	@recv_storid 收到的物品仓库ID(公会仓库返回-1, 普通仓库和扩展仓库返回仓库ID)
-	@recv_idx 物品原本的所在位置的序号(返回仓库/手推车/背包位置序号)
+	@recv_itemid	收到的物品ID
+	@recv_amount	收到的物品数量
+	@recv_source	来自于哪里
+	@recv_storid	收到的物品仓库ID(公会仓库返回-1, 普通仓库和扩展仓库返回仓库ID)
+	@recv_idx		物品原本的所在位置的序号(返回仓库/手推车/背包位置序号)
 
-参数 @recv_source
-	1  => 背包
-	2  => 手推车
-	3  => 普通/扩展仓库
-	4  => 公会仓库
-	5  => 拾取
-	6  => NPC购买
-	7  => 脚本(getitem等)
-	8  => 邮箱
-	9  => 交易
-	10 => 露天商店
-	11 => 采购
-	12 => 消耗(技能: 捡石头/天使之泪等)
-	13 => 制造
-	14 => 任务
-	15 => 商城
-	16 => 指令
-	17 => 转盘
-	18 => 出生时获得
-	19 => 其他
+参数 @recv_source (此选项为掩码选项)
+	LT_NONE					手推车
+	LT_TRADE				交易
+	LT_VENDING				挂店商店
+	LT_PICKDROP_PLAYER		玩家拾取
+	LT_PICKDROP_MONSTER		魔物拾取(不适用)
+	LT_NPC					NPC商店
+	LT_SCRIPT				脚本(getitem等指令)
+	LT_STEAL				偷窃
+	LT_CONSUME				消耗
+	LT_PRODUCE				制造
+	LT_MVP					MVP奖励
+	LT_COMMAND				GM指令
+	LT_STORAGE				个人仓库
+	LT_GSTORAGE				工会仓库
+	LT_MAIL					邮件
+	LT_AUCTION				拍卖行
+	LT_BUYING_STORE			采购商店
+	LT_OTHER				其他
+	LT_CASH					商城
+	LT_BANK					银行(不适用)
+	LT_BOUND_REMOVAL		绑定道具移除(工会绑定和组队绑定道具在团体解散后移除)
+	LT_ROULETTE				幸运转盘
+	LT_MERGE_ITEM			合成物品
+	LT_QUEST				任务
+	LT_PRIVATE_AIRSHIP		定制飞船
+	LT_BARTER				易货商店(barter shop)
+	LT_LAPHINE				合成系统
+	LT_ENCHANTGRADE			评级系统
+	LT_REFORM				改造系统
+	LT_ENCHANT				附魔系统
+	LT_PACKAGE				包装箱
+	LT_LOOT					拾取(不适用)
 
+例子: 
+	//对多个来源进行判断时, 注意手推车 LT_NONE 为 0 不能使用掩码进行判断
+	if (@recv_source == 0 || (@recv_source&(LT_STORAGE|LT_GSTORAGE|LT_MAIL)))
+		dispbottom "物品来源于手推车、邮箱、个人仓库或工会仓库"
+	
 注意: 
 	如果想在库存中减少时触发本事件, 
 	请将 BetterRA.conf 的 enable_delitem_event 设置为 yes
@@ -1083,33 +1430,7 @@ BetterRa 在官方的基础上做了以下改进:
 	@pick_storid      物品来自仓库ID (公会仓库返回-1, 普通仓库和扩展仓库返回仓库ID)
 	@pick_partner_aid 物品来自对方的AID (例如 交易、挂店、采购)
 	@pick_idx         物品原本的所在位置的序号, 可通过 getinventoryinfo getcartinfo getstorageinfo getguildstorageinfo 查看物品详细信息
-	@pick_type$       log 类型
-						- 'W' 手推车
-						- 'T' 交易 
-						- 'V' 挂店 
-						- 'P' 玩家拾起
-						- 'M' 魔物掉落 
-						- 'S' NPC购买 
-						- 'N' 脚本给予 
-						- 'D' 偷窃 
-						- 'C' 消耗 
-						- 'O' 制造 
-						- 'U' MVP物品 
-						- 'A' 指令获取 
-						- 'R' 仓库 
-						- 'G' 公会仓库 
-						- 'E' 邮件 
-						- 'I' 拍卖 
-						- 'B' 采购 
-						- 'L' 魔物拾取掉落
-						- 'K' 银行
-						- 'X' 其他 
-						- '$' 商城 
-						- 'F' 移除绑定
-						- 'Y' 幸运转盘
-						- 'Z' 合成
-						- 'Q' 任务
-						- 'H' 定制飞行
+	@pick_type        类型参考 OnPCInventoryAddFilter 中的 @recv_source 变量
 
 ---------------------------------------
 
@@ -1198,22 +1519,51 @@ BetterRa 在官方的基础上做了以下改进:
 	当玩家获得 bonus 属性时触发, 指令可通过 getbonus 获取玩家各参数实际值, 也可通过判断 玩家角色或账号ID进行累加获取实际值
 	
 参数说明：
-	@bonus_type 附加类型, 即 bonus 后第一个参数(例: bStr 等)
-	@bonus_val1 第 1 个参数
-	@bonus_val2 第 2 个参数
-	@bonus_val3 第 3 个参数
-	@bonus_val4 第 4 个参数
-    @bonus_val5 第 5 个参数
+	bonus_type 附加类型, 即 bonus 后第一个参数(例: bStr 等)
+	bonus_val1    第 1 个参数
+	bonus_val2    第 2 个参数
+	bonus_val3    第 3 个参数
+	bonus_val4    第 4 个参数
+    bonus_val5    第 5 个参数
+	inventory_idx 触发事件的 bonus 在背包中的序号(0~背包上限)
+	card_idx      触发事件的 bonus 在卡槽上的序号(0~3)
+	equip_pos     触发事件的 bonus 穿戴在身上的位置, 如果是套装则返回多个位置
 
 中断说明: 
-	中断后可通过修改上面的参数来实现对最终结果的影响, 当 @bonus_type 为0时, 当前 Bonus 附加失效
+	中断后可本次 bonus 附加失效, 可通过在本事件下写 bonus 达到改写的效果
+	
+例子:
+	
+-	script	#Event	-1,{
+	end;
+OnInit:
+	// 当 bonus 为 bStr, bAgi 触发 OnPCBonusFilter 事件
+	bonus_filter(bStr,bAgi);
+	end;
+OnPCBonusFilter:
+
+	// 打断后原本的 bonus 不生效
+	processhalt;
+	
+	Switch(bonus_type){
+		case bStr:
+			// 赋予玩家原本两倍的bStr属性
+			bonus bStr,bonus_val1*2;
+			break;
+		case bAgi:
+			// 赋予玩家原本三倍的bAgi属性
+			bonus bAgi,bonus_val1*3;
+			break;
+	}
+	end;
+}
 
 ---------------------------------------
 
 *OnAnyoneUseSkillFilter:
 
 事件描述：
-	当释放技能前触发, 可通过在skill_db中自创ID为20000以上的技能通过打断实现一些新技能(ID在20000以下会报错)
+	当释放技能前触发
 	
 参数说明：
 	$useskill_src 释放技能对象的GID
@@ -1230,7 +1580,7 @@ BetterRa 在官方的基础上做了以下改进:
 *OnAnyoneUseSkillEvent:
 
 事件描述：
-	当释放技能时触发, 可通过在skill_db中自创ID为20000以上的技能通过打断实现一些新技能(ID在20000以下会报错)
+	当释放技能后触发
 	
 参数说明：
 	$useskill_src 释放技能对象的GID
@@ -1239,8 +1589,21 @@ BetterRa 在官方的基础上做了以下改进:
 	$useskill_target 目标GID
 	$useskill_x 目标坐标x 如果是单体技能则返回目标的x坐标
 	$useskill_y 目标坐标x 如果是单体技能则返回目标的y坐标
+
+---------------------------------------
+
+*OnAnyoneCustomSkillEvent:
+
+事件描述：
+	当使用自定义技能时触发, 可通过脚本指令 unitskilltowide 和 unitskilltoAOE 实现更多功能
 	
-配合脚本指令 unitskilltowide 和 unitskilltoAOE 实现更多技能
+参数说明：
+	$useskill_src 释放技能对象的GID
+	$useskill_id 技能ID
+	$useskill_lv 技能等级
+	$useskill_target 目标GID
+	$useskill_x 目标坐标x 如果是单体技能则返回目标的x坐标
+	$useskill_y 目标坐标x 如果是单体技能则返回目标的y坐标
 
 ---------------------------------------
 
@@ -1283,7 +1646,6 @@ BetterRa 在官方的基础上做了以下改进:
 	@PetCatch_gid     所抓宠物对应的魔物GID
 	@PetCatch_item    所抓宠物所使用的物品ID
 	@PetCatch_rate    捕获宠物的成功概率
-	@PetCatch_real    捕获宠物的实际概率
 
 中断说明: 
 	中断后可通过对 @PetCatch_result(1: 成功 0: 失败) 修改动画播放结果
@@ -1304,6 +1666,21 @@ BetterRa 在官方的基础上做了以下改进:
 	
 ---------------------------------------
 
+*OnPCPetReturnEggFilter
+
+当宠物变回蛋时触发该事件
+
+参数说明:
+	@pet_id        宠物ID
+	@pet_gid       宠物GID
+	@pet_hungry    宠物饥饿值
+	@pet_intimate  宠物好感度
+	
+中断说明: 
+	打断后本次宠物无法变回宠物蛋
+	
+---------------------------------------
+
 *OnPCItemExpiredFilter:
 
 	当物品到期被删除前触发
@@ -1313,7 +1690,60 @@ BetterRa 在官方的基础上做了以下改进:
 	@item_nameid 物品ID
 	
 中断说明: 
-	将变为非租赁道具, 继续存在于背包中
+	将变为非租赁道具, 继续存在于背包中, 如果想自己控制物品删除与保留请使用 delinventorybyidx 删除该物品
+	
+---------------------------------------
+
+*OnPCStatusUpFilter:
+
+	当玩家在面板上增加属性点数时触发
+	
+参数说明:
+
+	@status_type    属性点类型 (支持: bStr,bAgi,bVit,bInt,bDex,bLuk,bPow,bSta,bWis,bSpl,bCon,bCrt)
+	@status_amount	属性点增加数量
+	@status_need	增加属性点需要消耗掉的点数
+	
+中断说明: 
+	增加属性点数失败
+		
+---------------------------------------
+
+*OnPCStatusChangeEvent:
+
+	当玩家属性点数被改变后触发
+	
+参数说明:
+	@status_type    属性点类型 (支持: bStr,bAgi,bVit,bInt,bDex,bLuk,bPow,bSta,bWis,bSpl,bCon,bCrt)
+	@status_amount	属性点增加数量
+	@status_old		未增加之前的属性点数
+	
+---------------------------------------
+
+*OnPCChannelJoinFilter:
+
+	当加入频道时触发
+	
+参数说明:
+	@channel_name$    频道名称
+	@channel_alias$   频道别名
+	@channel_type     频道类型(CHAN_TYPE_PUBLIC 公共频道, CHAN_TYPE_PRIVATE 私人频道, CHAN_TYPE_MAP 地图频道, CHAN_TYPE_ALLY 公会同盟频道)
+	@channel_opt      频道设置(请查看 channel_create 指令)
+	
+中断说明: 
+	加入频道失败
+	
+---------------------------------------
+
+*OnPCChannelLeaveEvent:
+
+	当离开频道时触发
+	
+参数说明:
+	@channel_name$    频道名称
+	@channel_alias$   频道别名
+	@channel_type     频道类型(CHAN_TYPE_PUBLIC 公共频道, CHAN_TYPE_PRIVATE 私人频道, CHAN_TYPE_MAP 地图频道, CHAN_TYPE_ALLY 公会同盟频道)
+	@channel_opt      频道设置(请查看 channel_create 指令)
 	
 ---------------------------------------
 
@@ -1363,8 +1793,13 @@ BetterRa 在官方的基础上做了以下改进:
 	$spawn_gid    魔物GID
 	$spawn_mobid  魔物mob_id
 	
+注意事项
+	使用该事件时配置选项 monster.conf 中的 dynamic_mobs 必须为 yes 才可以第一次加载魔物时生效
+	当地图带有 mobspawnevent 标记(mapflag) 时才会触发该事件(为防止大量魔物刷新时触发过多次数此事件)
+	如果想在所有地图上触发该事件请将 conf/battle/BetterRa.conf 中的 always_mob_spawn_filter 改为 yes
+	
 中断说明: 
-	中断后魔物生成失败, 不会触发魔物死亡事件
+	中断后魔物生成失败, 不会触发魔物死亡事件(注意：当魔物为固定刷新魔物时, 打断后魔物将不再重生)
 		
 ---------------------------------------
 
@@ -1376,8 +1811,44 @@ BetterRa 在官方的基础上做了以下改进:
 	$spawn_gid    魔物GID
 	$spawn_mobid  魔物mob_id
 	
+注意事项
+	当地图带有 mvpspawnevent 标记(mapflag) 时才会触发该事件(为防止大量魔物刷新时触发过多次数此事件)
+	如果想在所有地图上触发该事件请将 conf/battle/BetterRa.conf 中的 always_mvp_spawn_filter 改为 yes
+	
 中断说明: 
-	中断后魔物生成失败, 不会触发魔物死亡事件
+	中断后魔物生成失败, 不会触发魔物死亡事件(注意：当魔物为固定刷新魔物时, 打断后魔物将不再重生)
+	
+---------------------------------------
+
+*OnMVPTombFilter:
+
+	当点击魔物墓碑时触发该事件
+	
+参数说明:
+	$spawn_gid    魔物GID
+	$spawn_mobid  魔物mob_id
+	@kill_time    魔物死亡时间
+	
+中断说明: 
+	中断后墓碑原本显示的文字将不在显示
+	
+例子:
+	// 通过该事件与 enable_mvp_attacked_mark 配合可达到伤害排行榜的效果
+	// 测试该例子请先开启此配置
+	
+-	script	MVP伤害排行榜	-1,{
+OnMVPTombFilter:
+	halt;
+	mesf "[ ^EE0000%s^000000 ]",getunitname($spawn_gid);
+	mesf "在此结束了短暂的生命";
+	mesf "死亡时间 : ^EE0000%s^000000",gettimestr("%Y-%m/%d %H:%M:%S",21,@kill_time);
+	mesf "在此我们记录讨伐其的勇士们:";
+	.@count = unit_battle_get($spawn_gid,BLG_ATTACKED,BL_PC,true,.@cid,.@damage,.@name$);
+	for(.@i = 0; .@i < .@count; .@i++)
+		mesf "No.%d %s 伤害: %d",.@i+1,.@name$[.@i],.@damage[.@i];
+	close;
+}
+
 	
 ---------------------------------------
 
@@ -1424,4 +1895,74 @@ BetterRa 在官方的基础上做了以下改进:
 	@offline    玩家是否为离线挂机
 	@bot_reason 停止原因, 为 1 时 技能使用失败 为 2 时攻击失败, 为 3 时移动失败, 为 4 时挂机时间到
 	
+---------------------------------------
+
+*OnPCCaptchaFilter:
+
+	玩家开始验证时会触发该脚本事件, 本事件通过执行脚本或GM指令 macro_detector 或 captcha 触发
+	图片验证说明请阅读 db/import/captcha/readme.md
+	
+参数说明:
+	@captcha_key$		图片上的文本(验证码)
+	
+中断说明: 
+	中断后本次验证码不发送给玩家
+	
+---------------------------------------
+
+*OnPCCaptchaEvent:
+
+	玩家输入图片上的内容并确认后触发该事件, 本事件通过执行脚本或GM指令 macro_detector 或 captcha 触发
+	图片验证说明请阅读 db/import/captcha/readme.md
+	可将 conf/battle/client.conf 中的 macro_detection_punishment 改为 2 从此处做出惩罚
+	
+参数说明:
+	@captcha_key$		图片上的文本(验证码)
+	@captcha_answer$	玩家输入答案
+	@captcha_retry		剩余重试次数
+	@captcha_tick		本次消耗时间
+	@captcha_result		是否验证成功
+
+---------------------------------------
+
+*OnPetTempRemoveEvent:
+
+	当临时宠物被玩家点击恢复到蛋状态时或者是强制移除时触发
+	
+参数说明:
+	@pet_id        宠物ID
+	@pet_gid       宠物GID
+	@pet_hungry    宠物饥饿值
+	@pet_intimate  宠物好感度
+	
+注意: 当玩家主动将临时宠物回复到但形态时, 
+      必须在此事件下使用 unitremove @pet_gid, 0; 指令才能正常移除宠物.
+	  
+=====================
+|1.-   NPC事件    .|
+=====================
+
+*OnJoinChatroom:
+
+	当玩家双击进入本NPC开启的聊天室触发此事件该事件, 该事件只对当前NPC生效, 请将该事件移入要控制的NPC中
+
+事件顺序:
+	我们知道 waitingroom 本身自带一个事件, 当聊天室中的成员
+	数量足够时, 就会被触发。
+
+	在这里你需要知道的是, 若您使用 processhalt 中断了本事件, 那么
+	这个 rAthena 自带的 waitingroom 事件将不会被触发。
+
+中断说明: 
+	中断后客户端将不会打开聊天室窗口
+
+---------------------------------------
+
+*OnDisplay:
+
+	当NPC进入玩家可视范围内触发该事件, 该事件只对当前NPC生效, 请将该事件移入要控制的NPC中
+
+中断说明: 
+	NPC不会显示在玩家视野中, 可配合脚本指令 unithide 与 unitshow 完成一些NPC对个别玩家的显示与隐藏操作.
+
 ---------------------------------------

@@ -130,7 +130,7 @@
 		mes "I am busy, don't joke with me!";
 		close;
 	}
-	if (getequippercentrefinery(.@part) < 100) {
+	if (getequippercentrefinery(.@part, REFINE_COST_BLESSED) < 100) {
 		mes "[Blacksmith Dister]";
 		mes "This "+.@type$+" has been refined many times. Although it will not disappear upon failure, the "+.@ore$+" will disappear!";
 		next;
@@ -158,7 +158,7 @@
 
 	mes "[Blacksmith Dister]";
 	mes "Tac! Tac! Tac!";
-	if (getequippercentrefinery(.@part, true) > rand(100)) {
+	if (getequippercentrefinery(.@part, REFINE_COST_BLESSED) > rand(100)) {
 		specialeffect EF_BLESSING;
 		successrefitem .@part;
 		next;

@@ -1,0 +1,120 @@
+简介:
+
+容器指针, 是在脚本指令的容器相关指令扩展而来
+它能够让你在脚本中以对象的形式调用数据
+
+容器指针是可以简化容器指令的调用, 可以通过指针的形式直接调用容器中数据
+    - 以 *开头, 以 $ 结尾表示以文本形式调用, 非 $ 结尾表示以整数形式调用
+    - 可以使用 setd 对容器指针进行赋值
+    - 可以通过 getd 获取容器节点对应的值
+	
+特性:
+容器指针属于全局变量, 目前未做细化, 使用时请考虑指针被覆盖的问题
+容器指针在脚本重读后不会释放, 你依然可以再次通过指针调用容器中的内容
+
+例子:
+prontera,156,108,6	script	容器指针调用item_db例程	56,{
+	
+	// 非 $ 结尾表示以数值形式调用
+
+	dispbottom "以指针调用: ";
+	
+	// 非 $ 结尾表示以数值形式调用
+	dispbottom ""+*item_equip.Body[0].Id;
+	
+	// 以 $ 结尾表示以字符串形式调用
+	dispbottom "Body[0].AegisName - " + *item_equip.Body[0].AegisName$;
+	dispbottom "Body[0].SubType - " + *item_equip.Body[0].SubType$;
+	dispbottom "Id(2800).AegisName - " + *item_equip.Id(2800).AegisName$;
+	dispbottom "Body[0].AegisName - " + *item_usable.Body[0].AegisName$;
+	
+	dispbottom "--------------------------------------------------";
+	dispbottom "以指令调用: ";
+	dispbottom "Body[0].AegisName - " + container_getstr(*item_equip, "Body[0].AegisName");
+	dispbottom "Body[0].SubType - " + container_getstr(*item_equip, "Body[0].SubType");
+	dispbottom "Id(2800).AegisName - " + container_getstr(*item_equip, "Id(2800).AegisName");
+	dispbottom "Body[0].AegisName - " + container_getstr(*item_usable, "Body[0].AegisName");
+	dispbottom "--------------------------------------------------";
+	dispbottom "以变量调用索引: ";
+	container_createindex(*item_equip,"Body[1]","Map");
+	.@s$ = "AegisName";
+	dispbottom "Body[1].AegisName - "+*item_equip.Map(.@s$)$;
+	dispbottom "--------------------------------------------------";
+	dispbottom "以变量遍历Body数组: ";
+	dispbottom "字符串无法通过数值取出但是数值可以通过字符串取出, 这里以字符串取出所有变量";
+	setarray .@key$[0],"Id","AegisName","Name","Type","SubType";
+	for (.@i = 0; .@i < 10; .@i++){
+		for (.@n= 0; .@n < getarraysize(.@key$); .@n++){
+			dispbottom "Body["+.@i+"]."+.@key$[.@n]+" - " + *item_equip.Body[.@i][.@key$[.@n]]$;
+		}
+	}
+	dispbottom "--------------------------------------------------";
+	dispbottom "使用迭代器遍历 Body[1] 下的所有数据";
+	for(container_begin(*item_equip, "Body[1]"); container_end() == false; container_next()){
+		dispbottom "key: "+container_key()+" -> value: "+container_value();
+	}
+
+
+	// 将指针设置为0, 将释放容器指针, 以及容器内的所有内容, 可以在释放之前落地保存
+	// 当然通过将指针更改为其他的容器同样可以释放掉原本保存在 *item_equip 中的内容
+	// *item_equip = 0;
+	// 释放掉指针后再次用指针调用会报错
+
+	end;
+Oninit:
+	// 将容器指针设置为 0 则释放掉之前加载的数据
+	*item_equip = 0;
+	*item_usable = 0;
+	*item_equip = container_loadyaml("db/re/item_db_equip.yml");
+	// 以 Id 为键创建 Body 下所有数据的索引文件
+	container_createindex(*item_equip,"Body","Id");
+	*item_usable = container_loadyaml("db/re/item_db_usable.yml");
+}
+
+
+prontera,160,108,6	script	容器指针使用范例	56,{
+	
+	// 创建一个新的容器
+	*con = container_parse("{}");
+	.@key$ = sprintf("*con.Char.%d.Name$",getcharid(0));
+	debugmes .@key$;
+	setd(.@key$, strcharinfo(0));
+	*con.Char.11223344.Name$ = "文本型赋值";
+	debugmes *con.Char.11223344.Name$;
+	debugmes container_getjson(*con);
+	end;
+
+}
+
+容器指令包含:
+
+  - container_loadjson  将 Json 文件读入到容器中
+  - container_loadyaml  将 Yaml 文件读入到容器中
+  - container_parse     以对象文本形式创建容器
+  - container_fromsql   通过sql指令将数据读入容器中
+  - container_merge     将另一个文件合并到一个已经打开的容器中
+  - container_createindex  为一个容器中数组型结构创建一个索引
+  - container_exist     判断对应容器节点路径是否存在
+  - container_seqsize   获取对应容器中节点路径中的数据数量
+  - container_getstr    读取对应容器节点的文本值
+  - container_getnum    读取对应容器节点的整数值
+  - container_getarray  读取对应容器节点中的数组并转换为脚本变量
+  - container_getkeys   获取对应容器节点中的所有键
+  - container_setstr    写入对应容器节点字符串值
+  - container_setnum    写入对应容器节点的整数值
+  - container_setarray  写入对应容器节点中为数组
+  - container_setobject 写入对应容器节点中为对象
+  - container_begin     创建一个容器迭代器, 并使其指向开始的元素
+  - container_next      容器迭代器 移动到下一个元素
+  - container_end       判断 容器迭代器 是否在最后一个元素
+  - container_findbegin 创建一个容器查询迭代器并判断子节点路径是否与查询的值相等
+  - container_findnext  容器查询迭代器 移动到下一个元素.
+  - container_key       返回当前 容器迭代器 所指向元素的键(key)
+  - container_value     返回当前 容器迭代器 所指向元素的值(value)
+  - container_getjson   返回当前容器迭代器所指向节点的 json 文本, 方便数据交互
+  - container_saveyaml  将容器以Yaml文本的形式输出到文件中
+  - container_savejson  将容器以Json文本的形式输出到文件中
+  - container_close     关闭 容器对象 并释放内存
+
+目前容器包含近30个脚本指令, 其扩展性可以满足几乎所有的内容存储需求, 其格式明确条例清晰是他的优势
+后续将会将服务端存储的结构体转为容器存储的指令, 方便快速查找你想要的内容

@@ -134,7 +134,7 @@ amatsu,194,79,5	script	贸易船 船长#ama2	4_M_SEAMAN,{
 		mes "好啦, 开船咯~";
 		close2;
 		if (checkre(0))
-			warp "alberta",244,72;
+			warp "alberta",245,87;
 		else
 			warp "alberta",243,91;
 		end;

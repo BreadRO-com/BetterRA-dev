@@ -25,6 +25,7 @@
 # - Id                      Mercenary ID.
 #   AegisName               Server name to reference the mercenary in scripts and lookups, should use no spaces.
 #   Name                    Name in English.
+#   DisplaySprite           显示外观, 填写外观ID, 如果填写魔物ID可通过 mob_avail.yml 变更成玩家外观
 #   Level                   Level. (Default: 1)
 #   Hp                      Total HP. (Default: 1)
 #   Sp                      Total SP. (Default: 1)

@@ -1,0 +1,67 @@
+###########################################################################
+# bonus_attach_db Database (特别鸣谢: 聽風)
+###########################################################################
+#
+# Bonus Attach Settings
+#
+###########################################################################
+#
+# All                   对所有玩家附加 bonus 属性 (默认: false)
+# Jobs                  对指定职业附加 bonus 属性 
+# BaseJobs              对基础职业相同的职业附加 bonus 属性(一转职业或二转职业)
+# CharList              对指定 角色ID(char_id) 的玩家附加 bonus 属性
+# AccountList           对指定 账号ID(account_id) 的玩家附加 bonus 属性
+# TitleList             对制定 头衔ID(title_id) 的玩家附加 bonus 属性
+# GroupsList            对指定组的玩家附加 bonus 属性(conf/groups.yml)
+# GroupsStrategyList    对指定行为策略玩家附加bonus属性(conf/groups_strategy.yml)
+# Script                用于填写 bonus 脚本, 满足以上条件的任何一条都会在属性计算时触发改脚本
+#
+# 可使用 GM指令 @reloadbonusattachdb 重读该数据文件
+# Jobs 与 BaseJobs 为职业常量请参考 doc/item_db.txt
+# 
+###########################################################################
+
+Header:
+  Type: BONUS_ATTACH
+  Version: 1
+
+#Body:
+#  - Id: 0
+#    All: true
+#    Jobs:
+#      Alchemist: true
+#      Archer: true
+#      Assassin: true
+#      BardDancer: true
+#      Blacksmith: true
+#      Crusader: true
+#      Hunter: true
+#      KagerouOboro: true
+#      Knight: true
+#      Mage: true
+#    BaseJobs:
+#      Acolyte: true
+#    CharList:
+#      - 150000
+#      - 150001
+#    AccountList:
+#      - 200000
+#    TitleList:
+#      - 10001
+#    GroupsList:
+#      - 5
+#    GroupsStrategyList:
+#      - 1
+#    Script: |
+#      bonus bUnbreakableWeapon;
+#      bonus bBaseAtk,50+BaseLevel;
+#      bonus2 bAddItemHealRate,501,100;
+#      bonus2 bAddItemHealRate,502,100;
+#      bonus2 bAddItemHealRate,503,100;
+#      bonus2 bAddItemHealRate,504,100;
+#      if (eaclass()&EAJL_THIRD && BaseJob == Job_Alchemist) {
+#         bonus bHit,20;
+#         bonus bAspdRate,10;
+#         bonus bAtkRate,50;
+#         bonus2 bIgnoreDefRaceRate,RC_All,20;
+#      }

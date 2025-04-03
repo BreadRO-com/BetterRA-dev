@@ -1,0 +1,89 @@
+# This file is a part of rAthena.
+#   Copyright(C) 2021 rAthena Development Team
+#   https://rathena.org - https://github.com/rathena
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+#
+###########################################################################
+# Mob Ai Database
+###########################################################################
+#
+# Mob Ai Settings 魔物智能设置
+#
+###########################################################################
+#
+# - Id                难度ID
+#   Description:      简要说明
+#   OnBindScript      当魔物绑定时触发;
+#   OnTimer:
+#     - Interval:     执行间隔时间, 每隔多少时间执行一次（单位：毫秒, 最小100毫秒）
+#       Rate:         执行概率, 间隔时间后计算执行概率（万分率）
+#       Delay:        执行后延迟（单位：毫秒）
+#       State:        执行条件: 状态（默认：attack）
+#       HpLessThan:   执行条件: 血量低于（百分比）
+#       HpMoreThan:   执行条件: 血量高于（百分比）
+#       Script:       执行脚本
+#
+###########################################################################
+#
+# State: 
+#        any(任意状态)
+#       idle(闲置时)
+#     attack(攻击时)
+#   attacked(被攻击时)
+#      chase(追逐时)
+#  anytarget(可视范围内有任意敌对目标时)
+#
+# OnBindScript:
+#   脚本中可以使用 $src_gid 绑定魔物的GID
+# Script:
+#   脚本中可以使用 $src_gid 绑定魔物的GID、$target_gid 目标的GID
+#   当 State 为 any时不返回 $target_gid
+#
+# 在脚本中使用 mobbindai 指令捆绑AI
+#
+###########################################################################
+#
+# 注意! 脚本不需要在同一行, 支持多行, 如果需要使用此功能, 请联作者
+# 功能可在测试版测试, 测试版为 BetterRA.cn 首页下载, 售后服务版免费使用
+#
+###########################################################################
+
+
+Header:
+  Type: MOB_AI_DB
+  Version: 1
+
+Body:
+ - Id: 1
+   Description: 例子
+   OnBindScript: |
+     setunitdata $src_gid,UMOB_MAXHP,100000;
+     setunitdata $src_gid,UMOB_HP,100000;
+   OnTimer:
+     - Interval: 500
+       Rate: 5000
+       Delay: 5000
+       State: chase
+       Script: |
+         sc_start SC_FREEZE,2000,0,10000,SCSTART_NOAVOID|SCSTART_NOTICKDEF|SCSTART_NORATEDEF,$target_gid;
+         unitspecialeffect $src_gid,32;
+     - Interval: 500
+       Rate: 1000
+       Delay: 1000
+       State: anytarget
+       HpLessThan: 100
+       HpMoreThan: 0
+       Script: |
+         unitskilltowide $src_gid,21,5,15,2,15,1000;

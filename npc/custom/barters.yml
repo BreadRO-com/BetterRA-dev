@@ -39,6 +39,9 @@
 #            Item       Aegis name of required item.
 #            Amount     Amount of required item. (Default: 1)
 #            Refine     Refine level of required item. (Default: 0)
+#            NoCards    required item has no Card. (Default: false)
+#            NoEnchants required item has no Enchant. (Default: false)
+#            NoOptions  required item has no Options. (Default: false)
 ###########################################################################
 
 Header:

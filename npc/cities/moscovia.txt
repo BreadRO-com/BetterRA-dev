@@ -113,7 +113,7 @@ moscovia,166,53,4	script	莫斯科比亚 宣传员#2	4_F_RUSWOMAN2,{
 	mes "来, 出发了";
 	close2;
 	if (checkre(0))
-		warp "alberta",244,52;
+		warp "alberta",244,86;
 	else
 		warp "alberta",243,67;
 	end;

@@ -44,6 +44,7 @@
 #   EquipLevelMin           Minimum required level to equip. (Default: 0)
 #   EquipLevelMax           Maximum level that can equip. (Default: 0)
 #   Refineable              If the item can be refined. (Default: false)
+#   Gradable                If the item can be graded. (Default: false)
 #   View                    View sprite of an item. (Default: 0)
 #   AliasName               Another item's AegisName that will be sent to the client instead of this item's AegisName. (Default: null)
 #   Flags:                  Item flags. (Default: null)
@@ -60,11 +61,15 @@
 #     NoConsume2            物品不会由于被玩家主动使用而消耗（无 NoConsume 在使用技能和坐骑下不能使用的限制的限制）
 #     NoSkillConsume        物品不会由于被发动技能所需要而消耗
 #     NoDropWithoutPlayer   魔物在没有玩家参与被杀死时不会掉落该物品
-#     DoDropEvent           魔物被玩家击杀时, 会触发 OnMOBDropItemFilter 事件
+#     DoDropEvent           魔物被玩家击杀掉落该物品时, 会触发 OnMobDropItemFilter 与 OnMobDropItemEvent 事件
 #     TurnIntoCostume       插有该物品的装备变为时装/影装 (先在 BetterRA.conf 中 配置 item_costume_card为 yes 开启该功能)
 #     IgnoreScript          插有该物品的装备、时装/影装所有属性会无效化
 #     IgnoreAutoLoot        物品无视自动拾取, 会直接掉到地上
 #     IgnoreEquipView       装备外观不显示在装备栏窗口中
+#   Announce:               物品获取公告
+#     MobDrop               当魔物掉落时公告
+#     MvpReward             当以MVP奖励方式获取时公告
+#     Steal                 当偷窃获得该物品时公告
 #   Delay:                  Item use delay. (Default: null)
 #     Duration              Duration of delay in seconds.
 #     Status                Status Change used to track delay. (Default: None)
@@ -74,6 +79,11 @@
 #     Cart                  If the stack is applied to the player's cart. (Default: false)
 #     Storage               If the stack is applied to the player's storage. (Default: false)
 #     GuildStorage          If the stack is applied to the player's guild storage. (Default: false)
+#   MaxAmount:              物品最大数量, 超过堆叠上限后, 将添加在另一个栏位, 可超过 30000
+#     Inventory             物品在背包中最大数量
+#     Cart                  物品在手推车中最大数量
+#     Storage               物品在仓库中最大数量
+#     GuildStorage          物品在公会仓库中最大数量
 #   NoUse:                  Conditions when the item is unusable. (Default: null)
 #     Override              Group level to override these conditions. (Default: 100)
 #     Sitting               If the item can not be used while sitting. (Default: false)
@@ -88,6 +98,8 @@
 #     NoGuildStorage        If the item can not be put in a guild storage. (Default: false)
 #     NoMail                If the item can not be put in a mail. (Default: false)
 #     NoAuction             If the item can not be put in an auction. (Default: false)
+#     ForceVending          无视交易限制可以挂店出售租赁和绑定物品等(租赁时间不会显示在商店内 Default: false)
+#     ForceTrade            无视交易限制可以交易租赁和绑定物品等(租赁时间不会显示在交易框内 Default: false)
 #   Script                  Script to execute when the item is used/equipped. (Default: null)
 #   EquipScript             Script to execute when the item is equipped. (Default: null)
 #   UnEquipScript           Script to execute when the item is unequipped or when a rental item expires. (Default: null)
@@ -95,7 +107,7 @@
 
 Header:
   Type: ITEM_DB
-  Version: 2
+  Version: 3
 
 Body:
   - Id: 670
@@ -684,7 +696,7 @@ Body:
       BuyingStore: true
   - Id: 912
     AegisName: Zargon
-    Name: 刹勒空结晶
+    Name: 剎勒空结晶
     Type: Etc
     Buy: 480
     Weight: 10
@@ -2916,7 +2928,7 @@ Body:
       bonus bCritical,1;
   - Id: 4030
     AegisName: Mandragora_Card
-    Name: 曼陀萝魔花卡片
+    Name: 曼陀罗魔花卡片
     Type: Card
     Buy: 20
     Weight: 10
@@ -4036,7 +4048,6 @@ Body:
       BuyingStore: true
     Script: |
       skill "TF_DOUBLE",1;
-      bonus bDoubleRate,5;
   - Id: 4118
     AegisName: Petit_Card
     Name: 毕帝特地龙卡片
@@ -4334,7 +4345,7 @@ Body:
       bonus2 bAddClass,Class_Boss,25;
   - Id: 4141
     AegisName: Evil_Druid_Card
-    Name: 暗神官卡片
+    Name: 闇神官卡片
     Type: Card
     Buy: 20
     Weight: 10
@@ -5217,7 +5228,7 @@ Body:
       bonus2 bAddMonsterDropItem,644,30;
   - Id: 4207
     AegisName: Mysteltainn_Card
-    Name: 弑神者卡片
+    Name: 弒神者卡片
     Type: Card
     Buy: 20
     Weight: 10
@@ -5330,7 +5341,7 @@ Body:
     Flags:
       BuyingStore: true
     Script: |
-      bonus2 bAddMonsterDropItemGroup,IG_Food,600;
+      bonus2 bAddMonsterDropItemGroup,IG_Food,10000;
   - Id: 4216
     AegisName: Sasquatch_Card
     Name: 雪熊卡片
@@ -5614,7 +5625,7 @@ Body:
       bonus3 bAutoSpellWhenHit,"PR_KYRIE",10,(30+70*(readparam(bInt)>=99));
   - Id: 4237
     AegisName: Owl_Duke_Card
-    Name: 鹗袅首领卡片
+    Name: 鸮袅首领卡片
     Type: Card
     Buy: 20
     Weight: 10
@@ -5626,7 +5637,7 @@ Body:
       bonus3 bAutoSpell,"PR_IMPOSITIO",3,3;
   - Id: 4238
     AegisName: Owl_Baron_Card
-    Name: 鹗袅男爵卡片
+    Name: 鸮袅男爵卡片
     Type: Card
     Buy: 20
     Weight: 10
@@ -6240,7 +6251,7 @@ Body:
     Flags:
       BuyingStore: true
     Script: |
-      bonus2 bAddMonsterDropItemGroup,IG_Recovery,600;
+      bonus2 bAddMonsterDropItemGroup,IG_Recovery,10000;
   - Id: 4283
     AegisName: Greatest_General_Card
     Name: 将军魔碑卡片
@@ -6461,8 +6472,6 @@ Body:
       BuyingStore: true
     Script: |
       bonus3 bAutoSpellWhenHit,"CR_AUTOGUARD",3+7*(getskilllv("CR_AUTOGUARD") == 10),30;
-    UnEquipScript: |
-      sc_end SC_AUTOGUARD;
   - Id: 4300
     AegisName: Chimera_Card
     Name: 凯美拉卡片
@@ -7080,7 +7089,7 @@ Body:
       heal 0,-50;
   - Id: 4346
     AegisName: Ygnizem_Card
-    Name: 暗●剑士卡片
+    Name: 闇●剑士卡片
     Type: Card
     Buy: 20
     Weight: 10
@@ -7092,7 +7101,7 @@ Body:
       bonus bStr,readparam(bInt)/18;
   - Id: 4347
     AegisName: Armaia_Card
-    Name: 暗●商人卡片
+    Name: 闇●商人卡片
     Type: Card
     Buy: 20
     Weight: 10
@@ -7104,7 +7113,7 @@ Body:
       bonus3 bAddMonsterDropItem,12053,RC_Fish,50;
   - Id: 4348
     AegisName: Whikebain_Card
-    Name: 暗●盗贼卡片
+    Name: 闇●盗贼卡片
     Type: Card
     Buy: 20
     Weight: 10
@@ -7116,7 +7125,7 @@ Body:
       bonus3 bAutoSpell,"RG_STRIPARMOR",1,50;
   - Id: 4349
     AegisName: Erend_Card
-    Name: 暗●服事卡片
+    Name: 闇●服事卡片
     Type: Card
     Buy: 20
     Weight: 10
@@ -7128,7 +7137,7 @@ Body:
       bonus4 bAutoSpellWhenHit,"AL_PNEUMA",1,50,0;
   - Id: 4350
     AegisName: Rawrel_Card
-    Name: 暗●魔法师卡片
+    Name: 闇●魔法师卡片
     Type: Card
     Buy: 20
     Weight: 10
@@ -7143,7 +7152,7 @@ Body:
       heal 0,-50;
   - Id: 4351
     AegisName: Kavac_Card
-    Name: 暗●弓箭手卡片
+    Name: 闇●弓箭手卡片
     Type: Card
     Buy: 20
     Weight: 10
@@ -7161,7 +7170,7 @@ Body:
       }
   - Id: 4352
     AegisName: B_Ygnizem_Card
-    Name: 暗●剑士 赛尼亚卡片
+    Name: 闇●剑士 赛尼亚卡片
     Type: Card
     Buy: 20
     Weight: 10
@@ -7234,7 +7243,7 @@ Body:
       skill "SA_CASTCANCEL",1;
   - Id: 4357
     AegisName: B_Seyren_Card
-    Name: 暗●骑士领主 赛依连卡片
+    Name: 闇●骑士领主 赛依连卡片
     Type: Card
     Buy: 20
     Weight: 10
@@ -7249,7 +7258,7 @@ Body:
       bonus bMaxHPrate,-50;
   - Id: 4358
     AegisName: Seyren_Card
-    Name: 暗●骑士领主卡片
+    Name: 闇●骑士领主卡片
     Type: Card
     Buy: 20
     Weight: 10
@@ -7263,7 +7272,7 @@ Body:
       bonus bStr,getrefine()-6;
   - Id: 4359
     AegisName: B_Eremes_Card
-    Name: 暗●十字刺客 艾勒梅斯卡片
+    Name: 闇●十字刺客 艾勒梅斯卡片
     Type: Card
     Buy: 20
     Weight: 10
@@ -7277,7 +7286,7 @@ Body:
       sc_end SC_CLOAKING;
   - Id: 4360
     AegisName: Eremes_Card
-    Name: 暗●十字刺客卡片
+    Name: 闇●十字刺客卡片
     Type: Card
     Buy: 20
     Weight: 10
@@ -7290,7 +7299,7 @@ Body:
       bonus2 bCriticalAddRace,RC_Player_Human,10;
   - Id: 4361
     AegisName: B_Harword_Card
-    Name: 暗●神工匠 哈沃得卡片
+    Name: 闇●神工匠 哈沃得卡片
     Type: Card
     Buy: 20
     Weight: 10
@@ -7303,7 +7312,7 @@ Body:
       bonus bBreakArmorRate,700;
   - Id: 4362
     AegisName: Harword_Card
-    Name: 暗●神工匠卡片
+    Name: 闇●神工匠卡片
     Type: Card
     Buy: 20
     Weight: 10
@@ -7316,7 +7325,7 @@ Body:
       bonus bHit,30;
   - Id: 4363
     AegisName: B_Magaleta_Card
-    Name: 暗●神官 玛嘉雷特卡片
+    Name: 闇●神官 玛嘉雷特卡片
     Type: Card
     Buy: 20
     Weight: 10
@@ -7328,7 +7337,7 @@ Body:
       bonus5 bAutoSpellWhenHit,"HP_ASSUMPTIO",1,50,BF_WEAPON|BF_MAGIC,0;
   - Id: 4364
     AegisName: Magaleta_Card
-    Name: 暗●神官卡片
+    Name: 闇●神官卡片
     Type: Card
     Buy: 20
     Weight: 10
@@ -7343,7 +7352,7 @@ Body:
       bonus5 bAutoSpellWhenHit,"PR_LEXDIVINA",5,150,BF_MAGIC,1;
   - Id: 4365
     AegisName: B_Katrinn_Card
-    Name: 暗●超魔导师 凯特莉娜卡片
+    Name: 闇●超魔导师 凯特莉娜卡片
     Type: Card
     Buy: 20
     Weight: 10
@@ -7361,7 +7370,7 @@ Body:
       heal 0,-2000;
   - Id: 4366
     AegisName: Katrinn_Card
-    Name: 暗●超魔导师卡片
+    Name: 闇●超魔导师卡片
     Type: Card
     Buy: 20
     Weight: 10
@@ -7378,7 +7387,7 @@ Body:
       }
   - Id: 4367
     AegisName: B_Shecil_Card
-    Name: 暗●神射手 迪文卡片
+    Name: 闇●神射手 迪文卡片
     Type: Card
     Buy: 20
     Weight: 10
@@ -7391,7 +7400,7 @@ Body:
       bonus bHPrecovRate,-10;
   - Id: 4368
     AegisName: Shecil_Card
-    Name: 暗●神射手卡片
+    Name: 闇●神射手卡片
     Type: Card
     Buy: 20
     Weight: 10
@@ -9197,14 +9206,14 @@ Body:
     Weight: 10
   - Id: 4769
     AegisName: Str2_J
-    Name: Str+2
+    Name: STR+2
     Type: Card
     SubType: Enchant
     Buy: 20
     Weight: 10
   - Id: 4770
     AegisName: Str3_J
-    Name: Str+3
+    Name: STR+3
     Type: Card
     SubType: Enchant
     Buy: 20
@@ -9218,14 +9227,14 @@ Body:
     Weight: 10
   - Id: 4772
     AegisName: Int2_J
-    Name: Int+2
+    Name: INT+2
     Type: Card
     SubType: Enchant
     Buy: 20
     Weight: 10
   - Id: 4773
     AegisName: Int3_J
-    Name: Int+3
+    Name: INT+3
     Type: Card
     SubType: Enchant
     Buy: 20
@@ -9239,14 +9248,14 @@ Body:
     Weight: 10
   - Id: 4775
     AegisName: Vit2_J
-    Name: Vit+2
+    Name: VIT+2
     Type: Card
     SubType: Enchant
     Buy: 20
     Weight: 10
   - Id: 4776
     AegisName: Vit3_J
-    Name: Vit+3
+    Name: VIT+3
     Type: Card
     SubType: Enchant
     Buy: 20
@@ -9260,14 +9269,14 @@ Body:
     Weight: 10
   - Id: 4778
     AegisName: Agi2_J
-    Name: Agi+2
+    Name: AGI+2
     Type: Card
     SubType: Enchant
     Buy: 20
     Weight: 10
   - Id: 4779
     AegisName: Agi3_J
-    Name: Agi+3
+    Name: AGI+3
     Type: Card
     SubType: Enchant
     Buy: 20
@@ -9281,14 +9290,14 @@ Body:
     Weight: 10
   - Id: 4781
     AegisName: Dex2_J
-    Name: Dex+2
+    Name: DEX+2
     Type: Card
     SubType: Enchant
     Buy: 20
     Weight: 10
   - Id: 4782
     AegisName: Dex3_J
-    Name: Dex+3
+    Name: DEX+3
     Type: Card
     SubType: Enchant
     Buy: 20
@@ -9302,14 +9311,14 @@ Body:
     Weight: 10
   - Id: 4784
     AegisName: Luk2_J
-    Name: Luk+2
+    Name: LUK+2
     Type: Card
     SubType: Enchant
     Buy: 20
     Weight: 10
   - Id: 4785
     AegisName: Luk3_J
-    Name: Luk+3
+    Name: LUK+3
     Type: Card
     SubType: Enchant
     Buy: 20
@@ -9356,7 +9365,7 @@ Body:
       BuyingStore: true
   - Id: 6005
     AegisName: New_Year_Rice_Cake
-    Name: 新年米饼
+    Name: New Year Rice Cake
     Type: Etc
     Weight: 10
     Trade:
@@ -10014,7 +10023,7 @@ Body:
       BuyingStore: true
   - Id: 6092
     AegisName: Singing_Crystal_Piece
-    Name: 歌唱水晶碎片
+    Name: Piece Of Singing Crystal
     Type: Etc
     Weight: 10
   - Id: 6093
@@ -10031,7 +10040,7 @@ Body:
       NoAuction: true
   - Id: 6094
     AegisName: Traditional_Cookie
-    Name: 传统的饼干
+    Name: Traditional Sweets
     Type: Etc
     Buy: 20
     Weight: 10
@@ -10232,7 +10241,7 @@ Body:
       NoAuction: true
   - Id: 6117
     AegisName: Imp_Pet_Coupon
-    Name: 炙焰魔宠物蛋兑换券
+    Name: 熔岩魔宠物蛋兑换券
     Type: Etc
     Trade:
       NoDrop: true
@@ -10578,7 +10587,7 @@ Body:
       BuyingStore: true
   - Id: 6146
     AegisName: Magic_Gear_Fuel
-    Name: 魔导机械燃料
+    Name: 魔导战甲燃料
     Type: Etc
     Buy: 300
     Weight: 30
@@ -10718,7 +10727,7 @@ Body:
     Type: Etc
   - Id: 6162
     AegisName: Pecopeco_Ticket
-    Name: Peco Peco Exchange Ticket
+    Name: Cute Pet Peco-Peco Exchange Ticket
     Type: Etc
   - Id: 6163
     AegisName: Savage_Baby_Ticket
@@ -11295,7 +11304,7 @@ Body:
       NoAuction: true
   - Id: 6242
     AegisName: Midgard_Coin
-    Name: 米德加尔特金币
+    Name: Midgard Coin
     Type: Etc
     Buy: 20
     Weight: 10
@@ -14383,37 +14392,37 @@ Body:
     Weight: 10
   - Id: 7255
     AegisName: China_Marble01
-    Name: 圣火珠
+    Name: Mystic Orb
     Type: Etc
     Weight: 100
   - Id: 7256
     AegisName: China_Marble02
-    Name: 圣火珠
+    Name: Mystic Orb
     Type: Etc
     Weight: 100
   - Id: 7257
     AegisName: China_Marble03
-    Name: 圣火珠
+    Name: Mystic Orb
     Type: Etc
     Weight: 100
   - Id: 7258
     AegisName: China_Marble04
-    Name: 圣火珠
+    Name: Mystic Orb
     Type: Etc
     Weight: 100
   - Id: 7259
     AegisName: China_Marble05
-    Name: 圣火珠
+    Name: Mystic Orb
     Type: Etc
     Weight: 100
   - Id: 7260
     AegisName: China_Marble06
-    Name: 圣火珠
+    Name: Mystic Orb
     Type: Etc
     Weight: 100
   - Id: 7261
     AegisName: China_Marble07
-    Name: 圣火珠
+    Name: Mystic Orb
     Type: Etc
     Weight: 100
   - Id: 7262
@@ -14950,12 +14959,12 @@ Body:
     Weight: 10
   - Id: 7330
     AegisName: 2anny
-    Name: 圣火珠
+    Name: Mystic Orb
     Type: Etc
     Weight: 100
   - Id: 7331
     AegisName: Flower_Of_Heaven
-    Name: 天堂花
+    Name: Heaven Flower
     Type: Etc
     Buy: 500
     Weight: 10
@@ -15470,7 +15479,7 @@ Body:
     Weight: 10
   - Id: 7404
     AegisName: Word_Card06
-    Name: Ke-60
+    Name: ke-60
     Type: Etc
     Buy: 2
     Weight: 10
@@ -16107,7 +16116,7 @@ Body:
     Type: Etc
   - Id: 7484
     AegisName: Warrior_Symbol
-    Name: 勇士的象征
+    Name: Symbol of a Brave Warrior
     Type: Etc
     Weight: 10
     Trade:
@@ -16121,7 +16130,7 @@ Body:
       NoAuction: true
   - Id: 7485
     AegisName: 2nd_Floor_Pass
-    Name: 云丈之书
+    Name: Cloud General
     Type: Etc
     Weight: 10
     Trade:
@@ -16135,7 +16144,7 @@ Body:
       NoAuction: true
   - Id: 7486
     AegisName: 3rd_Floor_Pass
-    Name: 风丈之书
+    Name: Wind General
     Type: Etc
     Weight: 10
     Trade:
@@ -16473,7 +16482,7 @@ Body:
       BuyingStore: true
   - Id: 7514
     AegisName: Monster_Ticket
-    Name: 怪物票
+    Name: 魔物礼券
     Type: Etc
     Buy: 2
   - Id: 7515
@@ -16509,7 +16518,7 @@ Body:
     Weight: 100
   - Id: 7518
     AegisName: Women's_Medal
-    Name: 女生勋章
+    Name: Women's Medal
     Type: Etc
     Weight: 10
     Trade:
@@ -16522,12 +16531,12 @@ Body:
       NoAuction: true
   - Id: 7519
     AegisName: Money_Envelope
-    Name: 感谢信
+    Name: Handsel
     Type: Etc
     Weight: 10
   - Id: 7520
     AegisName: Chinese_Scroll
-    Name: 祝你发财
+    Name: Please Be Rich
     Type: Etc
     Weight: 10
   - Id: 7521
@@ -16732,37 +16741,37 @@ Body:
       NoAuction: true
   - Id: 7540
     AegisName: Lotto39
-    Name: 39号球
+    Name: Lotto Ball 39
     Type: Etc
     Weight: 10
   - Id: 7541
     AegisName: Lotto40
-    Name: 40号球
+    Name: Lotto Ball 40
     Type: Etc
     Weight: 10
   - Id: 7542
     AegisName: Lotto41
-    Name: 41号球
+    Name: Lotto Ball 41
     Type: Etc
     Weight: 10
   - Id: 7543
     AegisName: Lotto42
-    Name: 42号球
+    Name: Lotto Ball 42
     Type: Etc
     Weight: 10
   - Id: 7544
     AegisName: Lotto43
-    Name: 43号球
+    Name: Lotto Ball 43
     Type: Etc
     Weight: 10
   - Id: 7545
     AegisName: Lotto44
-    Name: 44号球
+    Name: Lotto Ball 44
     Type: Etc
     Weight: 10
   - Id: 7546
     AegisName: Lotto45
-    Name: 45号球
+    Name: Lotto Ball 45
     Type: Etc
     Weight: 10
   - Id: 7547
@@ -16963,7 +16972,7 @@ Body:
       BuyingStore: true
   - Id: 7564
     AegisName: Rotten_Meat
-    Name: 发臭的鱼
+    Name: 腐臭之肉
     Type: Etc
     Buy: 102
     Weight: 10
@@ -17096,13 +17105,13 @@ Body:
       NoAuction: true
   - Id: 7578
     AegisName: Anti_Spell_Bead
-    Name: 破法珠子
+    Name: Countermagic Crystal
     Type: Etc
     Buy: 20
     Weight: 10
   - Id: 7579
     AegisName: Silk_Handkerchief
-    Name: 织女的丝绸手绢
+    Name: Silk Handkerchief of Zhi Nu
     Type: Etc
     Buy: 20
     Weight: 10
@@ -17444,7 +17453,7 @@ Body:
       NoGuildStorage: true
   - Id: 7623
     AegisName: Name_Change_Coupon
-    Name: 名字变更优待券
+    Name: Ticket Of Identification
     Type: Etc
     Buy: 2
     Trade:
@@ -17515,7 +17524,7 @@ Body:
     Buy: 100
   - Id: 7701
     AegisName: Dragon_Spirit
-    Name: 神龙的魂魄
+    Name: Soul
     Type: Etc
     Buy: 2
     Weight: 10
@@ -17583,7 +17592,7 @@ Body:
     Weight: 10
   - Id: 7713
     AegisName: BlueCard_A_
-    Name: 蓝色A(2)卡片
+    Name: Blue A(2) Card
     Type: Etc
     Weight: 10
   - Id: 7714
@@ -17610,7 +17619,7 @@ Body:
     Weight: 10
   - Id: 7719
     AegisName: BlueCard_G
-    Name: 蓝色G卡片
+    Name: Blue G Card
     Type: Etc
     Weight: 10
   - Id: 7720
@@ -17817,7 +17826,7 @@ Body:
     Buy: 20
   - Id: 7756
     AegisName: Sealed_Book
-    Name: 封锁的 书籍
+    Name: Sealed Book
     Type: Etc
     Buy: 2000
     Weight: 10
@@ -17997,17 +18006,17 @@ Body:
     Weight: 10
   - Id: 7781
     AegisName: Heart_Box
-    Name: 刻有心的宝物箱子
+    Name: Engrave Treasure Box
     Type: Etc
     Weight: 10
   - Id: 7782
     AegisName: Gold_Key77
-    Name: 金钥匙
+    Name: Episode 13.1 Poporing Key
     Type: Etc
     Weight: 10
   - Id: 7783
     AegisName: Silver_Key77
-    Name: 银钥匙
+    Name: Episode 13.2 Poring Key
     Type: Etc
     Weight: 10
   - Id: 7784
@@ -18251,7 +18260,7 @@ Body:
     Weight: 10
   - Id: 7812
     AegisName: Red_Cat_Eyed_Stone
-    Name: 勇气的象征
+    Name: Symbol of Bravery
     Type: Etc
     Weight: 10
   - Id: 7813
@@ -18625,13 +18634,13 @@ Body:
     Weight: 30
   - Id: 7858
     AegisName: Dragonball_Yellow_
-    Name: 梦幻金属碎片
+    Name: Dragonball Yellow
     Type: Etc
     Buy: 20
     Weight: 10
   - Id: 7859
     AegisName: Game_Ticket
-    Name: 神秘的_游戏券
+    Name: Game Ticket
     Type: Etc
     Buy: 20
     Weight: 100
@@ -18665,7 +18674,7 @@ Body:
       NoAuction: true
   - Id: 7864
     AegisName: Love_Flower
-    Name: 情人花
+    Name: Love Flower
     Type: Etc
     Buy: 20
     Weight: 10
@@ -18783,7 +18792,7 @@ Body:
       NoAuction: true
   - Id: 7878
     AegisName: Lusalka_Hair
-    Name: 卢莎卡的头发
+    Name: 盧莎卡的头发
     Type: Etc
     Weight: 10
     Trade:
@@ -19227,7 +19236,7 @@ Body:
       NoAuction: true
   - Id: 7930
     AegisName: Cowking's_Nose_Ring
-    Name: 牛魔王的鼻环
+    Name: Devil's Cattle Ring
     Type: Etc
     Weight: 1000
     Trade:
@@ -19321,7 +19330,7 @@ Body:
       BuyingStore: true
   - Id: 7941
     AegisName: Halloween_Ticket
-    Name: 万圣节兑奖券
+    Name: Halloween Ticket
     Type: Etc
     Buy: 10
   - Id: 7942
@@ -19334,7 +19343,7 @@ Body:
     Type: Etc
   - Id: 7944
     AegisName: Sealed_Box
-    Name: 封印之箱
+    Name: Sealed Box
     Type: Etc
     Buy: 10
     Weight: 10
@@ -19344,7 +19353,7 @@ Body:
       NoGuildStorage: true
   - Id: 7945
     AegisName: Almighty_Charm
-    Name: 万能咒符
+    Name: Universal Amulet
     Type: Etc
     Weight: 10
     Trade:
@@ -19353,17 +19362,17 @@ Body:
       NoGuildStorage: true
   - Id: 7946
     AegisName: Valentine_Gold_Ring
-    Name: 情人节金戒指
+    Name: Gold Ring Of Valentine
     Type: Etc
     Buy: 10
   - Id: 7947
     AegisName: Valentine_Silver_Ring
-    Name: 情人节银戒指
+    Name: Silver Ring Of Valentine
     Type: Etc
     Buy: 10
   - Id: 7948
     AegisName: Box
-    Name: 箱子
+    Name: Box
     Type: Etc
     Buy: 10
     Weight: 10
@@ -19395,7 +19404,7 @@ Body:
       NoAuction: true
   - Id: 7951
     AegisName: Gold_Tulip
-    Name: 黄金郁金香
+    Name: Golden Tulip Flower
     Type: Etc
     Buy: 10
     Trade:
@@ -19495,7 +19504,7 @@ Body:
       NoAuction: true
   - Id: 7962
     AegisName: Treasure_Map1
-    Name: 藏宝图1
+    Name: Treasure Map1
     Type: Etc
     Buy: 10
     Trade:
@@ -19508,7 +19517,7 @@ Body:
       NoAuction: true
   - Id: 7963
     AegisName: Treasure_Map2
-    Name: 藏宝图2
+    Name: Treasure Map2
     Type: Etc
     Buy: 10
     Trade:
@@ -19521,7 +19530,7 @@ Body:
       NoAuction: true
   - Id: 7964
     AegisName: Treasure_Map3
-    Name: 藏宝图3
+    Name: Treasure Map3
     Type: Etc
     Buy: 10
     Trade:
@@ -19534,7 +19543,7 @@ Body:
       NoAuction: true
   - Id: 7965
     AegisName: Treasure_Map4
-    Name: 藏宝图4
+    Name: Treasure Map4
     Type: Etc
     Buy: 10
     Trade:
@@ -19547,7 +19556,7 @@ Body:
       NoAuction: true
   - Id: 7966
     AegisName: Weird_Parchment1
-    Name: 奇怪的羊皮纸第一部分
+    Name: Weird Parchment1
     Type: Etc
     Buy: 10
     Trade:
@@ -19560,7 +19569,7 @@ Body:
       NoAuction: true
   - Id: 7967
     AegisName: Weird_Parchment2
-    Name: 奇怪的羊皮纸第二部分
+    Name: Weird Parchment2
     Type: Etc
     Buy: 10
     Trade:
@@ -19573,7 +19582,7 @@ Body:
       NoAuction: true
   - Id: 7968
     AegisName: Weird_Parchment3
-    Name: 奇怪的羊皮纸第三部分
+    Name: Weird Parchment3
     Type: Etc
     Buy: 10
     Trade:
@@ -19586,7 +19595,7 @@ Body:
       NoAuction: true
   - Id: 7969
     AegisName: Weird_Parchment4
-    Name: 奇怪的羊皮纸第四部分
+    Name: Weird Parchment4
     Type: Etc
     Buy: 10
     Trade:
@@ -19611,7 +19620,7 @@ Body:
     Type: Etc
   - Id: 7973
     AegisName: Immortality_Egg
-    Name: 永生蛋
+    Name: Immortality Egg
     Type: Etc
     Buy: 20
     Trade:
@@ -19650,7 +19659,7 @@ Body:
     Type: Etc
   - Id: 7978
     AegisName: Spring_Stanza1
-    Name: 阳春布德泽
+    Name: 光明徽章
     Type: Etc
     Buy: 2
     Weight: 10
@@ -19664,7 +19673,7 @@ Body:
       NoAuction: true
   - Id: 7979
     AegisName: Spring_Stanza2
-    Name: 万物生光挥
+    Name: 纯洁徽章
     Type: Etc
     Buy: 2
     Weight: 10
@@ -19678,7 +19687,7 @@ Body:
       NoAuction: true
   - Id: 7980
     AegisName: Spring_Stanza3
-    Name: 和平天下福
+    Name: 善良徽章
     Type: Etc
     Buy: 2
     Weight: 10
@@ -19692,7 +19701,7 @@ Body:
       NoAuction: true
   - Id: 7981
     AegisName: Spring_Stanza4
-    Name: 孝友人间春
+    Name: 爱心徽章
     Type: Etc
     Buy: 2
     Weight: 10
@@ -19706,7 +19715,7 @@ Body:
       NoAuction: true
   - Id: 7982
     AegisName: Spring_Stanza5
-    Name: 普天开景运
+    Name: 希望徽章
     Type: Etc
     Buy: 2
     Weight: 10
@@ -19720,7 +19729,7 @@ Body:
       NoAuction: true
   - Id: 7983
     AegisName: Spring_Stanza6
-    Name: 大地转新机
+    Name: 智慧徽章
     Type: Etc
     Buy: 2
     Weight: 10
@@ -19734,7 +19743,7 @@ Body:
       NoAuction: true
   - Id: 7984
     AegisName: Spring_Stanza7
-    Name: 世界开昌运
+    Name: 友情徽章
     Type: Etc
     Buy: 2
     Weight: 10
@@ -19748,7 +19757,7 @@ Body:
       NoAuction: true
   - Id: 7985
     AegisName: Spring_Stanza8
-    Name: 笙歌乐太平
+    Name: 勇气徽章
     Type: Etc
     Buy: 2
     Weight: 10
@@ -21172,3 +21181,39 @@ Body:
     Locations:
       Ammo: true
     EquipLevelMin: 99
+  - Id: 25791
+    AegisName: Inventory_Ex_Evt
+    Name: '背包扩张券[活动专用]'
+    Type: Etc
+    Trade:
+      NoDrop: true
+      NoTrade: true
+      NoSell: true
+      NoCart: true
+      NoGuildStorage: true
+      NoMail: true
+      NoAuction: true
+  - Id: 25792
+    AegisName: Inventory_Ex_Dis
+    Name: '背包扩张券[限定]'
+    Type: Etc
+    Trade:
+      NoDrop: true
+      NoTrade: true
+      NoSell: true
+      NoCart: true
+      NoGuildStorage: true
+      NoMail: true
+      NoAuction: true
+  - Id: 25793
+    AegisName: Inventory_Ex
+    Name: 背包扩张券
+    Type: Etc
+    Trade:
+      NoDrop: true
+      NoTrade: true
+      NoSell: true
+      NoCart: true
+      NoGuildStorage: true
+      NoMail: true
+      NoAuction: true

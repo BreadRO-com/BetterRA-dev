@@ -1,15 +1,9 @@
-//===== rAthena Script ======================================= 
+//===== rAthena Script =======================================
 //= Assassin Job Quest
-//===== By: ================================================== 
-//= kobra_k88
-//===== Current Version: ===================================== 
-//= 3.7
-//===== Compatible With: ===================================== 
-//= rAthena Project
-//===== Description: ========================================= 
+//===== Description: =========================================
 //= [Official Conversion]
 //= Job Change quest for Assassin class.
-//===== Additional Comments: ================================= 
+//===== Changelog: ===========================================
 //= 1.0 Used some dialogue from the aegis Assassin script translated By: Pgro Team (OwNaGe)
 //=     Also converted the booby traps from the aegis script.[kobra_k88]
 //= 1.1 Made adjustments to ontouch npcs to work with the new "ontouch" functionality.
@@ -28,7 +22,7 @@
 //= 2.0 Changed numbers to constants. [Vicious]
 //= 2.1 Removed Duplicates [Silent]
 //= 2.2 Merged back JFunc. Fixed missing dialogue [Lupus]
-//= 2.3 Fixed typo and change Nameless addtimer to 100 (with 700ms I 
+//= 2.3 Fixed typo and change Nameless addtimer to 100 (with 700ms I
 //=     was still able to bypass it) [Toms]
 //= 2.4 Fixed skipping of Nameless NPC [Lupus]
 //= 2.5 Fixed a Rogue exploit [Lupus]
@@ -50,8 +44,8 @@
 //= 3.5 Fixed the waitingroom where player can enter the Test Area without passing the written exam. Now player will not be warp inside the Test Area when did not passed the written exam instead the player will be warp back to the written exam entrance [JayPee]
 //= 3.6 Fixed broken event calls. [Euphy]
 //= 3.7 Fixed issue that the player can't progress in the quest if timed out at weapon reward step. This issue is fixed on iRO but not on kRO. [https://forums.warpportal.com/index.php?/topic/130060-didnt-receive-necklace-of-oblivion-when-changing-assassin/#entry1496042] [MrAntares]
-//= 3.8 Another 'unofficial fix'. Player can't change job if time out after the necklace is deleted.
-//============================================================ 
+//= 3.8 Another 'unofficial fix'. Player can't change job if time out after the necklace is deleted. [Atemo]
+//============================================================
 
 in_moc_16,19,33,1	script	工会人员#asn	1_M_JOBTESTER,{
 	if (Upper == 1) {
@@ -86,7 +80,7 @@ in_moc_16,19,33,1	script	工会人员#asn	1_M_JOBTESTER,{
 			mes "那就好,";
 			mes "去吧!";
 			close2;
-			set ASSIN_Q,0;
+			ASSIN_Q = 0;
 			warp "in_moc_16",19,76;
 			end;
 		}
@@ -96,9 +90,10 @@ in_moc_16,19,33,1	script	工会人员#asn	1_M_JOBTESTER,{
 		mes "[看起来很凶的人]";
 		mes "想要回城的话只有走回去了. 噢, 不要忘了储存你的出生点了, 记住了吗?";
 		close2;
-		set ASSIN_Q,0;
-		set ASSIN_Q2,0;
-		set ASSIN_Q3,0;
+		ASSIN_Q = 0;
+		ASSIN_Q2 = 0;
+		if (ASSIN_Q3 < 3)
+			ASSIN_Q3 = 0;
 		savepoint "in_moc_16",18,14,1,1;
 		warp "in_moc_16",18,14;
 		end;
@@ -257,7 +252,7 @@ in_moc_16,19,33,1	script	工会人员#asn	1_M_JOBTESTER,{
 					mes "那么准备好了吗?";
 					mes "我会把你传送到办公室去的.";
 					close2;
-					set ASSIN_Q,0;
+					ASSIN_Q = 0;
 					if(checkquest(8000) != -1) {
 						changequest 8000,8001;
 					}else{
@@ -553,8 +548,9 @@ OnTouch_:
 				mes "那么,";
 				mes "祝你好运了!";
 				close2;
-				set ASSIN_Q3,1;
-				set ASSIN_Q,1;
+				if (ASSIN_Q3 < 3)
+					ASSIN_Q3 = 1;
+				ASSIN_Q = 1;
 				changequest 8001,8002;
 				warp "in_moc_16",19,144;
 				end;
@@ -576,8 +572,9 @@ OnTouch_:
 				mes "那么,";
 				mes "祝你好运了~";
 				close2;
-				set ASSIN_Q3,2;
-				set ASSIN_Q,1;
+				if (ASSIN_Q3 < 3)
+					ASSIN_Q3 = 2;
+				ASSIN_Q = 1;
 				changequest 8001,8002;
 				warp "in_moc_16",19,144;
 				end;
@@ -602,9 +599,8 @@ OnTouch_:
 				mes "赶紧滚出这个地方.";
 				mes "趁我还没有发脾气...";
 				close2;
-				set ASSIN_Q,0;
-				set ASSIN_Q3,0;
-				set ASSIN_Q2,0;
+				ASSIN_Q = 0;
+				ASSIN_Q2 = 0;
 				erasequest 8001;
 				warp "moc_fild16",206,229;
 				end;
@@ -630,8 +626,9 @@ OnTouch_:
 				mes "[凯伊]";
 				mes "表格填写完了吗? 好了, 交给我吧. 我会把你送到考试场地的, 祝你好运~";
 				next;
-				set ASSIN_Q3,1;
-				set ASSIN_Q,1;
+				if (ASSIN_Q3 < 3)
+					ASSIN_Q3 = 1;
+				ASSIN_Q = 1;
 				changequest 8001,8002;
 				warp "in_moc_16",19,144;
 				end;
@@ -644,8 +641,9 @@ OnTouch_:
 				mes "把它交给我吧, 我会送你到考试场地, 好吗?";
 				mes "祝你好运...";
 				next;
-				set ASSIN_Q3,2;
-				set ASSIN_Q,1;
+				if (ASSIN_Q3 < 3)
+					ASSIN_Q3 = 2;
+				ASSIN_Q = 1;
 				changequest 8001,8002;
 				warp "in_moc_16",19,144;
 				end;
@@ -711,7 +709,7 @@ OnTouch_:
 			mes "尽管我很狠心,";
 			mes "但我并不无情. 开始回答之前, 有什么要问的吗?";
 			next;
-			set ASSIN_Q2,0;
+			ASSIN_Q2 = 0;
 			while(ASSIN_Q2 < 3) {
 				switch(select("...技能?:...素质?:我都知道了.")) {
 				case 1:
@@ -774,7 +772,7 @@ OnTouch_:
 					mes "好了...";
 					mes "关于刺客的技能,";
 					mes "我能告诉你的就是这么多了.";
-					set ASSIN_Q2,1;
+					ASSIN_Q2 = 1;
 					next;
 					break;
 				case 2:
@@ -787,7 +785,7 @@ OnTouch_:
 					next;
 					mes "[无名者]";
 					mes "我不能给你一个固定的素质分配方案, 走哪条路, 要看你自己的决定.";
-					set ASSIN_Q2,2;
+					ASSIN_Q2 = 2;
 					next;
 					break;
 				case 3:
@@ -797,7 +795,7 @@ OnTouch_:
 						mes "我会进行裁定的!";
 						next;
 					}
-					set ASSIN_Q2,3;
+					ASSIN_Q2 = 3;
 					break;
 				}
 			}
@@ -847,53 +845,53 @@ OnTouch_:
 			mes "1. 下面哪个选项不是无影之牙的前置?";
 			next;
 			if (select("伪装2级:音速投掷5级:拳刃修炼4级:右手修炼2级") == 4)
-				set .@assassin_t,.@assassin_t+10;
+				.@assassin_t += 10;
 			mes "[无名者]";
 			mes "2. 涂毒会赋矛武器什么属性?";
 			next;
 			if (select("毒:地:火:风") == 1)
-				set .@assassin_t,.@assassin_t+10;
+				.@assassin_t += 10;
 			mes "[无名者]";
 			mes "3. 右手修炼4级有什么作用效果?";
 			next;
 			if (select("恢复80%攻击力:恢复90%攻击力:增加90%攻击力:增加108%攻击力") == 2)
-				set .@assassin_t,.@assassin_t+10;
+				.@assassin_t += 10;
 			mes "[无名者]";
 			mes "4. 病毒散播需要什么物品作为催化剂?";
 			next;
 			if (select("火灵矿石:蓝色魔力矿石:黄色魔力矿石:红色魔力矿石") == 4)
-				set .@assassin_t,.@assassin_t+10;
+				.@assassin_t += 10;
 			mes "[无名者]";
 			mes "5. 涂毒5级以后, 你就可以学习哪项技能了?";
 			next;
 			if (select("施毒:音速投掷:毒性感染:病毒散播") == 4)
-				set .@assassin_t,.@assassin_t+10;
+				.@assassin_t += 10;
 			mes "[无名者]";
 			mes "6. 下面这些技能中, 哪一个可以让你在隐身状态下还能移动?";
 			next;
 			if (select("隐匿:后退回避:伪装:喷砂") == 3)
-				set .@assassin_t,.@assassin_t+10;
+				.@assassin_t += 10;
 			mes "[无名者]";
 			mes "7. 下面哪一个选项是和毒性感染有关的?";
 			next;
 			if (select("移动速度.:红色魔力矿石.:施毒者的武器.") == 2)
-				set .@assassin_t,.@assassin_t+10;
+				.@assassin_t += 10;
 			mes "[无名者]";
 			mes "8. 下面哪种魔物被插了螃蟹卡片的武器所克制?";
 			next;
 			if (select("绿苍蝇:罗达蛙:长老树精:巴风特") == 3)
-				set .@assassin_t,.@assassin_t+10;
+				.@assassin_t += 10;
 			mes "[无名者]";
 			mes "9. 当使用二刀连击时,";
 			mes "需要消耗多少的SP?";
 			next;
 			if (select("消耗SP为15:被动技能, 消耗SP为0.:主动技能, 消耗SP为10.:消耗SP为54") == 2)
-				set .@assassin_t,.@assassin_t+10;
+				.@assassin_t += 10;
 			mes "[无名者]";
 			mes "10. 什么属性的武器在依斯鲁德海底时使用效果最好?";
 			next;
 			if (select("风属性:水属性:地属性:火属性") == 1)
-				set .@assassin_t,.@assassin_t+10;
+				.@assassin_t += 10;
 			break;
 		case 2:
 			mes "[无名者]";
@@ -901,104 +899,104 @@ OnTouch_:
 			mes "掉落有2洞的卡塔勒拳刃?";
 			next;
 			if (select("盗虫:魔菇:沙漠之狼:刺锤哥布灵") == 3)
-				set .@assassin_t,.@assassin_t+10;
+				.@assassin_t += 10;
 			mes "[无名者]";
 			mes "2. 杀死哪种魔物时,";
 			mes "掉落3洞的拳刃?";
 			next;
 			if (select("土拨鼠:沙漠之狼:螳螂:摩尔") == 1)
-				set .@assassin_t,.@assassin_t+10;
+				.@assassin_t += 10;
 			mes "[无名者]";
 			mes "3. 什么职业可以造属性武器?";
 			next;
 			if (select("商人:铁匠:盗贼:服事") == 2)
-				set .@assassin_t,.@assassin_t+10;
+				.@assassin_t += 10;
 			mes "[无名者]";
 			mes "4. 下面哪一个不是拳刃系列的武器?";
 			next;
 			if (select("秘刃暗啸:巨魔指甲:血之泪:长柄短剑") == 4)
-				set .@assassin_t,.@assassin_t+10;
+				.@assassin_t += 10;
 			mes "[无名者]";
 			mes "5. 依斯鲁德海底的怪物大部分是哪种属性的?";
 			next;
 			if (select("水:火:风:地") == 1)
-				set .@assassin_t,.@assassin_t+10;
+				.@assassin_t += 10;
 			mes "[无名者]";
 			mes "6. 下面哪一种魔物,";
 			mes "不能作为宠物来领养?";
 			next;
 			if (select("魔菇:罗达蛙:鬼女:苍蝇") == 2)
-				set .@assassin_t,.@assassin_t+10;
+				.@assassin_t += 10;
 			mes "[无名者]";
 			mes "7. 下面哪一种魔物, 用火属性的武器最好对付?";
 			next;
 			if (select("刺刀哥布灵:链锤哥布灵:大斧哥布灵:榔头哥布灵") == 4)
-				set .@assassin_t,.@assassin_t+10;
+				.@assassin_t += 10;
 			mes "[无名者]";
 			mes "8. 下面哪种拳刃是无属性的?";
 			next;
 			if (select("火灵拳刃:刺藤拳刃:骸灵拳刃:圣灵拳刃") == 4)
-				set .@assassin_t,.@assassin_t+10;
+				.@assassin_t += 10;
 			mes "[无名者]";
 			mes "9. 下面哪种波利是念属性的?";
 			next;
 			if (select("波利:波利之王:幽灵波利:圣诞波利") == 3)
-				set .@assassin_t,.@assassin_t+10;
+				.@assassin_t += 10;
 			mes "[无名者]";
 			mes "10. 下面哪一种魔物,";
 			mes "不是不死属性的?";
 			next;
 			if (select("腐尸:毕莱特:幽灵剑士:安毕斯") == 3)
-				set .@assassin_t,.@assassin_t+10;
+				.@assassin_t += 10;
 			break;
 		case 3:
 			mes "[无名者]";
 			mes "1. 10级的残影能提升多少的闪避?";
 			next;
 			if (select("30:40:160:20") == 1)
-				set .@assassin_t,.@assassin_t+10;
+				.@assassin_t += 10;
 			mes "[无名者]";
 			mes "2. 即使处于隐匿或伪装状态, 也可以被下列哪种魔物发现?";
 			next;
 			if (select("绿棉虫:黑暗之王:木乃伊:疯兔") == 2)
-				set .@assassin_t,.@assassin_t+10;
+				.@assassin_t += 10;
 			mes "[无名者]";
 			mes "3. 下面哪种搭配不能被刺客同时使用?";
 			next;
 			if (select("双刃短剑+大马士革短剑:笨拙短剑+大马士革短剑:血之泪+笨拙短剑:破甲短锥+手术刀") == 3)
-				set .@assassin_t,.@assassin_t+10;
+				.@assassin_t += 10;
 			mes "[无名者]";
 			mes "4. 下面哪一座城市是盗贼转职之地?";
 			next;
 			if (select("普隆德拉:朱诺:艾尔怕兰:梦罗克") == 4)
-				set .@assassin_t,.@assassin_t+10;
+				.@assassin_t += 10;
 			mes "[无名者]";
 			mes "5. 下面哪个卡片和AGI无关?";
 			next;
 			if (select("小巴风特卡片:长老树精卡片:盗虫卡片:浮勒盗虫卡片") == 2)
-				set .@assassin_t,.@assassin_t+10;
+				.@assassin_t += 10;
 			mes "[无名者]";
 			mes "6. 哪一项是刺客这个职业的特长?";
 			next;
 			if (select("出色的歌唱能力:无敌的阅读能力:厉害的魔法能力:看似NB的闪避能力") == 4)
-				set .@assassin_t,.@assassin_t+10;
+				.@assassin_t += 10;
 			mes "[无名者]";
 			mes "7. 当职业技能等级达到50级时, 可以额外获得的AGI点数是多少?";
 			next;
-			if (select("7:8:9:10") == 4) 
-				set .@assassin_t,.@assassin_t+10;
+			if (select("7:8:9:10") == 4)
+				.@assassin_t += 10;
 			mes "[无名者]";
 			mes "8. 哪一种装备是刺客不能佩戴的?";
 			next;
 			if (select("双刃短剑:狂怒飓风:圆盾:圣灵拳刃") == 2) 
-				set .@assassin_t,.@assassin_t+10;
+				.@assassin_t += 10;
 			mes "[无名者]";
 			mes "9. 下面哪一种物品是盗贼转职所需?";
 			next;
 			switch(select("恶臭香菇:香菇芽孢:毒香菇:毒魔菇芽孢")) {
 			case 1:
 			case 3:
-				set .@assassin_t,.@assassin_t+10;
+				.@assassin_t += 10;
 				break;
 			default:
 				break;
@@ -1007,7 +1005,7 @@ OnTouch_:
 			mes "10. 下面哪一种武器对刺客帮助最少?";
 			next;
 			if (select("疯兔卡片:长老树精卡片:狼卡片:小鸡卡片") == 2)
-				set .@assassin_t,.@assassin_t+10;
+				.@assassin_t += 10;
 			break;
 		}
 		if (ASSIN_Q2 == 3) {
@@ -1023,7 +1021,7 @@ OnTouch_:
 			mes "你的分数.";
 			mes "" + .@assassin_t + " percent...";
 			if (.@assassin_t > 80) {
-				set ASSIN_Q2,5;
+				ASSIN_Q2 = 5;
 				changequest 8002,8003;
 				mes "不错.";
 				mes "你通过了!";
@@ -1033,7 +1031,7 @@ OnTouch_:
 				close;
 			}
 			else {
-				set ASSIN_Q2,4;
+				ASSIN_Q2 = 4;
 				mes "那么, 你失败了!";
 				next;
 				mes "[无名者]";
@@ -1060,7 +1058,7 @@ OnTouch_:
 			mes "你的得分.";
 			mes "" + .@assassin_t + " points...";
 			if (.@assassin_t > 80) {
-				set ASSIN_Q2,5;
+				ASSIN_Q2 = 5;
 				changequest 8002,8003;
 				next;
 				mes "[无名者]";
@@ -1068,7 +1066,7 @@ OnTouch_:
 				close;
 			}
 			else {
-				set ASSIN_Q2,4;
+				ASSIN_Q2 = 4;
 				mes "你失败了!";
 				next;
 				mes "[无名者]";
@@ -1194,9 +1192,8 @@ OnTouch_:
 		mes "我想,";
 		mes "你是应该休息一下了...";
 		close2;
-		set ASSIN_Q,0;
-		set ASSIN_Q3,0;
-		set ASSIN_Q2,0;
+		ASSIN_Q = 0;
+		ASSIN_Q2 = 0;
 		changequest 8003,8000;
 		warp "in_moc_16",19,13;
 		end;
@@ -1207,7 +1204,7 @@ in_moc_16,1,1,0	script	旁观者#ASNTEST	-1,{
 	end;
 
 OnEnable:
-	set .MyMobs,6;
+	.MyMobs = 6;
 	// Target mobs
 	monster "in_moc_16",62,161,"转职试验用样本",1002,1,"旁观者#ASNTEST::OnMyMobDead";
 	monster "in_moc_16",85,169,"转职试验用样本",1063,1,"旁观者#ASNTEST::OnMyMobDead";
@@ -1267,15 +1264,15 @@ OnResetmob:
 	end;
 
 OnMyMobDead:
-	set .MyMobs,.MyMobs-1;
+	.MyMobs--;
 	if (.MyMobs < 1) {
 		mapannounce "in_moc_16","看起来你做的不错啊, 保持住!",bc_map;
-		set ASSIN_Q,3;
+		ASSIN_Q = 3;
 		changequest 8003,8004;
 		donpcevent "计时器#1::OnEnable";
 		donpcevent "门卫#ASN::OnEnable";
 		donpcevent "旁观者#ASNTEST::OnResetmob";
-		set .DisableTraps,1;
+		.DisableTraps = 1;
 		stopnpctimer;
 	}
 	else {
@@ -1285,7 +1282,7 @@ OnMyMobDead:
 
 OnMyMobDead2:
 	mapannounce "in_moc_16",strcharinfo(0) + "! 你犯了一个错误! 我要把你带出考场!",bc_map;
-	set ASSIN_Q,2;
+	ASSIN_Q = 2;
 	warp "in_moc_16",19,161;
 	donpcevent "旁观者#ASNTEST::OnReset";
 	end;
@@ -1341,7 +1338,7 @@ OnTimer184000:
 OnTimer185000:
 	mapannounce "in_moc_16","时间到!",bc_map;
 	mapannounce "in_moc_16","想浪费时间的话你就这样继续吧. 你不得不再进行一次测试了!",bc_map;
-	//set ASSIN_Q,2;
+	//ASSIN_Q = 2;
 	end;
 
 OnTimer186000:
@@ -1357,7 +1354,7 @@ in_moc_16,68,158,0	script	01_1::SinTrap	-1,0,0,{
 OnTouch:
 	if (getvariableofnpc(.DisableTraps,"旁观者#ASNTEST")  < 1) {
 		mapannounce "in_moc_16",strcharinfo(0) + ", 你掉入了陷阱, 将会被遣返.",bc_map;
-		set ASSIN_Q,2;
+		ASSIN_Q = 2;
 		warp "in_moc_16",19,161;
 		donpcevent "旁观者#ASNTEST::OnResetmob";
 		donpcevent "待命房间#ASNTEST::OnStart";
@@ -1457,9 +1454,9 @@ OnInit:
 OnTouch:
 	donpcevent "托马斯#ASNTEST::OnDisable";
 	if (ASSIN_Q == 3)
-		set ASSIN_Q,3;
+		ASSIN_Q = 3;
 	else
-		set ASSIN_Q,4;
+		ASSIN_Q = 4;
 	warp "in_moc_16",87,102;
 	savepoint "in_moc_16",16,13,1,1;
 	end;
@@ -1487,13 +1484,13 @@ OnTimer187000:
 OnDisable:
 	stopnpctimer;
 	end;
-	
+
 OnMyMobDead:
 	mapannounce "in_moc_16","嘿, 我怎么跟你说的, 不要乱杀生啊!",bc_map;
 	mapannounce "in_moc_16","我要把你带回去... *唉...*",bc_map;
-	set ASSIN_Q,3;
+	ASSIN_Q = 3;
 	warp "in_moc_16",87,102;
-	killmonsterall "in_moc_16";
+	killmonster "in_moc_16","timestopper#1::OnMyMobDead";
 	end;
 }
 
@@ -1525,9 +1522,8 @@ OnTouch:
 			mes "另外, 不要忘了储存你在城市里的出生点.";
 			close2;
 			mapannounce "in_moc_16",strcharinfo(0) + " 退出了考试...下一个是谁?!",bc_map;
-			set ASSIN_Q,0;
-			set ASSIN_Q2,0;
-			set ASSIN_Q3,0;
+			ASSIN_Q = 0;
+			ASSIN_Q2 = 0;
 			changequest 8004,8000;
 			savepoint "in_moc_16",18,14,1,1;
 			warp "in_moc_16",18,14;
@@ -1548,7 +1544,7 @@ OnTouch:
 	mes "[托马斯]";
 	mes "好吧, 说的够多了, 让我们看看你的表现吧.";
 	close2;
-	set ASSIN_Q,4;
+	ASSIN_Q = 4;
 
 	monster "in_moc_16",81,77,"木乃伊",1041,1,"计时器#1::OnMyMobDead";
 	monster "in_moc_16",82,77,"木乃伊",1041,1,"计时器#1::OnMyMobDead";
@@ -1583,7 +1579,7 @@ OnTouch:
 
 OnDisable:
 	donpcevent "待命房间#ASNTEST::OnStart";
-	killmonsterall "in_moc_16";
+	killmonster "in_moc_16","timestopper#1::OnMyMobDead";
 	end;
 }
 
@@ -1595,7 +1591,7 @@ OnTouch_:
 	mes "噢! 恭喜你了!";
 	mes "你可以到我们工会会长的房间去了, 加油吧!";
 	close2;
-	set ASSIN_Q,5;
+	ASSIN_Q = 5;
 	changequest 8004,8005;
 	warp "in_moc_16",181,183;
 	end;
@@ -1605,7 +1601,7 @@ in_moc_16,182,169,0	script	迷宫辅助人员	WARPNPC,1,1,{
 OnTouch_:
 	if (ASSIN_Q == 5 || ASSIN_Q == 6) {
 		warp "in_moc_16",181,183;
-		set ASSIN_Q,ASSIN_Q+1;
+		ASSIN_Q++;
 		changequest 8005,8006;
 	}
 	else {
@@ -1646,7 +1642,7 @@ OnTouch_:
 	else
 		savepoint "moc_ruins",79,99,1,1;
 	if (ASSIN_Q == 7 && BaseJob == Job_Thief) {
-		set ASSIN_Q,8;
+		ASSIN_Q = 8;
 		mes "[工会会长]";
 		mes "欢迎!";
 		mes "让你花费这么长时间";
@@ -1680,7 +1676,6 @@ OnTouch_:
 			next;
 			switch(select("复仇...!:钱财~:我想去旅行.")) {
 			case 1:
-				set ASSIN_Q,8;
 				mes "[工会会长]";
 				mes "复仇...?";
 				mes "是的, 我懂的, 我们每个人都有一些怨恨的人或事.";
@@ -1694,7 +1689,7 @@ OnTouch_:
 				next;
 				break;
 			case 2:
-				set ASSIN_Q,9;
+				ASSIN_Q = 9;
 				mes "[工会会长]";
 				mes "为了金钱...? 不否认我们都需要钱才能活下去. 但是我们刺客有更高尚的目的.";
 				next;
@@ -1705,7 +1700,7 @@ OnTouch_:
 				next;
 				break;
 			case 3:
-				set ASSIN_Q,10;
+				ASSIN_Q = 10;
 				mes "[工会会长]";
 				mes "好想法. 周游世界会增长你的见识.";
 				next;
@@ -1734,7 +1729,7 @@ OnTouch_:
 			next;
 			switch(select("我喜欢孤独的感觉.:赚钱.:感觉挺屌.")) {
 			case 1:
-				set ASSIN_Q,11;
+				ASSIN_Q = 11;
 				mes "[工会会长]";
 				mes "说的对...";
 				mes "我们都是苦行僧, 都是独行侠...";
@@ -1749,13 +1744,13 @@ OnTouch_:
 				next;
 				break;
 			case 2:
-				set ASSIN_Q,12;
+				ASSIN_Q = 12;
 				mes "[工会会长]";
 				mes "不否认我们都需要钱才能活下去. 但是我们刺客有更高尚的目的, 不只是为了钱, 是吗?";
 				next;
 				break;
 			case 3:
-				set ASSIN_Q,13;
+				ASSIN_Q = 13;
 				mes "[工会会长]";
 				mes "外貌只是表象...";
 				next;
@@ -1780,7 +1775,7 @@ OnTouch_:
 			next;
 			switch(select("加强我的技能.:就是我的目标.:为了精神上的充实.")) {
 			case 1:
-				set ASSIN_Q,14;
+				ASSIN_Q = 14;
 				mes "[工会会长]";
 				mes "这是必然的. 但是不要认为技能对刺客来说是最重要的.";
 				next;
@@ -1789,7 +1784,7 @@ OnTouch_:
 				next;
 				break;
 			case 2:
-				set ASSIN_Q,15;
+				ASSIN_Q = 15;
 				mes "[工会会长]";
 				mes "是你其中的一个理想? 我想你一定有很多理想了...";
 				next;
@@ -1803,7 +1798,7 @@ OnTouch_:
 				next;
 				break;
 			case 3:
-				set ASSIN_Q,16;
+				ASSIN_Q = 16;
 				mes "[工会会长]";
 				mes "好想法...";
 				mes "这是提升的一个好想法. 很多人只注重身体上的修炼而忽视了精神的修养.";
@@ -1835,14 +1830,14 @@ OnTouch_:
 			next;
 			switch(select("我会先去升级.:我去试试我的技能.:我会去那些原来我不能去的地方.")) {
 			case 1:
-				set .@assassin_sangdam,.@assassin_sangdam+10;
+				.@assassin_sangdam += 10;
 				mes "[工会会长]";
 				mes "不要鲁莽啊...";
 				mes "成为刺客并不意味着你变成了另外一个人, 不要着急.";
 				next;
 				break;
 			case 2:
-				set .@assassin_sangdam,.@assassin_sangdam+5;
+				.@assassin_sangdam += 5;
 				mes "[工会会长]";
 				mes "自省是很重要的. 我能理解当你成为刺客时对自己的新能力而感到兴奋.";
 				next;
@@ -1869,14 +1864,14 @@ OnTouch_:
 			next;
 			switch(select("好基友.:好战友.:好炮友.")) {
 			case 1:
-				set .@assassin_sangdam,.@assassin_sangdam+5;
+				.@assassin_sangdam += 5;
 				mes "[工会会长]";
 				mes "我懂的...";
 				mes "好基友, 一起走.";
 				next;
 				break;
 			case 2:
-				set .@assassin_sangdam,.@assassin_sangdam+5;
+				.@assassin_sangdam += 5;
 				mes "[工会会长]";
 				mes "非常好...";
 				mes "好战友是那些为了你可以牺牲自己生命的朋友...";
@@ -1907,7 +1902,7 @@ OnTouch_:
 			next;
 			switch(select("刺客在哪里升级...:刺客的主要目标.:赚钱方面的...")) {
 			case 1:
-				set .@assassin_sangdam,.@assassin_sangdam+5;
+				.@assassin_sangdam += 5;
 				mes "[工会会长]";
 				mes "全看你的能力和选择了, 其实任何地方都可以做为你成长的环境.";
 				next;
@@ -1925,7 +1920,7 @@ OnTouch_:
 				next;
 				break;
 			case 3:
-				set .@assassin_sangdam,.@assassin_sangdam+10;
+				.@assassin_sangdam += 10;
 				mes "[工会会长]";
 				mes "啧啧啧...";
 				mes "你成为刺客就是想去赚钱吗?";
@@ -1977,7 +1972,7 @@ OnTouch_:
 		mes "还是支持你的.";
 		mes "你的意见呢, 修伊?";
 		next;
-		if (ASSIN_Q3 == 1) {
+		if (ASSIN_Q3 == 1) { // player Job Level was above 48
 			mes "[修伊]";
 			mes "这么说吧...";
 			mes "他的表现不是非常好,";
@@ -1987,7 +1982,7 @@ OnTouch_:
 			mes "我的意见呢,";
 			mes "和无名者一样.";
 		}
-		else {
+		else { // player Job Level was below 48
 			mes "[修伊]";
 			mes "尽管"+ strcharinfo(0) +"表现的有点儿柔弱, 但总的来说, "+ strcharinfo(0) +"达到了我的标准.";
 			next;
@@ -2062,7 +2057,8 @@ OnTouch_:
 			mes "但我相信, 你和他们不同...";
 			next;
 		}
-		if (ASSIN_Q3 == 1 && BaseJob == Job_Thief && ASSIN_Q > 6 && ASSIN_Q < 17) {
+		switch(ASSIN_Q3) {
+		case 1: // player Job Level was above 48
 			mes "[工会会长]";
 			mes "好了, 我说的够多了, 选一项做为礼物吧.";
 			next;
@@ -2096,10 +2092,10 @@ OnTouch_:
 				mes "给你, 拿好啦. 祝你成功!";
 				getitem 1220,1; //Gladius_
 			}
-			ASSIN_Q3 = 2;
+			ASSIN_Q3 = 3;
 			next;
-		}
-		else if (ASSIN_Q3 != 2) {
+			break;
+		case 2: // player Job Level was below 48
 			mes "[工会会长]";
 			mes "好了, 我说的够多了.";
 			mes "这个先拿着吧.";
@@ -2120,7 +2116,7 @@ OnTouch_:
 			case 5:
 				getitem 1252,1; //Katar
 			}
-			ASSIN_Q3 = 2;
+			ASSIN_Q3 = 3;
 		}
 		mes "[工会会长]";
 		mes "好吧, 我会给你一个标记. 去找入口处那位看起来很凶的人.";
@@ -2163,7 +2159,7 @@ OnTouch_:
 		end;
 	}
 	else if (ASSIN_Q > 7 && ASSIN_Q < 17) {
-		set ASSIN_Q,7;
+		ASSIN_Q = 7;
 		mes "[工会会长]";
 		mes "搞什么? 你选择了取消? 你不想完成转职了吗?";
 		next;

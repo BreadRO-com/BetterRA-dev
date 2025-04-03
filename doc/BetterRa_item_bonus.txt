@@ -10,7 +10,31 @@
 //= 下面的说明, 它会介绍这些物品附加效果的使用方法.
 //============================================================
 
+bonus2 bSubSkillRate,sk,r;				当被sk技能攻击时, 技能伤害 - r%
+bonus bMaxPainDefRate,r;				当被极限痛苦(NPC_MAXPAIN)伤害反射时, 伤害 - r/10%
+
+bonus2 bSkillUseHP,sk,n;				减少技能sk的HP消耗 + n 可用负数增加消耗
+bonus2 bSkillUseHPrate,sk,n;			减少技能sk的HP消耗 + n%
+bonus2 bSkillUseAP,sk,n;				减少技能sk的AP消耗 + n 可用负数增加消耗
+bonus2 bSkillUseAPrate,sk,n;			减少技能sk的AP消耗 + n%
+bonus bAPGainValue,n;					以近距离物理攻击杀死魔物时得到 n AP
+bonus bLongAPGainValue,n;				以远距离物理攻击杀死魔物时得到 n AP
+bonus bMagicAPGainValue,n;				以魔法攻击杀死魔物时得到 n AP
+bonus2 bMagicHPDrainRate,x,n;			以魔法攻击时 x/10 % 几率把伤害的 n/10% 回复到HP
+bonus2 bMagicSPDrainRate,x,n;			以魔法攻击时 x/10 % 几率把伤害的 n/10% 回复到SP
+
+bonus2 bItemDelay,i,n;					为指定物品 i 增加使用后延迟 n 毫秒, 可用负数减少延迟
+
+bonus bMdefRatioMatkRace,r;				敌人的 Mdef越高, 对 r 种族的敌人的魔法伤害越高
+bonus bMdefRatioMatkEle,e;				敌人的 Mdef越高, 对 e 属性的敌人的魔法伤害越高
+bonus bMdefRatioMatkClass,c;			敌人的 Mdef越高, 对 c 阶级的敌人的魔法伤害越高
+
+bonus2 bAddItemTypeDropRate,t,n;		当杀死魔物掉落道具时, 物品类型 t 的道具掉落概率增加 n/10%
+bonus2 bAddRaceDropRate,r,n;			当杀死魔物掉落道具时, 魔物种族 r 的道具掉落概率增加 n/10%
+bonus2 bAddClassDropRate,c,n;			当杀死魔物掉落道具时, 魔物类别 c 的道具掉落概率增加 n/10%
+
 bonus2 bWeaponSubSize,s,x;				当受到物理攻击时, 减少来自体型 s 的伤害 x%
+bonus2 bWeaponAtkEle,e,x;				当使用 e 属性物理攻击时, 物理攻击力 + n%
 
 bonus4 bSkillForAOE,sk,range,n,r;		使用sk技能时, 有r(千分率)的几率对range范围内的n个目标使用同样的技能.
 bonus bWeaponAddDamage,n;				普通攻击或武器技能攻击时增加 n 的固定伤害
@@ -39,13 +63,23 @@ bonus2 bSkillTreeCooldown,jobid,n;		职业技能公共技能延迟调整
 bonus2 bSkillTreeDelayRate,jobid,n;		职业技能独立技能延迟按百分比调整
 bonus2 bSkillTreeDelay,jobid,n;			职业技能独立技能延迟调整
 
+bonus bSkillAtk,n                       所有技能伤害增加 n%
+
+bonus bSkillIgnoreDef,sk;				技能 sk 无视物理和魔法防御(只能在服务版中使用)
+bonus bSkillIgnoreFree,sk;				技能 sk 无视回避(只能在服务版中使用)
+bonus bSkillIgnoreEle,sk;				技能 sk 无视属性修正(包含卡片对属性的修正)(只能在服务版中使用)
+bonus bSkillIgnoreDefCard,sk;			技能 sk 无视卡片修正(只能在服务版中使用)
+bonus bSkillCanCritical,sk;				技能 sk 可以暴击, 只对物理技能有效(例: 锐利射击)(只能在服务版中使用)
+
 bonus2 bReborn,r,n;						当玩家死亡时有 r% 的概率复活并恢复 n% 的血量
 bonus2 bBlockStatus,x,n;				固定玩家属性 x 为 n
 										x 支持	STATUS_MAXHP STATUS_MAXSP 
 												STATUS_STR STATUS_AGI STATUS_VIT STATUS_INT STATUS_DEX STATUS_LUK
+												STATUS_POW STATUS_STA STATUS_WIS STATUS_SPL STATUS_CON STATUS_CRT
 												STATUS_ATK_L STATUS_ATK_R STATUS_MATK_L STATUS_MATK_R
 												STATUS_HIT STATUS_SPEED STATUS_FLEE_L STATUS_FLEE_R STATUS_CRI
 												STATUS_DEF_L STATUS_DEF_R STATUS_MDEF_L STATUS_MDEF_R
+												STATUS_PATK STATUS_SMATK STATUS_RES STATUS_MRES STATUS_HPLUS STATUS_CRATE,
 												STATUS_ATK_ELE STATUS_DEF_ELE STATUS_ATK_RANGE STATUS_ASPD
 
 bonus bCooldownrate,n;					技能独立延迟时间 + n%
@@ -53,16 +87,22 @@ bonus bMaxASPD,n;						修改ASPD上限(无视CONF中的配置)
 bonus bDefSize,s;						修改体型大小为 s
 bonus bDefRace,r;						修改种族为 r
 bonus bDefEleLevel,n;					修改防御属性等级为 n
-bonus3 bSkillItemFix,sk,iid,n;			技能 sk 消耗的物品ID iid 增加 n 个(n可以为负数)
+bonus3 bSkillItemFix,sk,iid,n;			技能 sk 消耗的物品ID iid 增加 n 个(n可以为负数减少消耗)
 bonus3 bRegen,hp,sp,t;					每隔 t 毫秒, 恢复 HP 和 SP (不覆盖, 独立运算)
 bonus3 bRegenPercent,hp,sp,t;			每隔 t 毫秒, 按百分比恢复 HP 和 SP(不覆盖, 独立运算)
+bonus4 bRegen,hp,sp,ap,t;				每隔 t 毫秒, 恢复 HP \ SP 和 ap (不覆盖, 独立运算)
+bonus4 bRegenPercent,hp,sp,ap,t;		每隔 t 毫秒, 按百分比恢复 HP \ SP 和 ap (不覆盖, 独立运算)
 
 bonus bFixedCastAddRate,n;				固定咏唱时间 + n%(可累加)
 bonus3 bMultiDamageRate,bf,r,n;			当玩家使用 bf 攻击时, 有 r/10% 的概率使伤害增加 n% 倍
-bonus3 bSkillCritical,sk,r,n;			当玩家使用 sk 攻击时, 有 r/10% 的概率使伤害增加 n% 倍
-										sk 为 -1 时所有技能暴击
-bonus bSkillCritAtkRate,n;				技能暴击伤害 + n%
-bonus3 bSkillAddDiv,sk,div,n;			技能 sk 打击段数增加 div, 伤害 + n%, 当 n 为 0 时伤害根据段数修正
+bonus2 bSkillCritical,sk,r;				当玩家使用 sk 攻击时, 有 r/10% 的概率暴击并显示蓝字伤害 (sk 为 -1 时增加所有技能暴击概率)
+bonus bSkillCritAtkRate,n;				技能暴击伤害倍率 + n%
+bonus2 bSkillCritAtkRate,sk,n;			当使用 sk 技能时, 技能暴击伤害倍率 + n%
+bonus2 bSkillCritFlagRate,bf,n;			当使用 bf 类型的技能时, 技能暴击伤害倍率 + n%
+
+bonus2 bSkillAddDiv,sk,div;				技能 sk 打击段数增加 div
+bonus3 bSkillAddDiv,sk,min,max;			技能 sk 打击段数增加 min 至 max
+bonus4 bSkillAddDiv,sk,div,r,rate;		技能 sk r/10% 的概率打击段数增加 div 并且伤害倍率增加 rate, 当 rate 为 0 时伤害根据段数修正
 bonus2 bSkillChangeType,sk,bf;          修改技能 sk 攻击类型为 bf
 
 bonus2 bIgnoreMdefRaceVal,r,n;			无视 r 种族 n 点魔法防御力
@@ -74,23 +114,30 @@ bonus bIgnoreWhiteImprison,n;			无视白色监狱, n无意义
 
 bonus3 bFinalAddRace,r,x,bf;			使用 bf 攻击时, 增加 r 种族 x% 的伤害(在最终伤害上全段修正)
 bonus3 bFinalAddClass,c,x,bf;			使用 bf 攻击时, 增加 c 类别魔物 x% 的伤害(在最终伤害上全段修正)
+bonus3 bFinalAddSize,s,x,bf;			使用 bf 攻击时, 增加 s 体型魔物 x% 的伤害(在最终伤害上全段修正)
+bonus3 bFinalAddEle,e,x,bf;				使用 bf 攻击时, 增加 e 属性魔物 x% 的伤害(在最终伤害上全段修正)
 bonus3 bFinalAddRaceDamage,r,n,bf;		使用 bf 攻击时, 增加 r 种族 n 点伤害(在最终伤害上全段修正)
 bonus3 bFinalAddClassDamage,c,n,bf;		使用 bf 攻击时, 增加 c 类别魔物 n 点伤害(在最终伤害上全段修正)
+bonus3 bFinalAddSizeDamage,s,n,bf;		使用 bf 攻击时, 增加 s 体型魔物 n 点伤害(在最终伤害上全段修正)
+bonus3 bFinalAddEleDamage,e,n,bf;		使用 bf 攻击时, 增加 e 属性魔物 n 点伤害(在最终伤害上全段修正)
 
 bonus2 bAddSkillArea,sk,n;				增加 sk 技能 n 格范围, 可用于溅射或范围技能
 bonus2 bAddSkillRange,sk,n;				增加 sk 技能 n 格攻击距离
+bonus2 bSkillClearCooldown,sk,n;		使用 sk 技能时有 n/10% 概率重置本技能的延迟
 
-bonus2 bSkillToAround,sk,n;				技能 sk 变为群体技能, 自动选择自身 n 格范围内的敌对目标进行攻击
-bonus2 bSkillToGround,sk,n;				技能 sk 变为地面技能, 并攻击 n 格范围内的敌对目标
+bonus2 bSkillToAround,sk,r;				技能 sk 变为群体技能, 自动选择自身 r 格范围内的所有敌对目标进行攻击
+bonus2 bSkillToGround,sk,r;				技能 sk 变为地面技能, 并攻击 r 格范围内的所有敌对目标
+bonus3 bSkillToAround,sk,r,n;			技能 sk 变为群体技能, 自动选择 r 格范围内的最多 n 个敌对目标进行攻击
+bonus3 bSkillToGround,sk,r,n;			技能 sk 变为地面技能, 并攻击 r 格范围内的最多 n 个敌对目标
 
 bonus2 bSkillNoSpecial,sk,bitmask;		移除技能 sk 的特殊条件, bitmask 为 掩码类型(可叠加),  
 										转生术/十字驱魔 (bitmask=1 移除对方为不死或恶魔限制)
 										水球术/天使之泪 (bitmask=1 移除地面为水面限制)
 										背刺(bitmask=1 移除背对限制)
 										阿修罗霸皇拳(bitmask=4 移除SP消耗)
-										狂怒之枪(bitmask=1 移除使用物品限制, 2移除穿上卸下装备限制, 4移除使用技能限制, 8移除说话限制)
 										(其他技能, 可联系作者添加)
-										
+				
+bonus bSkillNoRequire,bitmask;			移除技能消耗, bitmask 为 掩码类型(可叠加)
 bonus2 bSkillNoRequire,sk,bitmask;		移除技能 sk 的需求条件, bitmask 为 掩码类型(可叠加),  
 										移除 'skill_require_db.txt' 中技能的指定需求.
 										掩码类型:
@@ -107,13 +154,15 @@ bonus2 bSkillNoRequire,sk,bitmask;		移除技能 sk 的需求条件, bitmask 为 掩码类型(
 											REQ_SPIRITSPHERECOST (0x400)  - 气球体消耗
 											REQ_ITEMCOST         (0x800)  - 物品消耗
 											REQ_EQUIPMEN        (0x1000)  - 装备要求
+bonus bSkillNoRequireItem,iid;			移除技能对 iid 的物品消耗, 类似于 bSkillItemFix
+bonus bNormalNoRequireAmmo;				平射不消耗箭矢/弹药等
 										
 bonus3 bSkillAttribute,sk,ele,n;		技能 sk 变为 ele 属性(为避免带宽消耗过大或特效卡客户端, 每个技能最多显示一次温暖风特效)
 										 sk 为  0 时为普通攻击(n 为是否显示温暖的风特效)
 										 sk 为 -1 时为所有技能(n 为是否显示温暖的风特效)
-										ele 为 -1 时变为最克制属性(n 为是否显示温暖的风特效), 
-										ele 为 -2 时变为最接近属性(n 为是否显示温暖的风特效), 
-										ele 为 -3 时无视属性克制(伤害倍率修正为 n%, 优先度最高),
+										ele 为 -1 时变为最克制属性(n 为是否显示温暖的风特效)
+										ele 为 -2 时变为最接近属性(n 为是否显示温暖的风特效)
+										ele 为 -3 时无视属性克制(伤害倍率修正为 n%, 优先度最高)
 
 bonus bWeaponReturnDefRate,n;			受到物理反射伤害时, 伤害减少原来的 n%
 bonus bMagicReturnDefRate,n;			受到魔法反射伤害时, 伤害减少原来的 n%
@@ -137,3 +186,6 @@ bonus5 bAddStatusVal,sc,val1,val2,val3,val4;	赋予状态时, 参数分别累加 val1, val2
 												例: bonus5 bAddStatusVal,SC_BLESSING,10,10,0,0;
 												说明: 赋予天使赐福状态时 STR DEX INT 分别加 20 点
 
+bonus2 bStatusIgnoreState,sc,scs;		移除状态对基础状态的影响(status.yml中的States节点) 
+										例子: bonus2 bStatusIgnoreState,SC_BERSERK,SCS_NOCAST; 
+										说明: 如果不生效请将status.yml中的 Icon 节点移除
